@@ -1,0 +1,75 @@
+<div class="parent">
+    <div class="video-screen">
+        <video id="video-player" (click) = "hotkeys()" controls autoplay src="{{playingVideo.url}}"></video>
+        <div class="title" (click) = "deletekeys()">{{playingVideo.title}}</div>
+        <div class="viewInfo" (click) = "deletekeys()">
+            
+            <div>
+                {{playingVideo.views}} views
+                Date
+            </div>
+
+            <div class="responses" (click) = "deletekeys()">
+                <i class="material-icons" id="menu-btn">thumb_up_alt</i>{{playingVideo.likes}}
+                <i class="material-icons" id="menu-btn">thumb_down_alt</i>{{playingVideo.dislikes}}
+                <i class="material-icons" id="reply-btn">reply</i>SHARE
+                <i class="material-icons" id="save-btn" >playlist_add</i>SAVE
+                <i class="material-icons" id="menu-btn">more_horiz</i>
+            </div>
+        </div>
+        <div class="profile_info" (click) = "deletekeys()">
+            <img src = "{{userProfile.profile_picture}}" class="profile_pic">
+            <div class="profilePart2">
+                <div class="detail_info">
+                    <div class="username">{{userProfile.name}}</div>
+                    <div class="subscriber">{{userProfile.subscriber}} subscribers</div>
+                </div>
+                
+                <div class="subNotif">
+                    <button>SUBSCRIBE</button>
+                    <i class="material-icons" id="notif-btn">notifications_none</i>
+                    <!-- <i class="material-icons" id="notif-btn">notifications_active</i>
+                        <i class="material-icons" id="notif-btn">notifications_off</i> -->
+                    </div>
+                </div>
+            </div>
+            <div class="desc_part" (click) = "deletekeys()">
+                <div>{{playingVideo.description}}</div>
+            </div>
+            
+            <div class="commentSection" (click) = "deletekeys()">
+                <div class="total-sort">
+                    <div>Comments</div>
+                    <div class="sort">
+                        <i class="material-icons">sort</i>
+                        <span>SORT BY</span>
+                    </div>
+                </div>
+                <div class="commentInput">
+                    <img src = "{{loggedUser.profile_picture}}" class="profile_pic">
+                    <input type="text" name="" id="commentTA" placeholder="Add a public comment" (input)="comment = $event.target.value">
+                </div>
+                <div class="submitComment">
+                    <button (click)="submitComment()">COMMENT</button>
+                </div>
+
+                <div *ngFor="let item of comments">
+                    <app-comment [comment]="item"></app-comment>
+                </div>
+
+            </div>
+        </div>
+        
+        <div class="container" (click) = "deletekeys()">
+            <div class="autoPlay">
+                <span class="TxtNext">Up next</span>
+                <span class="toggle">
+                    <span class="TxtAuto">Autoplay</span>
+                    <input type="checkbox" name="" id="checkbox" checked (change)="autoPlay($event)">
+            </span>
+        </div>
+        <div class="video-container" *ngFor="let v of videos" (click) = "deletekeys()">
+            <app-related-video [video]="v"></app-related-video>
+        </div>
+    </div>
+</div>

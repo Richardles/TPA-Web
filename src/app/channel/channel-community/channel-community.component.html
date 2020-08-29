@@ -1,0 +1,25 @@
+<div class="inputSection">
+    <div class="titleInput">
+        <img src = "{{user.profile_picture}}" class="profile_pic">
+        <input type="text" name="" id="postTA" placeholder="Title" (input) = "title = $event.target.value">
+    </div>
+    <textarea name="" id="desc" cols="115" rows="5" placeholder="Description" (input) = "description = $event.target.value"></textarea>
+    <div class="submitPost">
+        <div class="uploadThumb">
+            <input type="file" name="pic" id="pic"(change)="onInputPic($event.target.files)" (url)="setUrl($event)">
+            <input type="button" class="button" value="ADD PICTURE" onclick="document.getElementById('pic').click();"/>
+        </div>
+        <button class="button" (click)="insert()">POST</button>
+    </div>
+
+    <div class="img">
+        <img src="{{downloadURL}}" alt="" *ngIf="showPic">
+        <p *ngIf="!showPic">No picture</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="posts" *ngFor=" let post of posts">
+        <app-community-posts [post]="post" [id]="id"></app-community-posts>
+    </div>
+</div>

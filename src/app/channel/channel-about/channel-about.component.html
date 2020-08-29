@@ -1,0 +1,41 @@
+<div class="body">
+    <div class="not-stat">
+        <div class="desc">
+            <p>Description</p>
+            <div class="updateDesc">
+                <p *ngIf="!isUpdating">{{user.channel_description}}</p>
+                <div class="descTAsection" *ngIf="isUpdating">
+                    <textarea name="" id="" cols="80" rows="6" class="descTA" (input) = "desc = $event.target.value"></textarea>
+                    <div class="btns">
+                        <button class="cancel" (click) = "toggleDesc()">CANCEL</button>
+                        <button class="done" (click) = "updateDesc($event)">DONE</button>
+                    </div>
+                </div>
+                <i class="material-icons" id="update-btn" (click) = "toggleDesc()">create</i>
+            </div>
+        </div>
+        <div class="details">
+            <div class="location">
+                <p>Details</p>
+                <div class="loc">
+                    <p>Location:</p>
+                    <p>{{user.channel_location}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="links">
+            <div>
+                <p>Links</p>
+                <p class="link">.com</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat">
+        <div class="stats">
+            <div>Stats</div>
+            <div>Joined {{user.channel_join_date}}</div>
+            <div>{{user.channel_views}} Views</div>
+        </div>
+    </div>
+</div>

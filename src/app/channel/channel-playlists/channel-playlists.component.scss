@@ -1,0 +1,11 @@
+.parent{
+    margin-left: 80px;
+    .container{
+        display: flex;
+    }
+    .welcome{
+        font-family: Helvetica;
+        margin: 25px 0px 25px 0px;
+        font-weight: bold;
+    }
+}

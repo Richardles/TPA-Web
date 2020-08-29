@@ -1,0 +1,20 @@
+<div class="container">
+    <div class="ruLabel">
+        <p>RECENTLY UPLOADED VIDEO</p>
+        <p class="pa" (click)="toChannel()">PLAY ALL</p>
+    </div>
+    <div class="video-container">
+        <app-video-box *ngIf="videos" [video]=videos></app-video-box>
+    </div>
+</div>
+<div class="line">
+    
+</div>
+<div class="randLabel">
+    <p>RANDOM VIDEOS</p>
+</div>
+<div class="auto-grid">
+    <div class="video-container" *ngFor="let video of showRandVids">
+        <app-video-box [video]=video></app-video-box>
+    </div>
+</div>

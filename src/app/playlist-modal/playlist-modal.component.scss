@@ -1,0 +1,59 @@
+.grand-parent{
+    width: 100%;
+    height: 100%;
+    background: rgba(128, 128, 128, 0.5);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    .parent{
+        background: white;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        .header{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 0.5px solid;
+            *{
+                margin: 10px 20px 10px 20px;
+            }
+        }
+        .playlists{
+            display: flex;
+            flex-direction: column;
+            border-bottom: 0.5px solid;
+            *{
+                display: flex;
+                align-items: center;
+                margin: 10px 10px 10px 10px;
+            }
+        }
+        .createPlaylist{
+            p{
+                margin: 10px 10px 10px 10px;
+            }
+        }
+        .playlistForm{
+            display: flex;
+            flex-direction: column;
+            #name{
+                padding: 5px;
+                border: none;
+                outline: none;
+                border-bottom: 0.5px solid;
+            }
+            #vis{
+                
+            }
+            .btn{
+                padding: 5px;
+            }
+            *{
+                margin: 10px;
+            }
+        }
+    }
+}

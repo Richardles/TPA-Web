@@ -1,0 +1,211 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+.header{
+    display: flex;
+}
+
+#menu-btn{
+    margin-top: 10px;
+    margin-left: 20px;
+}
+
+.hamburger:hover, .yt-image:hover{
+    cursor: pointer;
+}
+
+.material-icons{
+    cursor: pointer;
+}
+
+input[type=text]{
+    padding: 7px;
+}
+.yt-image{
+    width: 100px;
+    margin-top: 10px;
+    margin-left: 20px;
+    margin-right: 3vw;
+}
+.yt-text{
+    color: black;
+    font-family: Helvetica;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+.btn-search{
+    border: none;
+    background: none;
+    position: relative;
+}
+.btn-search img{
+    width: 15px;
+    background: rgb(207, 207, 207);
+    opacity: 0.7;
+    margin-top: 5px;
+    padding-top: 9px;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 9px;
+    position: absolute;
+    transform: translate(-0%,-15%);
+    border-radius: 0px 2px 2px 0px;
+    transition: 0.1s;
+}
+.btn-search img:hover{
+    opacity: 1;
+}
+
+.search-bar{
+    width: 525px;
+}
+
+.search-form{
+    padding-right: 19vw;
+    margin-top: 5px;
+    .auto{
+        position: absolute;
+        width: 543px;
+        box-shadow: -1px -1px 5px gray;
+        background: white;
+        ul{
+            list-style: none;
+            :hover{
+                background: gray;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+.side-bar-list{
+    list-style: none;
+    position: fixed;
+    width: 230px;
+    height: 91vh;
+    margin: 0;
+    padding: 0;
+    left: -230px;
+    /* background: greenyellow; */
+    user-select: none;
+    overflow-x: auto;
+    z-index: 1;
+    transition: 0.3s ease;
+    background: white;
+}
+
+.side-bar-list li:hover{
+    background-color: gray;
+}
+
+.side-bar{
+    z-index: 0;
+}
+
+.side-bar-list a{
+    text-decoration: none;
+    font-family: 'Segoe UI';
+}
+
+.side-bar-list li{
+    list-style: none;
+    padding: 10px;
+    transition: 0.1s;
+    text-decoration: none;
+    display: block;
+    box-sizing: border-box;
+}
+
+.bell-icon{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.apps-icon{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.sign-in-button{
+    color: blue;
+    padding-top: 0px;
+}
+.sign-in-components i{
+    color: blue;
+    margin-bottom: 50px;
+}
+.sign-in-components{
+    padding: 0px;
+    border: 1px solid blue;
+    height: 25px;
+    margin-top: 10px;
+}
+.sign-in-components:hover{
+    background: rgb(121, 121, 255);
+}
+
+.upload{
+    margin-left: 0px;
+}
+.upload, .apps, .setting{
+    margin-right: 20px;
+}
+.upload, .apps, .setting{
+    margin-top: 10px;
+}
+
+.user-pp img{
+    width: 30px;
+    border-radius: 50%;
+    margin-top: 8px;
+}
+
+.gray-screen{
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0, 0, 0, 0.5);
+    position: absolute;
+    display: none;
+    transition: 0.5s ease;
+    animation: 0.5s;
+}
+.userMenu{
+    position: absolute;
+    display: flex;
+    justify-content: flex-end;
+    width: 95%;
+    margin-top: 50px;
+    .userProfile{
+        height: 100%;
+        border-radius: 1px;
+        display: flex;
+        padding: 10px;
+        border: 0.1px solid;
+        background: white;
+        img{
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .listMenu{
+            margin-top: 20px;
+            list-style: none;
+            li{
+                cursor: pointer;
+                &:hover{
+                    background: gray;
+                }
+            }
+        }
+        .userInfo{
+            .name-mail{
+            }
+        }
+    }
+}

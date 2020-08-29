@@ -1,0 +1,58 @@
+<div class="parent">
+    <div class="left">
+        <div class="thumbnail">
+            <img src="{{playlistThumbnail}}" alt="">
+        </div>
+        <div class="title">
+            <p *ngIf="!isUpdatingTitle">{{playlist.title}}</p>
+            <div class="titleSection" *ngIf="isUpdatingTitle">
+                <input type="text" name="" id="" [value]="playlist.title" (input) = "newTitle = $event.target.value">
+                <div class="btns">
+                    <button class="cancel" (click) = "toggleEditTitle()">CANCEL</button>
+                    <button class="done" (click) = "updateTitle()">DONE</button>
+                </div>
+            </div>
+            <i class="material-icons" id="create-btn" (click)="toggleEditTitle()">create</i>
+        </div>
+        <div class="info">
+            <div class="vid-count">{{totalVids}} videos</div>
+            <div class="last-update">{{playlist.last_updated}}</div>
+        </div>
+        <div class="vis">
+            <select name="visibility" id="visibility" [selectedIndex] = "selectedVis" (change)="UpdatePlayVisibility()">
+                <option value="Public">Public</option>
+                <option value="Unlisted">Unlisted</option>
+                <option value="Private">Private</option>
+            </select>
+        </div>
+        <div class="action">
+            <i class="material-icons" id="create-btn">shuffle</i>
+            <i class="material-icons" id="reply-btn">reply</i>
+            <i class="material-icons" id="more-btn">more_horiz</i>
+        </div>
+        
+        <div class="description">
+            <div *ngIf = "!editing">{{playlist.description}}</div>
+            <div class="descArea" *ngIf = "editing">
+                <textarea name="" id="" cols="30" rows="3" (input) = "newDesc = $event.target.value"></textarea>
+                <div class="btns">
+                    <button class="cancel" (click) = "toggleEditDesc()">CANCEL</button>
+                    <button class="done" (click) = "UpdatePlayDesc()">DONE</button>
+                </div>
+            </div>
+            <i class="material-icons" id="create-btn" (click)="toggleEditDesc()">create</i>
+        </div>
+
+        <div class="user-profile">
+            <img src="{{userPlaylist.profile_picture}}" alt="">
+            <div class="name">{{userPlaylist.name}}</div>
+        </div>
+    </div>
+
+
+    <div class="right">
+        <div class="videos-container" *ngFor = "let video of videosObj">
+            <app-playlist-videos [video]="video" (videoId)="removeVideo($event)"></app-playlist-videos>
+        </div>
+    </div>
+</div>

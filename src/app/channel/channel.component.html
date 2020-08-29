@@ -1,0 +1,25 @@
+<div class="body">
+
+    <div class="banner">
+        
+    </div>
+    
+    <div class="channel-home">
+        <div class="profile">
+            <img src="{{loggedUser.profile_picture}}" alt="">
+            <div class="info">
+                <div class="uname">{{loggedUser.name}}</div>
+                <div class="subs">{{loggedUser.subscriber}} subscribers</div>
+            </div>
+        </div>
+        
+        <div class="nav-bar">
+            <div routerLink="/channel-app/{{id}}/home">HOME</div>
+            <div routerLink="/channel-app/{{id}}/videos">VIDEOS</div>
+            <div routerLink="/channel-app/{{id}}/playlists">PLAYLISTS</div>
+            <div routerLink="/channel-app/{{id}}/community">COMMUNITY</div>
+            <div routerLink="/channel-app/{{id}}/about">ABOUT</div>
+        </div>
+    </div>
+</div>
+<router-outlet></router-outlet>

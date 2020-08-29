@@ -1,0 +1,10 @@
+
+<div class="parent">
+    <div class="welcome">Created playlists</div>
+    
+    <div class="container">
+        <div class="playlist-container" *ngFor="let playlist of playlists">
+            <app-playlist [playlist]="playlist"></app-playlist>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,142 @@
+<div class="header">
+    <i class="material-icons" id="menu-btn" (click)="toggleSidebar()">menu</i>
+    <a routerLink="home" class="head1">
+        <img src="../../assets/images/yt-icon.png" alt="no image" class="yt-image">
+    </a>
+    
+    <div style="margin: 0px 0px 0px 13vw;">
+        <form class="search-form">
+            <input type="text" placeholder="Search" class="search-bar" (input)="search = $event.target.value" 
+            [value] = "search" (keyup)="displayAutoComplete($event)">
+            <span class="btn-search">
+                <img src="../../assets/images/search-icon.png" alt="no image">
+            </span>
+
+            <div class="auto">
+                <ul>
+                    <li *ngFor="let txt of auto">
+                        {{txt.toString()}}
+                    </li>
+                </ul>
+            </div>
+        </form>
+    </div>
+    
+    <a routerLink="upload" class="upload">
+        <i class="material-icons">video_call</i>
+    </a>
+    <a routerLink="more" class="apps">
+        <i class="material-icons">apps</i>
+    </a>
+    <a routerLink="setting" class="setting">
+        <i class="material-icons">more_vert</i>
+    </a>
+
+    <div *ngIf="!loggedUser" class="sign-in-components" (click)="signIn()">
+        <i class="material-icons" >account_circle</i>
+        <span class="sign-in-button">SIGN IN</span>
+    </div>
+    <div *ngIf="loggedUser" class="user-pp">
+        <img src="{{loggedUser.profile_picture}}" alt="user photo" (click)="toggleMenu()">
+    </div>
+    <div class="userMenu" *ngIf="userMenus">
+        <div class="userProfile">
+            <img src="{{loggedUser.profile_picture}}" alt="user photo">
+            <div class="userInfo">
+                <div class="name-mail">
+                    <div>{{loggedUser.name}}</div>
+                    <div>{{loggedUser.email}}</div>
+                </div>
+                <ul class="listMenu">
+                    <li (click)="toChannel()">Your channel</li>
+                    <li>Paid memberships</li>
+                    <li>YouTube Studio</li>
+                    <li>Switch account</li>
+                    <li (click)="signOut()">Sign out</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sidebar -->
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <div class="side-bar">
+        <ul class="side-bar-list">
+            <a routerLink="home">
+                <li class="home-btn">
+                    <i class="material-icons">home</i>
+                    <span style="padding: 15px;">Home</span>
+                </li>
+            </a>
+            <a routerLink="trending-page">
+                <li class="trending-btn">
+                    <i class="material-icons">whatshot</i>
+                    <span style="padding: 15px;">Trending</span>
+                </li>
+            </a>
+            <a routerLink="subscription-page">
+                <li class="">
+                    <i class="material-icons">subscriptions</i>
+                    <span style="padding: 15px;">Subscriptions</span>
+                </li>
+            </a>
+            <br>
+            <a routerLink="library-page">
+                <li class="">
+                    <i class="material-icons">video_library</i>
+                    <span style="padding: 15px;">Library</span>
+                </li>
+            </a>
+            <a routerLink="history-page">
+                <li class="">
+                    <i class="material-icons">history</i>
+                    <span style="padding: 15px;">History</span>
+                </li>
+            </a>
+            <a routerLink="your-videos-page">
+                <li class="">
+                    <i class="material-icons">slideshow</i>
+                    <span style="padding: 15px;">Your videos</span>
+                </li>
+            </a>
+            <a routerLink="watch-later-page">
+                <li class="">
+                    <i class="material-icons">schedule</i>
+                    <span style="padding: 15px;">Watch later</span>
+                </li>
+            </a>
+            <a routerLink="liked-videos-page">
+                <li class="">
+                    <i class="material-icons">thumb_up</i>
+                    <span style="padding: 15px;">Liked videos</span>
+                </li>
+            </a>
+            SUBSCRIPTION
+                <a routerLink="liked-videos-page">
+                    <li class="">
+                        <i class="material-icons">youtube_play</i>
+                        Popular on YouTube
+                    </li>
+                </a>
+                <a routerLink="liked-videos-page">
+                    <li class="">
+                        Music
+                    </li>
+                </a>
+                <a routerLink="liked-videos-page">
+                    <li class="">
+                        Sports
+                    </li>
+                </a>
+                <a routerLink="liked-videos-page">
+                    <li class="">
+                        Gaming
+                    </li>
+                </a>
+        </ul>
+    </div>
+    
+    <div class="gray-screen"></div>

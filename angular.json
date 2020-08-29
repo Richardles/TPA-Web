@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "TPA-Web-RR"
+    }
+  },
+  "defaultProject": "TPA-Web-RR",
+  "cli": {
+    "analytics": false
+  }
 }

@@ -1,0 +1,9 @@
+<div class="uploadLbl">
+    <p>UPLOADS</p>
+</div>
+
+<div class="container">
+    <div class="video-container" *ngFor="let video of videos">
+        <app-video-box [video]="video"></app-video-box>
+    </div>
+</div>

@@ -1,0 +1,110 @@
+.body{
+    display: flex;
+    .not-stat{
+        width: 60%;
+    }
+    font-family: Helvetica;
+    .desc{
+        border-bottom: 0.5px solid;
+        margin-left: 140px;
+        .updateDesc{
+            margin: 35px 0px 35px 0px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            .descTAsection {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+                .descTA{
+                    outline-color: blue;
+                }
+                .btns{
+                    display: flex;
+                    justify-content: flex-end;
+                    *{
+                        margin: 5px;
+                    }
+                    .done{
+                        padding: 8px 12px 8px 12px;
+                        margin: 7px;
+                        border: none;
+                        outline: none;
+                        border-radius: 2px;
+                        transition: 0.2s;
+                        font-weight: 600;
+                        color: white;
+                        background: rgba(0, 0, 0, 0.2);
+                        &:hover{
+                            background: blue;
+                            color: white;
+                            cursor: pointer;
+                        }
+                    }
+                    .cancel{
+                        padding: 8px 12px 8px 12px;
+                        margin: 7px;
+                        border: none;
+                        outline: none;
+                        border-radius: 2px;
+                        transition: 0.2s;
+                        font-weight: 600;
+                        color: gray;
+                        background: transparent;
+                        &:hover{
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+            i{
+                filter: opacity(0.6);
+                cursor: pointer;
+                transition: 0.3s;
+                &:hover{
+                    filter: opacity(1);
+                }
+            }
+        }
+    }
+    .details{
+        border-bottom: 0.5px solid;
+        margin-left: 140px;
+        .location{
+            margin: 35px 0px 35px 0px;
+            .loc{
+                display: flex;
+                font-size: 13px;
+                color: gray;
+                *{
+                    margin-right: 50px;
+                }
+            }
+        }
+    }
+    .links{
+        border-bottom: 0.5px solid;
+        margin-left: 140px;
+        *{
+            margin: 35px 0px 35px 0px;
+        }
+        .link{
+            color: blue;
+            font-size: 13px;
+        }
+    }
+
+    .stat{
+        margin-left: 100px;
+        margin-top: 40px;
+        width: 30%;
+        .stats{
+            *{
+                margin-bottom: 30px;
+                padding-bottom: 30px;
+                border-bottom: 0.5px solid;
+            }
+        }
+    }
+}
+

@@ -1,0 +1,40 @@
+*{
+    margin: 0px;
+    box-sizing: border-box;
+    display: flex;
+}
+
+.thumbnail{
+    margin: 0px;
+    width: 168px;
+    height: 94px;
+    margin-bottom: 10px;
+}
+.videoBox{
+    flex-direction: row;
+}
+
+.titleBox{
+    margin: 0px;
+    width: 311px;
+    height: 75px;
+    .pp{
+        margin: 0px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+    }
+    .info{
+        margin-left: 10px;
+        flex-direction: column;
+    }
+    .viewDate{
+        *{
+            margin-right: 5px;
+        }
+    }
+    .title{
+        font-family: Helvetica;
+        font-weight: 550;
+    }
+}

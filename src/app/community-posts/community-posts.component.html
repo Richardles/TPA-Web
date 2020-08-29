@@ -1,0 +1,24 @@
+<div class="container">
+    <div class="pp">
+        <img src="{{user.profile_picture}}" alt="">
+    </div>
+    <div class="thePost">
+        <div class="info">
+            <p>{{user.name}}</p>
+            <p>{{post.date}}</p>
+        </div>
+        <div class="desc">
+            <div class="title">{{post.title}}</div>
+            <div class="description">{{post.description}}</div>
+        </div>
+        <div class="pic">
+            <img src="{{post.picture_url}}" alt="">
+        </div>
+        <div class="response">
+            <i class="material-icons" id="like-btn" >thumb_up_alt</i>
+            <div>{{post.likes}}</div>
+            <i class="material-icons" id="dislike-btn" >thumb_down_alt</i>
+            <div>{{post.dislikes}}</div>
+        </div>
+    </div>
+</div>

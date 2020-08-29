@@ -1,0 +1,28 @@
+<div *ngIf="isVisible" class="grand-parent">
+    <div class="parent">
+        <div class="header">
+            <div>Save to...</div>
+            <i class="material-icons" (click) = "close()">close</i>
+        </div>
+
+        <div class="playlists">
+            <div *ngFor = "let playlist of playlists">
+                <input type="checkbox" name="playlist" id="playlists" (change) = "getPlayId(playlist.id)"
+                [checked]="playlist.videos_id.includes(vid.id)">{{playlist.title}}
+            </div>
+        </div>
+
+        <div class="createPlaylist" *ngIf="!formOpen">
+            <p (click)="showForm()">Create new playlist</p>
+        </div>
+        <div class="playlistForm" *ngIf="formOpen">
+            <input type="text" name="" id="name" placeholder="Enter playlist name..." (input)="playlistTitle = $event.target.value">
+            <select name="" id="vis" (change)="getInfo()">
+                <option value="Public">Public</option>
+                <option value="Private">Private</option>
+                <option value="Unlisted">Unlisted</option>
+            </select>
+            <button class="btn" (click) = "createPlaylist()">CREATE</button>
+        </div>
+    </div>
+</div>

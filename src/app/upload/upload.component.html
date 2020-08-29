@@ -1,0 +1,179 @@
+<div class="ParentUpload" (appDirectiveDrop)="onDrop($event)" *ngIf="!dropped">
+    <div class="ParentUploadHeader">
+        <span class="TxtUploadVideo">Upload videos</span>
+        <img src="../../assets/images/feedback.png" alt="feedback" class="feedbackOnUpload">
+        <img src="../../assets/images/close.png" alt="close" class="closeOnUpload">
+    </div>
+
+    <div class="uploadArea">
+        <div>
+            <img src="../../assets/images/upload.png" alt="upload" class="uploadOnUpload">
+        </div>
+        <input type="file" name="video" id="video" (change)="onInput($event.target.files)">
+        <input type="button" value="SELECT FILES" onclick="document.getElementById('video').click();"/>
+    </div>
+    
+    
+</div>
+<!-- ======================================================================== -->
+
+<div class="DetailUpload" *ngIf="dropped && !detailPg">
+    <div class="ParentUploadHeader">
+        <span class="TxtUploadVideo">Upload videos</span>
+        <img src="../../assets/images/feedback.png" alt="feedback" class="feedbackOnUpload">
+        <img src="../../assets/images/close.png" alt="close" class="closeOnUpload">
+    </div>
+
+    <div class="DetailJourney">
+        <span>
+            <span class="NoOneOnDetail" [style.backgroundColor] = "detailPg ? 'gray' : 'blue' ">1</span>
+            <span>Details</span>
+        </span>
+        <span>
+            <span class="NoTwoOnDetail" [style.backgroundColor] = "detailPg ? 'blue' : 'gray' ">2</span>
+            <span>Visibility</span>
+        </span>
+    </div>
+
+    <div class="VideoUploadDetails">
+        <div>
+            <h2>Details</h2>
+        </div>
+        <input type="text" name="title" id="video-title" placeholder="Title(required)" (input)="videoTitle = $event.target.value" 
+        [value] = "videoTitle" [style.border] = "videoTitle.length == 0 ? '1px solid red':'1px solid green'">
+        <div>
+            <textarea name="description" id="video-desc" cols="124" rows="10" placeholder="Description"
+            (input)="videoDesc = $event.target.value" ></textarea>
+        </div>
+        
+        <span class="TxtThumbnail">Thumbnail</span>
+        <span>Select or upload a picture that shows what's in your video. A good thumbnail stands out and draws viewers' attention.</span>
+        <div class="uploadThumb">
+            <input type="file" name="video" id="video" (change)="onInputThumb($event.target.files)">
+            <input type="button" value="Upload thumbnail" onclick="document.getElementById('video').click();" />
+        </div>
+        <br>
+        
+        <span class="TxtPlaylist">Playlist</span>
+        <span>Add your video to one or more playlists. Playlists can help viewers discover your content faster.</span>
+        <select name="playlists" id="playlists" (change)="log()">
+            <option value=0 (click)="playlistId = 0">None</option>
+            <option [value]="playlist.id" *ngFor="let playlist of playlists">{{playlist.title}}</option>
+        </select>
+        <br>
+        <input type="text" placeholder="Playlist name" (input)="playlistTitle = $event.target.value"><br>
+        <div>
+            <textarea name="" id="" cols="124" rows="10" placeholder="Playlist description" (input)="playlistDesc = $event.target.value"></textarea>
+        </div>
+
+        <div class="playlistVisibility">
+            <input type="radio" checked="true" value="Public" name="visibility" (change)="playlistVisibility = 'Public'">Public
+            <input type="radio" value="Private" name="visibility" (change)="playlistVisibility = 'Private'">Private
+            <input type="radio" value="Unlisted" name="visibility" (change)="playlistVisibility = 'Unlisted'">Unlisted
+        </div>
+        
+        <button class="createPlaylistBtn" (click)="createPlaylist()">NEW PLAYLIST</button>
+
+        <br>
+
+        <span class="TxtAudience">Audience</span>
+        <span>Is this video made for kids? (required)</span>
+        <span>Regardless of your location, you're legally required to comply with the Children's Online Privacy Protection Act (COPPA) and/or other laws. You're required to tell us whether your videos are made for kids. </span>
+        <div class="radioKids">
+            <input type="radio" name="audience" id="yesChild" value="Yes" (click) = "audience = 'Kids'">Yes, it's made for kids
+            <br>
+            <input type="radio" name="audience" id="noChild" value="No" checked (click) = "audience = 'All ages'">No, it's not made for kids
+        </div>
+        <br>
+
+        <span class="TxtCategory">Category</span>
+        <span>Add your video to a category so viewers can find it more easily</span>
+        <select name="categoryLists" id="categoryLists" (change)="upCategory()">
+            <option value="Music" (click) = "category = 'Music'">Music</option>
+            <option value="Sport" (click) = "category = 'Sport'">Sport</option>
+            <option value="Gaming" (click) = "category = 'Gaming'">Gaming</option>
+            <option value="Entertainment" (click) = "category = 'Entertainment'">Entertainment</option>
+            <option value="News" (click) = "category = 'News'">News</option>
+            <option value="Travel" (click) = "category = 'Travel'">Travel</option>
+        </select>
+    </div>
+            <div class="VideoDetailsFooter">
+                <div *ngFor="let file of files">
+                    <app-upload-child (url)="setUrl($event)" [file]='file'></app-upload-child>
+                </div>
+                <div>
+                    <button (click) = "validateTitle()">Next</button>
+                </div>
+            </div>
+    
+</div>
+
+<div class="visibilityPage" *ngIf="dropped && detailPg">
+
+    <div class="ParentUploadHeader">
+        <span class="TxtUploadVideo">Upload videos</span>
+        <img src="../../assets/images/feedback.png" alt="feedback" class="feedbackOnUpload">
+        <img src="../../assets/images/close.png" alt="close" class="closeOnUpload">
+    </div>
+
+    <div class="DetailJourney">
+        <span>
+            <span class="NoOneOnDetail" [style.backgroundColor] = "detailPg ? 'gray' : 'blue' ">1</span>
+            <span>Details</span>
+        </span>
+        <span>
+            <span class="NoTwoOnDetail" [style.backgroundColor] = "detailPg ? 'blue' : 'gray' ">2</span>
+            <span>Visibility</span>
+        </span>
+    </div>
+
+    <div class="visibilityBody">
+        <div class="TxtVisibility">Visibility</div>
+        <div class="TxtVisibility">Choose when to publish and who can see your video</div>
+    
+        <div class="saveOrPublish">
+            <input type="radio" name="publish" id="public" value="public" (click)="visibility = 'Public'">Public
+            <div>Everyone can watch your video</div>
+            <br>
+            <input type="radio" name="publish" id="private" value="private" checked (click)="visibility = 'Private'">Private
+            <div>Only you and people you choose can watch your video</div>
+            <br>
+            <input type="radio" name="publish" id="unlisted" value="unlisted" (click)="visibility = 'Unlisted'">Unlisted
+            <div>Anyone with the video link can watch your video</div>
+        </div>
+
+        <div class="TxtVisibility">Choose who can see your video</div>
+        <div class="saveOrPublish2">
+            <input type="radio" name="premium" id="public" value="public" (click)="premium = 'Premium'">Premium
+            <div>Only you and premium user can watch your video</div>
+            <br>
+            <input type="radio" name="premium" id="private" value="private" checked (click)="premium = 'Not premium'">Not premium
+            <div>Everyone can watch your video</div>
+        </div>
+
+    </div>
+
+    <div class="VideoDetailsFooter">
+        <div *ngFor="let file of files">
+            <app-upload-child (url)="setUrl($event)" [file]='file'></app-upload-child>
+        </div>
+        <div>
+            <button (click) = "uploadToDb()">Save</button>
+        </div>
+    </div>
+</div>
+<div *ngIf="percentage | async as pct" style="display: none;">
+    <progress [value]="pct" max="100"></progress>
+    {{ pct | number }}%
+</div>
+  
+<div *ngIf="snapshot | async as snap" style="display: none;" style="display: none;">
+  
+    {{ snap.bytesTransferred }} of {{ snap.totalBytes }} 
+  
+    <div *ngIf="downloadURL as url">
+      <h3>Success!</h3>
+      <h5>{{downloadURL}}</h5>
+    </div> 
+
+  </div>

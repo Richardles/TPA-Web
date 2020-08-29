@@ -1,0 +1,71 @@
+*{
+    margin: 0px;
+    box-sizing: border-box;
+    display: flex;
+}
+
+.thumbnail{
+    margin: 0px;
+    width: 300px;
+    height: 175px;
+    margin-bottom: 10px;
+}
+.videoBox{
+    flex-direction: column;
+    .playlistModal{
+        // width: 150px;
+        // height: 50px;
+        background: white;
+        box-shadow: 0px 0px 3px black;
+        border-radius: 2px;
+        position: absolute;
+        margin-top: 235px;
+        margin-left: 200px;
+        display: flex;
+        flex-direction: column;
+        *{
+            display: flex;
+            justify-content: flex-end;
+            margin: 5px 0px 5px 0px;
+            padding: 5px 10px 5px 10px;
+            cursor: pointer;
+            transition: 0.2s;
+            &:hover{
+                background: gray;
+            }
+        }
+    }
+}
+
+.titleBox{
+    margin: 0px;
+    width: 311px;
+    height: 75px;
+    .pp{
+        margin: 0px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+    }
+    .info{
+        margin-left: 10px;
+        flex-direction: column;
+        .playlist{
+            width: 250px;
+            display: flex;
+            justify-content: space-between;
+            i{
+                cursor: pointer;
+            }
+        }
+    }
+    .viewDate{
+        *{
+            margin-right: 5px;
+        }
+    }
+    .title{
+        font-family: Helvetica;
+        
+    }
+}

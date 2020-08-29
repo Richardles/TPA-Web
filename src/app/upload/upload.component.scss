@@ -1,0 +1,162 @@
+*{
+    margin-left: 0px;
+}
+.ParentUpload{
+    border: solid black;
+    border-radius: 8px;
+    width: 960px;
+    height: 626px;
+    margin: auto;
+}
+
+.DetailUpload{
+    border: solid black;
+    border-radius: 8px;
+    width: 960px;
+    height: 626px;
+    margin: auto;
+    // overflow: scroll;
+    position: relative;
+}
+
+.ParentUploadHeader{
+    padding: 16px 16px 16px 24px;
+    border-bottom: 0.5px solid black;
+}
+
+.TxtUploadVideo{
+    margin-right: 700px;
+    font-size: 20px;
+    font-family: Helvetica;
+}
+
+.feedbackOnUpload, .closeOnUpload{
+    width: 20px;
+    margin-left: 20px;
+}
+
+.uploadArea{
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.uploadOnUpload{
+    width: 100px;
+}
+
+#video{
+    display: none;
+}
+
+.drop_zone{
+    border: 2px solid black;
+    background: rgba(128, 128, 128, 0.479);
+    height: 20px;
+}
+.VideoUploadDetails{
+    padding: 0px 16px 0px 16px;
+    height: 450px;
+    display: flex;
+    flex-direction: column;
+    // overflow: hidden;
+    overflow-y: scroll;
+    .playlistForm{
+        width: 100px;
+        height: 50px;
+        background: gray;
+    }
+    .createPlaylistBtn{
+        margin: 10px;
+        width: 150px;
+    }
+}
+#video-title{
+    /* position: relative;
+    top: -150px; */
+}
+
+#video-desc{
+    /* position: relative;
+    left: -165px;
+    top: 50px; */
+}
+
+.TxtThumbnail, .TxtPlaylist, .TxtAudience{
+    font-family: Helvetica;
+    font-size: 15px;
+}
+
+.VideoDetailsFooter{
+    border-top: 0.5px solid black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height:50px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.DetailJourney{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 10px;
+    span{
+        display: flex;
+        align-items: center;
+    }
+    .NoOneOnDetail{
+        width: 30px;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+    }
+    .NoTwoOnDetail{
+        width: 30px;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+    }
+}
+
+.visibilityPage{
+    border: solid black;
+    border-radius: 8px;
+    width: 960px;
+    height: 626px;
+    margin: auto;
+    .TxtVisibility{
+        font-family: Helvetica;
+        font-size: 20px;
+        margin-left: 30px;
+    }
+    .saveOrPublish{
+        margin-left: 30px;
+        padding: 15px;
+        width: 500px;
+        height: 175px;
+        border: 0.7px solid black;
+        border-radius: 5px;
+    }
+    .saveOrPublish2{
+        margin-left: 30px;
+        padding: 15px;
+        width: 500px;
+        height: 100px;
+        border: 0.7px solid black;
+        border-radius: 5px;
+    }
+    .visibilityBody{
+        min-height: 450px;
+        overflow: hidden;
+        overflow-y: scroll;
+        
+    }
+}

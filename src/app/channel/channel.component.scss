@@ -1,0 +1,52 @@
+*{
+    font-family: Helvetica;
+}
+.body{
+    background: whitesmoke;
+}
+.banner{
+    width: 100%;
+    height: 200px;
+    background: gray;
+}
+
+.profile{
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    img{
+        width: 50px;
+        height: 50px;
+        background: gray;
+        border-radius: 50%;
+    }
+    .info{
+        *{
+            margin-left: 10px;
+        }
+        .uname{
+            font-size: 25px;
+        }
+    }
+}
+
+
+.channel-home{
+    margin-top: 10px;
+    padding-left: 13%;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    background: white;
+    width: 100%;
+    border-bottom: 1px solid;
+    .nav-bar{
+        display: flex;
+        *{
+            margin-right: 30px;
+            outline: none;
+        }
+        &:hover{
+            cursor: pointer;
+        }
+    }
+}
