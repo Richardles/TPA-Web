@@ -1,0 +1,64 @@
+*{
+    margin: 0px;
+    box-sizing: border-box;
+    display: flex;
+}
+.parent{
+    display: flex;
+    flex-direction: column;
+    font-family: Helvetica;
+    .thumbnail{
+        margin: 0px;
+        width: 300px;
+        height: 175px;
+        opacity: 1;
+        display: block;
+        transition: .5s ease;
+        backface-visibility: hidden;
+    }
+    .thumb{
+        position: relative;
+        width: 300px;
+        transition: .5s ease;
+        &:hover{
+            background: gray;
+            opacity: 0.7;
+            cursor: pointer;
+        }
+        .effect{
+            transition: .5s ease;
+            opacity: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            text-align: center;
+            &:hover{
+                color: blue;
+                cursor: pointer;
+            }
+            .label{            
+
+            }
+        }
+        &:hover{
+            .effect{
+                opacity: 1;
+            }
+        }
+    }
+    .titleBox{
+        margin: 0px;
+        width: 311px;
+        height: 75px;
+        display: flex;
+        flex-direction: column;
+        .viewFull{
+            cursor: pointer;
+        }
+        a{
+            text-decoration: none;
+        }
+    }
+}

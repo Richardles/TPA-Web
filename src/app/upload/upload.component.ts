@@ -26,6 +26,7 @@ export class UploadComponent implements OnInit {
   category;
   visibility;
   premium;
+  createdObj;
   
   validateTitle(){
     if(this.videoTitle.length > 0){
@@ -140,23 +141,45 @@ export class UploadComponent implements OnInit {
         category: this.category
       }
     }).subscribe(({ data }) => {
+      this.createdObj = data["createVideo"]
       console.log('got data', data);
+      if(this.createdObj.playlist_id != 0){
+        this.updatePlaylist()
+        console.log(this.playlistId);
+      }
       location.href = "/home";
     },(error) => {
       console.log('there was an error sending the query', error);
-      console.log(this.url);
-      console.log(this.videoTitle);
-      console.log(this.videoDesc);
-      console.log(this.downloadURL);
-      console.log(this.getUserId());
-      console.log(typeof(parseInt(this.playlistId)))
-      console.log(this.playlistId);
-      console.log(this.audience);
-      console.log(this.visibility);
-      console.log(this.premium);
-      console.log(this.category);
-      
     })
+  }
+
+  updatePlaylist(){
+    console.log(this.playlistId);
+    console.log(this.createdObj.id);
+    this.apollo.mutate({
+      mutation: gql`
+      mutation UpdatePlaylistVideo($play_id: Int!, $vid_id: Int!){
+        updateVideoInPlaylist(playlist_id: $play_id, video_id: $vid_id){
+          id
+          title
+          total_videos
+          views
+          last_updated
+          view_type
+          description
+          userId
+          videos_id
+        }
+      }
+      `,variables:{
+        play_id: this.playlistId,
+        vid_id: this.createdObj.id
+      }
+    }).subscribe(res => {
+      console.log(res.data)
+    }),(error) => {
+      console.log(error);
+    }
   }
 
   createPlaylist(){

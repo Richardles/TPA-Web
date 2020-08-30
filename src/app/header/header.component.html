@@ -1,3 +1,4 @@
+
 <div class="header">
     <i class="material-icons" id="menu-btn" (click)="toggleSidebar()">menu</i>
     <a routerLink="home" class="head1">
@@ -6,13 +7,13 @@
     
     <div style="margin: 0px 0px 0px 13vw;">
         <form class="search-form">
-            <input type="text" placeholder="Search" class="search-bar" (input)="search = $event.target.value" 
+            <input type="text" placeholder="Search" class="search-bar" id="search_bar" (input)="search = $event.target.value" 
             [value] = "search" (keyup)="displayAutoComplete($event)">
-            <span class="btn-search">
+            <span class="btn-search" (click)="searchVid()">
                 <img src="../../assets/images/search-icon.png" alt="no image">
             </span>
 
-            <div class="auto">
+            <div class="auto" *ngIf="isSearching">
                 <ul>
                     <li *ngFor="let txt of auto">
                         {{txt.toString()}}
@@ -29,8 +30,65 @@
         <i class="material-icons">apps</i>
     </a>
     <a routerLink="setting" class="setting">
-        <i class="material-icons">more_vert</i>
+        <i class="material-icons" (click)="toggleSetting()" *ngIf="!logged">more_vert</i>
+        <i class="material-icons" (click)="toggleNotif()" *ngIf="logged">notifications_none</i>
     </a>
+
+    <div class="setting-modal" *ngIf="setting">
+        <div class="set-box">
+            <div class="restric">
+                <div>Resctricted mode</div>
+                <input type="checkbox" name="" id="">
+            </div>
+            <div class="loc">
+                <div>Location</div>
+                <select name="" id="">
+                    <option value="India">India</option>
+                    <option value="Indonesia">Indonesia</option>
+                    <option value="Thailand">Thailand</option>
+                    <option value="United Kingdom">United Kingdom</option>
+                    <option value="United States">United States</option>
+                </select>
+            </div>
+            <div class="key" (click)="toggleKey()">Keyboard shortcuts</div>
+        </div>
+    </div>
+
+    <div class="keyboard-modal" *ngIf="isShortKey">
+        <div class="body">
+            <div class="sides">
+                <div class="title">Playback</div>
+                <div class="keys">
+                    <div>Toggle play/pause</div>
+                    <div>k</div>
+                </div>
+                <div class="keys">
+                    <div>Rewind 10 seconds</div>
+                    <div>j</div>
+                </div>
+                <div class="keys">
+                    <div>Fast forward 10 seconds</div>
+                    <div>l</div>
+                </div>
+            </div>
+            <div class="sides">
+                <div class="title">General</div>
+                <div class="keys">
+                    <div>Toggle full screen</div>
+                    <div>f</div>
+                </div>
+                <div class="keys">
+                    <div>Toggle mute</div>
+                    <div>m</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div (click)="toggleKey()">DISMISS</div>
+        </div>
+        
+    </div>
 
     <div *ngIf="!loggedUser" class="sign-in-components" (click)="signIn()">
         <i class="material-icons" >account_circle</i>
@@ -50,8 +108,22 @@
                 <ul class="listMenu">
                     <li (click)="toChannel()">Your channel</li>
                     <li>Paid memberships</li>
-                    <li>YouTube Studio</li>
-                    <li>Switch account</li>
+                    <li (click)="switchAcc()">Switch account</li>
+                    <div class="restric">
+                        <div>Resctricted mode</div>
+                        <input type="checkbox" name="" id="">
+                    </div>
+                    <div class="loc">
+                        <div>Location</div>
+                        <select name="" id="">
+                            <option value="India">India</option>
+                            <option value="Indonesia">Indonesia</option>
+                            <option value="Thailand">Thailand</option>
+                            <option value="United Kingdom">United Kingdom</option>
+                            <option value="United States">United States</option>
+                        </select>
+                    </div>
+                    <li (click)="toggleKey()">Keyboard shortcuts</li>
                     <li (click)="signOut()">Sign out</li>
                 </ul>
             </div>
@@ -65,20 +137,20 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <div class="side-bar">
         <ul class="side-bar-list">
-            <a routerLink="home">
-                <li class="home-btn">
+            <a routerLink="home" (click)="toggleSidebar()">
+                <li class="btns">
                     <i class="material-icons">home</i>
                     <span style="padding: 15px;">Home</span>
                 </li>
             </a>
-            <a routerLink="trending-page">
-                <li class="trending-btn">
+            <a routerLink="trending-page" (click)="toggleSidebar()">
+                <li class="btns">
                     <i class="material-icons">whatshot</i>
                     <span style="padding: 15px;">Trending</span>
                 </li>
             </a>
-            <a routerLink="subscription-page">
-                <li class="">
+            <a routerLink="subscription-page" (click)="toggleSidebar()">
+                <li class="btns">
                     <i class="material-icons">subscriptions</i>
                     <span style="padding: 15px;">Subscriptions</span>
                 </li>
@@ -134,6 +206,11 @@
                 <a routerLink="liked-videos-page">
                     <li class="">
                         Gaming
+                    </li>
+                </a>
+                <a routerLink="premium">
+                    <li class="">
+                        YouTube premium
                     </li>
                 </a>
         </ul>

@@ -1,3 +1,48 @@
-*{
-    margin-left: 230px;
+.nav{
+    display: flex;
+    justify-content: space-between;
+    width: 560px;
+    padding: 46px 0;
+}
+
+.parent{
+    width: 70%;
+    margin-left: 10%;
+    border-bottom: 0.1px solid gray;
+}
+
+.nav .music .music-ico{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80px;
+    height: 80px;
+    .title{
+        margin-top: 8px;
+        max-height: 1.6rem;
+        font-family: Helvetica;
+        line-height: 1.6rem;
+        color: rgb(80, 80, 80);
+        font-weight: bold;
+        font-size: 1rem;
+        white-space: nowrap;
+        letter-spacing: normal;
+        cursor: pointer;
+    }
+}
+
+img{
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    &:hover{
+        cursor: pointer;
+    }
+}
+
+.trending{
+    margin-left: 10%;
+    .video-container{
+        margin: 10px;
+    }
 }

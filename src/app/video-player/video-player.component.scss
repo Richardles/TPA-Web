@@ -163,34 +163,33 @@
             }
         }
         input[type="checkbox"]{
-            // z-index: -1;
-            // position: relative;
-            // width: 30px;
-            // height: 15px;
-            // -webkit-appearance: none;
-            // border-radius: 20px;
-            // outline: none;
-            // box-shadow: inset 0 0 5px rgba($color: #000000, $alpha: 0.5);
-            // transition: 0.2s;
+            position: relative;
+            width: 30px;
+            height: 15px;
+            -webkit-appearance: none;
+            border-radius: 20px;
+            outline: none;
+            box-shadow: inset 0 0 5px rgba($color: #000000, $alpha: 0.6);
+            transition: 0.2s;
         }
         input:checked[type="checkbox"]{
-            background: blueviolet;
+            background: rgba(132, 0, 255, 0.653);
         }
         input[type="checkbox"]:before{
-            // content: '';
-            // position: absolute;
-            // width: 15px;
-            // height: 15px;
-            // border-radius: 20px;
-            // top: 0;
-            // left: 0;
-            // background: whitesmoke;
-            // transform: scale(1.1);
-            // transition: 0.2s;
-            // box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border-radius: 20px;
+            top: 0;
+            left: 0;
+            background: whitesmoke;
+            transform: scale(1.1);
+            transition: 0.2s;
+            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.5);
         }
         input:checked[type="checkbox"]:before{
-            // left: 15px;
+            left: 15px;
         }
     }
 }

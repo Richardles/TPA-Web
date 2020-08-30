@@ -31,7 +31,8 @@ export class ChannelHomeComponent implements OnInit {
 
   popVideos(){
     let pushed = []
-    let i = 0
+    let i = 0;
+    let ctr = 0;
     while(i < 5){
        let idx = this.randVideos[Math.floor(Math.random() * (this.randVideos.length - 0) + 0)];
        console.log(idx)
@@ -41,6 +42,10 @@ export class ChannelHomeComponent implements OnInit {
            pushed.push(idx.id)
            i++
          }
+       }
+       ctr++
+       if(ctr >= 200){
+         break;
        }
     }
 

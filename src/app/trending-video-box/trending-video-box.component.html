@@ -1,0 +1,32 @@
+<div class="videoBox">
+    <a [routerLink]="['/video-player-page', video.id]" routerLinkActive="router-link-active" >
+        <img [src]="video.thumbnail" class="thumbnail">
+    </a>
+        
+    <div class="titleBox" *ngIf="userId">
+        <!-- <img [src]="userId.profile_picture" class="pp" (click)="toChannel()"> -->
+        <div class="info">
+            <div class="title">{{video.title}}</div>
+            <div class="playlist">
+                <div class="info">
+                    <div class="user" *ngIf="userId != null">{{userId.name}}</div>
+                    <div class="views">{{video.views}} Views</div>
+                    <div class="date">date</div>
+                </div>
+                <i class="material-icons" (click) = "toggleModal()">more_vert</i>
+            </div>
+            <div class="desc">
+                <div>{{video.description}}</div>
+            </div>
+            <div class="viewDate">
+            </div>
+        </div>
+    </div>
+
+    <div class="playlistModal" *ngIf="modal">
+        <div>Add to queue</div>
+        <div (click) = "routerToPlaylistModal()">Save to playlist</div>
+    </div>
+</div>
+
+<app-playlist-modal [isVisible]="playlist_modal" [vid]="video" (closePlaylist)="routerToPlaylistModal()"></app-playlist-modal>

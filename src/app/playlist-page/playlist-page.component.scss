@@ -32,6 +32,26 @@
             *{
                 margin-top: 20px;
                 margin-right: 20px;
+                opacity: 0.5;
+                transition: 0.1s;
+                &:hover{
+                    cursor: pointer;
+                    opacity: 1;
+                }
+            }
+        }
+        .more{
+            position: absolute;
+            box-shadow: 1px 1px 2px gray;
+            left: 190px;
+            background: white;
+            div{
+                margin: 10px 0px 10px 0px;
+                padding: 10px 20px 10px 20px;
+                &:hover{
+                    background: rgb(189, 189, 189);
+                    cursor: pointer;
+                }
             }
         }
         .description{

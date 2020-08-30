@@ -1,11 +1,32 @@
-<!-- <div class="reply-field">
-    <div class="commentInput">
-        <img src = "{{loggedUser.profile_picture}}" class="profile_pic">
-        <input type="text" name="" id="commentTA" placeholder="Add a public comment" (input)="rep = $event.target.value">
-    </div>
-    <div class="submitComment">
-        <button class="cancel" (click)="reply()">CANCEL</button>
-        <button class="reply">REPLY</button>
-    </div>
+<div class="comment">
+    <img src = "{{user.profile_picture}}" class="profile_pic">
+    <div class="commentInfo">
+        <div class="commenter-date">
+            <span>{{user.name}}</span>
+            <span class="date">{{comment.date}}</span>
+        </div>
+        <div class="theComment">
+            {{comment.comment}}
+        </div>
+        <div class="responses">
+            <i class="material-icons" id="menu-btn" (click)="updateLike()" [style.color]="isLiked ? 'blue' : 'black'">thumb_up_alt</i>{{comment.likes}}
+            <i class="material-icons" id="menu-btn" (click)="updateDislike()">thumb_down_alt</i>{{comment.dislikes}}
+            <span (click)="reply()" class="TxtReply">REPLY</span>
+        </div>
+        <div class="replyField" *ngIf="isReply">
+            <div class="commentInput">
+                <img src = "{{loggedUser.profile_picture}}" class="profile_pic">
+                <input type="text" name="" id="commentTA" placeholder="Add a public comment" (input)="rep = $event.target.value">
+            </div>
+            <div class="submitComment">
+                <button class="cancel" (click)="reply()">CANCEL</button>
+                <button class="reply" (click)="submitReply()">REPLY</button>
+            </div>
+        </div>
+<!-- 
+        <div *ngFor="let item of replies">
+            <app-comment-replies [comment]="item"></app-comment-replies>
+        </div> -->
 
-</div> -->
+    </div>
+</div>

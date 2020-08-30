@@ -14,6 +14,10 @@ import { ChannelCommunityComponent } from './channel/channel-community/channel-c
 import { ChannelAboutComponent } from './channel/channel-about/channel-about.component';
 import { PlaylistModalComponent } from './playlist-modal/playlist-modal.component';
 import { PlaylistPageComponent } from './playlist-page/playlist-page.component';
+import { TrendingVideosComponent } from './trending/trending-videos/trending-videos.component';
+import { PremiumComponent } from './premium/premium.component';
+import { SearchPageComponent } from './search-page/search-page.component';
+import { RefreshComponent } from './refresh/refresh.component';
 
 
 const routes: Routes = [
@@ -23,6 +27,10 @@ const routes: Routes = [
   {path:"trending-page", component: TrendingComponent},
   {path:"subscription-page", component: SubscriptionComponent},
   {path:"playlist-modal", component: PlaylistModalComponent},
+  {path:"trending-videos", component: TrendingVideosComponent},
+  {path:"premium", component: PremiumComponent},
+  {path:"refresh", component: RefreshComponent},
+  {path:"search-page/:query", component: SearchPageComponent},
   {path:"playlist-page/:id", component: PlaylistPageComponent},
   {path:"video-player-page/:id", component: VideoPlayerComponent},
   {path:"channel-app/:id", component: ChannelComponent,

@@ -1,1 +1,37 @@
-<p>trending works!</p>
+<div class="parent">
+    <div class="nav">
+        <div class="music" (click)="filter('Music')">
+            <div class="music-ico">
+                <img src="../assets/images/music-ico.png" alt="">
+                <div class="title">Music</div>
+            </div>
+        </div>
+        <div class="music" (click)="filter('Gaming')">
+            <div class="music-ico">
+                <img src="../assets/images/gaming-ico.png" alt="">
+                <div class="title">Gaming</div>
+            </div>
+        </div>
+        <div class="music" (click)="filter('News')">
+            <div class="music-ico">
+                <img src="../assets/images/news-ico.png" alt="">
+                <div class="title">News</div>
+            </div>
+        </div>
+        <div class="music" (click)="filter('Movies')">
+            <div class="music-ico">
+                <img src="../assets/images/movies-ico.png" alt="">
+                <div class="title">Movies</div>
+            </div>
+        </div>
+    </div>
+
+
+    
+</div>
+
+<div class="trending">
+    <div class="video-container" *ngFor="let video of videos">
+        <app-trending-video-box [video]="video" (passVideo)="getPassingVideo($event)"></app-trending-video-box>
+    </div>
+</div>

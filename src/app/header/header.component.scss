@@ -1,10 +1,85 @@
 *{
     padding: 0;
     margin: 0;
+    font-family: Helvetica;
 }
 
 .header{
     display: flex;
+    .keyboard-modal{
+        position: absolute;
+        width: 50%;
+        height: 40%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        box-shadow: 1px 1px 2px gray;
+        background: white;
+        .body{
+            display: flex;
+            flex-direction: row;
+            .sides{
+                width: 40%;
+                padding: 20px;
+                color: rgb(61, 61, 61);
+                .title{
+                    padding: 10px 20px 15px 20px;
+                    border-bottom: 0.5px solid;
+                }
+                .keys{
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 10px 20px 10px 20px;
+                    border-bottom: 0.5px solid;
+                }
+            }
+        }
+        .footer{
+            display: flex;
+            justify-content: flex-end;
+            div{
+                padding: 10px;
+                color: blue;
+                font-weight: 600;
+                &:hover{
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+    .setting-modal{
+        display: flex;
+        justify-content: flex-end;
+        .set-box{
+            background: white;
+            top: 50px;
+            width: 20%;
+            height: 500px;
+            box-shadow: 1px 1px 2px gray;
+            position: absolute;
+            *{
+                margin: 10px;
+                transition: 0.1s;
+                &:hover{
+                    cursor: pointer;
+                }
+            }
+            .restric{
+                display: flex;
+                justify-content: space-between;
+            }
+            .loc{
+                display: flex;
+                justify-content: space-between;
+            }
+            .key{
+                padding: 10px;
+                &:hover{
+                    background: rgba(128, 128, 128, 0.5);
+                }
+            }
+        }
+    }
 }
 
 #menu-btn{
@@ -42,6 +117,9 @@ a:link {
     border: none;
     background: none;
     position: relative;
+    &:hover{
+        cursor: pointer;
+    }
 }
 .btn-search img{
     width: 15px;
@@ -91,12 +169,16 @@ a:link {
     margin: 0;
     padding: 0;
     left: -230px;
-    /* background: greenyellow; */
     user-select: none;
     overflow-x: auto;
     z-index: 1;
     transition: 0.3s ease;
     background: white;
+    overflow-x: hidden;
+    .btns{
+        display: flex;
+        align-items: center;
+    }
 }
 
 .side-bar-list li:hover{
@@ -137,13 +219,17 @@ a:link {
 }
 .sign-in-components i{
     color: blue;
-    margin-bottom: 50px;
 }
 .sign-in-components{
-    padding: 0px;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    border-radius: 2px;
     border: 1px solid blue;
     height: 25px;
     margin-top: 10px;
+    position: relative;
+    bottom: 5px;
 }
 .sign-in-components:hover{
     background: rgb(121, 121, 255);

@@ -28,7 +28,11 @@
         <div class="action">
             <i class="material-icons" id="create-btn">shuffle</i>
             <i class="material-icons" id="reply-btn">reply</i>
-            <i class="material-icons" id="more-btn">more_horiz</i>
+            <i class="material-icons" id="more-btn" (click)="toggleMore()">more_horiz</i>
+        </div>
+
+        <div class="more" *ngIf="isMore">
+            <div (click)="removeAll()">Remove all video</div>
         </div>
         
         <div class="description">
@@ -43,7 +47,7 @@
             <i class="material-icons" id="create-btn" (click)="toggleEditDesc()">create</i>
         </div>
 
-        <div class="user-profile">
+        <div class="user-profile" (click)="toChannel()">
             <img src="{{userPlaylist.profile_picture}}" alt="">
             <div class="name">{{userPlaylist.name}}</div>
         </div>

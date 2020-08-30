@@ -1,7 +1,11 @@
 <div class="body">
 
     <div class="banner">
-        
+        <img src="{{loggedUser.channel_art}}" alt="">
+        <div class="ico">
+            <input type="file" name="pic" id="pic"(change)="onInputPic($event.target.files)" (url)="setUrl($event)">
+            <img src="../../assets/images/cam-ico.png" alt="" onclick="document.getElementById('pic').click();">
+        </div>
     </div>
     
     <div class="channel-home">

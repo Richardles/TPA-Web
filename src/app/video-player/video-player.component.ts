@@ -24,7 +24,30 @@ export class VideoPlayerComponent implements OnInit {
       }
     }
     `
-
+  GET_USER = gql`
+  query GetUser($id: String!){
+    getUser(id: $id){
+      id
+      name
+      profile_picture
+      subscriber
+      email
+      location
+      premium
+      restriction
+      premium_date
+      channel_icon
+      channel_description
+      channel_join_date
+      channel_views
+      channel_location
+      channel_art
+      like_comment
+      dislike_comment
+      subscribed
+    }
+  }
+  `
   id;
   videos;
   playingVideo;
@@ -34,6 +57,8 @@ export class VideoPlayerComponent implements OnInit {
   comment;
   comments;
   updated;
+
+  filteredComments = [];
   
   constructor(private route: ActivatedRoute, private apollo: Apollo, private router: Router) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
@@ -54,7 +79,6 @@ export class VideoPlayerComponent implements OnInit {
     this.loggedUser = this.getLoggedUser();
     
     this.route.paramMap.subscribe(params => {
-      
       this.id = params.get('id');
       if(this.id !== null) {
         this.getVideoById();
@@ -66,64 +90,119 @@ export class VideoPlayerComponent implements OnInit {
   
   }
 
+  subscribe(){
+    this.apollo.mutate({
+      mutation:gql`
+      mutation UpdateSubscriber($uid: String!, $tid: String!){
+        updateSubscriber(user_id: $uid, target_id: $tid){
+          id
+          name
+          profile_picture
+          subscriber
+          email
+          location
+          premium
+          restriction
+          premium_date
+          channel_icon
+          channel_description
+          channel_join_date
+          channel_views
+          channel_location
+          channel_art
+          like_comment
+          dislike_comment
+          subscribed
+        }
+      }
+      `,variables:{
+        uid: this.loggedUser.id,
+        tid: this.userProfile.id
+      },refetchQueries:[{
+        query: this.GET_USER
+        ,variables:{
+          id: this.userProfile.id
+        }
+      }]
+    }).subscribe( result => {
+      
+    }),(error) => {
+      console.log(error);
+    }
+  }
+
   deletekeys(){
     document.onkeydown = function(event) {
     }
   }
 
-    hotkeys(){
-      var audio_element = (document.getElementById('video-player') as HTMLVideoElement);
-      document.onkeydown = function(event) {
-        switch (event.keyCode) {
-          case 38:
-                event.preventDefault();
-                var audio_vol = (audio_element).volume;
-                if (audio_vol!=1) {
-                  try {
-                      var x = audio_vol + 0.02;
-                      audio_element.volume = x;
-                    }
-                  catch(err) {
-                      audio_element.volume = 1;
+  hotkeys(){
+    var audio_element = (document.getElementById('video-player') as HTMLVideoElement);
+    document.onkeydown = function(event) {
+      switch (event.keyCode) {
+        case 38:
+              event.preventDefault();
+              var audio_vol = (audio_element).volume;
+              if (audio_vol!=1) {
+                try {
+                    var x = audio_vol + 0.02;
+                    audio_element.volume = x;
                   }
-                  
+                catch(err) {
+                    audio_element.volume = 1;
+                }
+              }
+            break;
+        case 40:
+              event.preventDefault();
+              audio_vol = audio_element.volume;
+              if (audio_vol!=0) {
+                try {
+                  var y = audio_vol - 0.02;
+                  audio_element.volume = y;
+                }
+                catch(err) {
+                    audio_element.volume = 0;
                 }
                 
+              }
+            break;
+          case 74:
+            event.preventDefault();
+            audio_element.currentTime -= 10;
               break;
-          case 40:
-                event.preventDefault();
-                audio_vol = audio_element.volume;
-                if (audio_vol!=0) {
-                  try {
-                    var y = audio_vol - 0.02;
-                    audio_element.volume = y;
-                  }
-                  catch(err) {
-                      audio_element.volume = 0;
-                  }
-                  
-                }
+          case 37:
+            event.preventDefault();
+            audio_element.currentTime -= 5;
               break;
-            case 74:
-              event.preventDefault();
-              audio_element.currentTime -= 10;
-                break;
-            case 75:
-              event.preventDefault();
-              audio_element.paused == false ? audio_element.pause() : audio_element.play();
+          case 75:
+            event.preventDefault();
+            audio_element.paused == false ? audio_element.pause() : audio_element.play();
+            break;
+          case 76:
+            event.preventDefault();
+            audio_element.currentTime += 10;
               break;
-            case 76:
-              event.preventDefault();
-              audio_element.currentTime += 10;
-                break;
-            case 70:
-              event.preventDefault();
-              var vid = (document.getElementById('video-player') as HTMLVideoElement);
-              vid.requestFullscreen();
+          case 39:
+            event.preventDefault();
+            audio_element.currentTime += 5;
               break;
-        }
+          case 77:
+            event.preventDefault();
+            if(audio_element.muted){
+              audio_element.muted = false
+            }else{
+              audio_element.muted = true
+            }
+              break;
+          case 70:
+            event.preventDefault();
+            var vid = (document.getElementById('video-player') as HTMLVideoElement);
+            vid.requestFullscreen();
+            break;
       }
     }
+  }
 
   getVideo(){
     this.apollo.watchQuery<any>({
@@ -278,6 +357,9 @@ export class VideoPlayerComponent implements OnInit {
             channel_views
             channel_location
             channel_art
+            like_comment
+            dislike_comment
+            subscribed
           }
         }
       `,
@@ -390,9 +472,20 @@ export class VideoPlayerComponent implements OnInit {
       }
     }).valueChanges.subscribe(result => {
       this.comments = result.data.getCommentByVideoId
+      this.filterComment()
     }),(error) => {
       console.log(error);
     }
+  }
+
+  filterComment(){
+    for(let i = 0; i < this.comments.length; i++){
+      if(this.comments[i].replies_id == 0){
+        this.filteredComments.push(this.comments[i])
+      }
+    }
+    console.log(this.filteredComments);
+    
   }
 
 }

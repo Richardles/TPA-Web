@@ -19,8 +19,8 @@
     </div>
 
     <div class="playlistModal" *ngIf="modal">
-        <div>Add to queue</div>
-        <div (click) = "routerToPlaylistModal()">Save to playlist</div>
+        <div (click)="addToQueue()">Add to queue</div>
+        <div (click)="routerToPlaylistModal()">Save to playlist</div>
     </div>
 </div>
 

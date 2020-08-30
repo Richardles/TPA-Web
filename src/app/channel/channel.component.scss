@@ -5,9 +5,41 @@
     background: whitesmoke;
 }
 .banner{
+    position: relative;
     width: 100%;
-    height: 200px;
-    background: gray;
+    height: 250px;
+    background: rgb(220, 220, 220);
+    img{
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+    }
+    .ico{
+        top: 0px;
+        right: 0px;
+        position: absolute;
+        display: flex;
+        justify-content: flex-end;
+        padding: 20px;
+        #pic{
+            display: none;
+        }
+        img{
+            padding: 15px;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            background: rgba(128, 128, 128, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0.6;
+            transition: 0.1s;
+            &:hover{
+                opacity: 1;
+            }
+        }
+    }
 }
 
 .profile{

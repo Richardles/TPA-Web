@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Apollo, gql } from 'apollo-angular';
 import { title } from 'process';
+import { Route } from '@angular/compiler/src/core';
 
 @Component({
   selector: 'app-playlist-page',
@@ -26,8 +27,9 @@ export class PlaylistPageComponent implements OnInit {
   newTitle;
   newCategory;
   newDesc;
+  isMore;
 
-  constructor(private route:ActivatedRoute, private apollo: Apollo) { 
+  constructor(private route:ActivatedRoute, private apollo: Apollo, private router: Router) { 
     this.route.params.subscribe(param => {
       this.id = param['id'];
       console.log(this.id);
@@ -37,6 +39,50 @@ export class PlaylistPageComponent implements OnInit {
     this.GetPlaylistById()
     this.editing = false
     this.isUpdatingTitle = false
+    this.isMore = false;
+  }
+
+  toChannel(){
+    this.router.navigateByUrl("/channel-app/" + this.userPlaylist.id + "/home");
+  }
+
+  toggleMore(){
+    if(this.isMore){
+      this.isMore = false
+    }else{
+      this.isMore = true
+    }
+  }
+
+  removeAll(){
+    this.toggleMore()
+    this.EmptyPlaylist()
+  }
+
+  EmptyPlaylist(){
+    this.apollo.mutate({
+      mutation:gql`
+      mutation EmptyPlaylist($id: Int!){
+        emptyPlaylist(playlist_id: $id){
+          id
+          title
+          total_videos
+          views
+          last_updated
+          view_type
+          description
+          userId
+          videos_id
+        }
+      }
+      `,variables:{
+        id: this.id
+      }
+    }).subscribe( res => {
+
+    }),(error) => {
+      console.log(error);
+    }
   }
 
   selectVis(){
@@ -97,7 +143,6 @@ export class PlaylistPageComponent implements OnInit {
 
     }),(error) => {
       console.log(error);
-      
     }
   }
 

@@ -1,0 +1,61 @@
+*{
+    font-family: sans-serif;
+}
+.parent{
+    padding: 16px 24px;
+    width: 80%;
+    margin-left: 10%;
+    .filter-btn{
+        padding: 6px 0px;
+        display: flex;
+        align-items: center;
+        div{
+            margin-left: 6px;
+        }
+        &:hover{
+            cursor: pointer;
+        }
+    }
+    .filter{
+        display: flex;
+        margin-bottom: 24px;
+        .type{
+            padding: 0px 64px 0px 0px;
+            .title{
+                border-bottom: 1px solid;
+                width: 120%;
+                margin: 5px 0;
+                padding: 15px 0;
+                font-size: 1.3rem;
+                font-weight: 500;
+                text-transform: uppercase;    
+                border-bottom: 1px solid;
+            }
+            .detail{
+                font-size: 14px;
+                padding: 15px 0 0;
+                &:hover{
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+    .content{
+        border-top: 1px solid;
+        .channels{
+            border-bottom: 1px solid;
+            .cs{
+                margin: 15px;
+            }
+        }
+        .videos{
+            border-bottom: 1px solid;
+            .vids{
+                margin: 10px;
+            }
+        }
+        .playlists{
+            border-bottom: 1px solid;
+        }
+    }
+}

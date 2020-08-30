@@ -9,8 +9,8 @@
             {{comment.comment}}
         </div>
         <div class="responses">
-            <i class="material-icons" id="menu-btn">thumb_up_alt</i>{{comment.likes}}
-            <i class="material-icons" id="menu-btn">thumb_down_alt</i>{{comment.dislikes}}
+            <i class="material-icons" id="menu-btn" (click)="updateLike()" [style.color]="isLiked ? 'blue' : 'black'">thumb_up_alt</i>{{comment.likes}}
+            <i class="material-icons" id="menu-btn" (click)="updateDislike()">thumb_down_alt</i>{{comment.dislikes}}
             <span (click)="reply()" class="TxtReply">REPLY</span>
         </div>
         <div class="replyField" *ngIf="isReply">
@@ -23,7 +23,9 @@
                 <button class="reply" (click)="submitReply()">REPLY</button>
             </div>
         </div>
-        <!-- <app-comment-replies></app-comment-replies> -->
 
+        <div *ngFor="let item of replies">
+            <app-comment-replies [comment]="item"></app-comment-replies>
+        </div>
     </div>
 </div>

@@ -20,6 +20,10 @@ export class HeaderComponent implements OnInit {
   loggedUser: any;
   userss: any;
   search: string;
+  isSearching;
+  isShortKey;
+  setting;
+  logged;
 
   constructor(private authService: SocialAuthService, private apollo: Apollo, private router: Router) { }
 
@@ -34,7 +38,12 @@ export class HeaderComponent implements OnInit {
     (<HTMLElement>document.querySelector(".side-bar-list")).style.left = "-230px";
     this.getVideo();
     this.search = "";
+    this.isSearching = false
     this.userMenus = false;
+    this.isShortKey = false;
+    this.setting = false;
+    this.logged = false;
+    this.getLoggedUser()
   }
 
   signIn(): void {
@@ -57,6 +66,32 @@ export class HeaderComponent implements OnInit {
     location.reload()
   }
 
+  getLoggedUser(){
+    let user = JSON.parse(localStorage.getItem("currentUser"))
+    if(user){
+      this.logged = true
+    }else{
+      this.logged = false
+    }
+  }
+
+  searchVid(){
+    document.getElementById("search_bar").nodeValue = ""
+    this.router.navigateByUrl("/refresh", {skipLocationChange: true}).then(()=>{
+      this.router.navigateByUrl("/search-page/" + this.search)
+    })
+    this.isSearching = false
+  }
+
+  switchAcc(){
+    // this.signOut()
+    // this.signIn()
+  }
+
+  toggleNotif(){
+
+  }
+
   toggleSidebar(){
     let side = (<HTMLElement>document.querySelector(".side-bar-list")).style;
     let grayScreen = (<HTMLElement>document.querySelector(".gray-screen")).style;
@@ -70,6 +105,15 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  up(){
+    console.log(this.search);
+    if(this.search !== ""){
+      this.isSearching = true
+    }else{
+      this.isSearching = false
+    }
+  }
+
   displayAutoComplete(event){
     this.auto = [];
     this.videos.forEach(element => {
@@ -78,6 +122,7 @@ export class HeaderComponent implements OnInit {
       }
     })
     console.log(this.auto);
+    this.up()
   }
 
   getVideo(){
@@ -109,6 +154,22 @@ export class HeaderComponent implements OnInit {
     })
   }
 
+  toggleKey(){
+    if(this.isShortKey){
+      this.isShortKey = false
+    }else{
+      this.isShortKey = true
+      this.setting = false
+    }
+  }
+  toggleSetting(){
+    if(this.setting){
+      this.setting = false
+    }else{
+      this.setting = true
+    }
+  }
+
 
   getUser(){
     this.apollo.watchQuery<any>({
@@ -130,6 +191,9 @@ export class HeaderComponent implements OnInit {
             channel_views
             channel_location
             channel_art
+            like_comment
+            dislike_comment
+            subscribed
           }
         }
       `,
@@ -143,6 +207,7 @@ export class HeaderComponent implements OnInit {
       localStorage.removeItem("currentUser");
       localStorage.setItem("currentUser",JSON.stringify(this.loggedUser));
       // location.reload();
+
     },(error) => {
       console.log(error);
       //ga ada -> create
@@ -169,7 +234,10 @@ export class HeaderComponent implements OnInit {
           channel_join_date: "",
           channel_views: 0,
           channel_location: "Indonesia",
-          channel_art: $c_art
+          channel_art: $c_art,
+          like_comment: 0,
+          dislike_comment: 0,
+          subscribed: ""
         }){
           id
           name
@@ -185,6 +253,10 @@ export class HeaderComponent implements OnInit {
           channel_join_date
           channel_views
           channel_location
+          like_comment
+          like_comment
+          dislike_comment
+          subscribed
         }
       }
       `,variables:{
@@ -214,6 +286,8 @@ export class HeaderComponent implements OnInit {
     this.router.navigateByUrl("/channel-app/" + this.loggedUser.id + "/home")
     this.toggleMenu()
   }
+
+
 
   toggleMenu(){
     if(this.userMenus){

@@ -1,0 +1,39 @@
+<div class="parent">
+    <div class="filter-btn" (click)="toggleFilter()">
+        <i class="material-icons" id="tune-btn">tune</i>
+        <div>FILTER</div>
+    </div>
+
+    <div class="filter" *ngIf="isFiltering">
+        <div class="type">
+            <div class="title">Upload date</div>
+            <div class="detail">This week</div>
+            <div class="detail">This month</div>
+            <div class="detail">This year</div>
+        </div>
+        <div class="type">
+            <div class="title">Type</div>
+            <div class="detail" (click)="changeType('video')" [style.color]="typeVideo ? 'blue':'black' ">Video</div>
+            <div class="detail" (click)="changeType('playlist')" [style.color]="typePlaylist ? 'blue':'black' ">Playlist</div>
+            <div class="detail" (click)="changeType('channel')" [style.color]="typeChannel ? 'blue':'black' ">Channel</div>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="channels" *ngIf="typeChannel">
+            <div class="cs" *ngFor="let channel of channels">
+                <app-channel-box [channel]="channel"></app-channel-box>
+            </div>
+        </div>
+        <div class="videos" *ngIf="typeVideo">
+            <div class="vids" *ngFor="let video of videos">
+                <app-trending-video-box [video]="video" (passVideo)="getPassingVideo($event)"></app-trending-video-box>
+            </div>
+        </div>
+        <div class="playlists" *ngIf="typePlaylist">
+            <div class="plays" *ngFor="let playlist of playlists">
+                <app-playlist-box [playlist]="playlist"></app-playlist-box>
+            </div>
+        </div>
+    </div>
+</div>

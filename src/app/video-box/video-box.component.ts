@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 export class VideoBoxComponent implements OnInit {
   @Output() passVideo = new EventEmitter<any>()
   @Input() video: any;
+  @Output() queued = new EventEmitter<any>()
   userId;
   modal;
   playlist_modal;
@@ -25,6 +26,10 @@ export class VideoBoxComponent implements OnInit {
     }
     this.modal = false;
     this.playlist_modal = false;
+  }
+
+  addToQueue(){
+    this.queued.emit(this.video)
   }
 
   getUserById(){

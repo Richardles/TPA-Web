@@ -1,0 +1,80 @@
+*{
+    margin: 0px;
+    box-sizing: border-box;
+    display: flex;
+}
+
+.thumbnail{
+    margin: 0px;
+    width: 246px;
+    height: 138px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+.videoBox{
+    display: flex;
+    width: 60%;
+    .playlistModal{
+        background: white;
+        box-shadow: 0px 0px 3px black;
+        border-radius: 2px;
+        position: absolute;
+        margin-top: 50px;
+        margin-left: 500px;
+        display: flex;
+        flex-direction: column;
+        *{
+            display: flex;
+            justify-content: flex-end;
+            margin: 5px 0px 5px 0px;
+            padding: 5px 10px 5px 10px;
+            cursor: pointer;
+            transition: 0.2s;
+            &:hover{
+                background: gray;
+            }
+        }
+    }
+}
+
+.titleBox{
+    margin: 0px;
+    width: 311px;
+    height: 75px;
+    .pp{
+        margin: 0px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+    }
+    .info{
+        // margin-left: 10px;
+        flex-direction: column;
+        .playlist{
+            width: 40vw;
+            display: flex;
+            justify-content: space-between;
+            i{
+                cursor: pointer;
+            }
+            .info{
+                display: flex;
+                flex-direction: row;
+            }
+        }
+        .desc{
+            padding-top: 8px;
+            padding-bottom: 8px;
+        }
+    }
+    .viewDate{
+        *{
+            margin-right: 5px;
+        }
+    }
+    .title{
+        font-family: Helvetica;
+        font-size: 1.8rem;
+        font-weight: 400;
+    }
+}

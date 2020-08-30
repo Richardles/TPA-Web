@@ -38,6 +38,11 @@ import { PlaylistModalComponent } from './playlist-modal/playlist-modal.componen
 import { PlaylistPageComponent } from './playlist-page/playlist-page.component';
 import { PlaylistVideosComponent } from './playlist-page/playlist-videos/playlist-videos.component';
 import { CommunityPostsComponent } from './community-posts/community-posts.component';
+// import { TrendingVideosComponent } from './trending/trending-videos/trending-videos.component';
+import { ChannelBoxComponent } from './channel-box/channel-box.component';
+import { PlaylistBoxComponent } from './playlist-box/playlist-box.component';
+import { TrendingVideoBoxComponent } from './trending-video-box/trending-video-box.component';
+import { RefreshComponent } from './refresh/refresh.component';
 
 const fireConfig = {
     apiKey: "AIzaSyA2VWuhvm5N68oILOWtoYgPq_nTCbvvfEY",
@@ -74,7 +79,12 @@ const fireConfig = {
     PlaylistModalComponent,
     PlaylistPageComponent,
     PlaylistVideosComponent,
-    CommunityPostsComponent
+    CommunityPostsComponent,
+    // TrendingVideosComponent,
+    ChannelBoxComponent,
+    PlaylistBoxComponent,
+    TrendingVideoBoxComponent,
+    RefreshComponent,
   ],
   imports: [
     BrowserModule,
@@ -95,7 +105,7 @@ const fireConfig = {
           {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
-              '923946978263-fs7jsg0jaa7gob0hogfkpumvkq9iqjg6.apps.googleusercontent.com'
+              '1010191127145-doanmfkr3t7kfpd75bjtt9tbktu1dna5.apps.googleusercontent.com'
             ),
           },
         ],
