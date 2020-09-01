@@ -43,6 +43,7 @@ import { ChannelBoxComponent } from './channel-box/channel-box.component';
 import { PlaylistBoxComponent } from './playlist-box/playlist-box.component';
 import { TrendingVideoBoxComponent } from './trending-video-box/trending-video-box.component';
 import { RefreshComponent } from './refresh/refresh.component';
+import { PremiumComponent } from './premium/premium.component';
 
 const fireConfig = {
     apiKey: "AIzaSyA2VWuhvm5N68oILOWtoYgPq_nTCbvvfEY",
@@ -85,6 +86,7 @@ const fireConfig = {
     PlaylistBoxComponent,
     TrendingVideoBoxComponent,
     RefreshComponent,
+    PremiumComponent
   ],
   imports: [
     BrowserModule,

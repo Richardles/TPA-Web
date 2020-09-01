@@ -15,9 +15,9 @@
             <img src="{{post.picture_url}}" alt="">
         </div>
         <div class="response">
-            <i class="material-icons" id="like-btn" >thumb_up_alt</i>
+            <i class="material-icons" id="like-btn" (click)="like()">thumb_up_alt</i>
             <div>{{post.likes}}</div>
-            <i class="material-icons" id="dislike-btn" >thumb_down_alt</i>
+            <i class="material-icons" id="dislike-btn" (click)="dislike()">thumb_down_alt</i>
             <div>{{post.dislikes}}</div>
         </div>
     </div>

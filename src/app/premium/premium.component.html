@@ -6,13 +6,17 @@
             <span>offline, and in the background</span>
         </div>
         <div class="buy">
-            <div>GET YOUTUBE PREMIUM</div>
+            <div id="getPrem" (click)="updatePremium()" *ngIf="!isPremium">GET YOUTUBE PREMIUM</div>
+            <div class="alreadyPrem" *ngIf="isPremium">YOU ARE PREMIUM!</div>
         </div>
         <div class="regis">
-            <div class="billing">IDR {{price}}.0/{{plan}}</div>
+            <div class="billing" *ngIf="!isPremium">IDR {{price}}.0/{{plan}}</div>
+            <div *ngIf="isPremium">member since {{premDate}}</div>
             <div class="plan">
-                <div (click)="setPlan('monthly')">Monthly</div>
-                <div (click)="setPlan('annually')">Annually</div>
+                <div (click)="setPlan('monthly')" *ngIf="!isPremium">Monthly</div>
+                <div (click)="setPlan('annually')" *ngIf="!isPremium">Annually</div>
+                <div *ngIf="isPremium">expiration date</div>
+                <div *ngIf="isPremium">{{premExp}}</div>
             </div>
         </div>
         <div class="restric">Restrictions apply. Learn more here</div>
