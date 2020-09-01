@@ -10,8 +10,8 @@
             <div class="playlist">
                 <div class="info">
                     <div class="user" *ngIf="userId != null">{{userId.name}}</div>
-                    <div class="views">{{video.views}} Views</div>
-                    <div class="date">date</div>
+                    <div class="views">{{view}} Views</div>
+                    <div class="date">{{video.date | dateAgo}}</div>
                 </div>
                 <i class="material-icons" (click) = "toggleModal()">more_vert</i>
             </div>

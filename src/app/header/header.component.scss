@@ -46,6 +46,7 @@
                 }
             }
         }
+        
     }
     .setting-modal{
         display: flex;
@@ -243,6 +244,54 @@ a:link {
 }
 .upload, .apps, .setting{
     margin-top: 10px;
+}
+
+.pp{
+   
+    img{
+        border-radius: 50px;
+    }
+}
+.container{
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    padding: 50px 0px;
+}
+.subs{
+    margin-left: 16px;
+    .channels{
+    }
+}
+
+.setting{
+    .notif-container{
+        position: relative;
+        .notif-modal{
+            height: 20%;
+            position: absolute;
+            background: white;
+            height: 500px;
+            box-shadow: 0.5px 0.5px 3px gray;
+            left: -320px;
+            width: 350px;
+            .box{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                div{
+                    padding: 10px;
+                }
+                .header{
+                    height: 50px;
+                    display: flex;
+                    align-items: center;
+                    margin-left: 16px;
+                }
+            }
+        }
+    }
 }
 
 .user-pp img{

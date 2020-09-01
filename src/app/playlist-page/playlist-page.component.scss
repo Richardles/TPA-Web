@@ -24,6 +24,9 @@
         .info{
             display: flex;
             align-items: center;
+            *{
+                margin: 5px;
+            }
         }
         .vis{
             margin-top: 20px;

@@ -14,6 +14,11 @@ export class TrendingComponent implements OnInit {
 
   ngOnInit(): void {
     this.getVideo()
+    this.pop()
+  }
+
+  pop(){
+    
   }
 
   getPassingVideo(v){
@@ -39,6 +44,7 @@ export class TrendingComponent implements OnInit {
           audience
           visibility
           premium
+          date
         }
       }
       `,variables:{
@@ -71,6 +77,7 @@ export class TrendingComponent implements OnInit {
           audience
           visibility
           premium
+          date
         }
       }
       `,

@@ -16,7 +16,7 @@
         </div>
         <div class="info">
             <div class="vid-count">{{totalVids}} videos</div>
-            <div class="last-update">{{playlist.last_updated}}</div>
+            <div class="last-update">Updated {{playlist.last_updated | dateAgo}}</div>
         </div>
         <div class="vis">
             <select name="visibility" id="visibility" [selectedIndex] = "selectedVis" (change)="UpdatePlayVisibility()">

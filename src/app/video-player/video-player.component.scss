@@ -79,6 +79,12 @@
                 .subNotif{
                     display: flex;
                     align-items: center;
+                    transition: 0.2s;
+                    i{
+                        &:hover{
+                            cursor: pointer;
+                        }
+                    }
                     #notif-btn{
                         margin-left: 10px;
                     }

@@ -43,6 +43,8 @@ import { ChannelBoxComponent } from './channel-box/channel-box.component';
 import { PlaylistBoxComponent } from './playlist-box/playlist-box.component';
 import { TrendingVideoBoxComponent } from './trending-video-box/trending-video-box.component';
 import { RefreshComponent } from './refresh/refresh.component';
+import { NotifBoxComponent } from './notif-box/notif-box.component';
+import { DateAgoPipe } from './pipes/date-ago.pipe';
 
 const fireConfig = {
     apiKey: "AIzaSyA2VWuhvm5N68oILOWtoYgPq_nTCbvvfEY",
@@ -85,6 +87,8 @@ const fireConfig = {
     PlaylistBoxComponent,
     TrendingVideoBoxComponent,
     RefreshComponent,
+    NotifBoxComponent,
+    DateAgoPipe,
   ],
   imports: [
     BrowserModule,

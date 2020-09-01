@@ -59,6 +59,10 @@ export class VideoPlayerComponent implements OnInit {
   updated;
 
   filteredComments = [];
+  subsLabel;
+  isSub;
+  isOn;
+  view;
   
   constructor(private route: ActivatedRoute, private apollo: Apollo, private router: Router) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
@@ -87,7 +91,76 @@ export class VideoPlayerComponent implements OnInit {
       }
     })
     // this.updateVideoView();
-  
+    this.subsLabel = "SUBSCRIBE"
+    this.isSub = false
+    this.isOn = false
+  }
+
+  checkSub(){
+    let sub = this.loggedUser.subscribed
+    let check = this.userProfile.id
+    if(sub.includes(check)){
+      this.subsLabel = "SUBSCRIBED"
+      this.isSub = true
+    }else{
+      this.subsLabel = "SUBSCRIBE"
+      this.isSub = false
+    }
+  }
+
+  toggleNotif(){
+    if(this.isOn){
+      this.isOn = false
+    }else{
+      this.isOn = true
+    }
+    this.updateNotif()
+  }
+
+  checkNotif(){
+    if(this.loggedUser.notified_by.includes(this.playingVideo.userId)){
+      this.isOn = true
+    }else{
+      this.isOn = false
+    }
+  }
+
+  updateNotif(){
+    this.apollo.mutate({
+      mutation:gql`
+      mutation UpdateUserNotify($uid: String!, $nid: String!){
+        updateUserNotify(user_id: $uid,notif_id: $nid){
+          id
+          name
+          profile_picture
+          subscriber
+          email
+          location
+          premium
+          restriction
+          premium_date
+          channel_icon
+          channel_description
+          channel_join_date
+          channel_views
+          channel_location
+          channel_art
+          like_comment
+          dislike_comment
+          subscribed
+          notified_by
+        }
+      }
+      `,variables:{
+        uid: this.loggedUser.id,
+        nid: this.playingVideo.userId
+      }
+    }).subscribe( result => {
+
+    }),(error)=>{
+      console.log(error);
+      
+    }
   }
 
   subscribe(){
@@ -113,6 +186,7 @@ export class VideoPlayerComponent implements OnInit {
           like_comment
           dislike_comment
           subscribed
+          notified_by
         }
       }
       `,variables:{
@@ -125,7 +199,7 @@ export class VideoPlayerComponent implements OnInit {
         }
       }]
     }).subscribe( result => {
-      
+
     }),(error) => {
       console.log(error);
     }
@@ -218,6 +292,12 @@ export class VideoPlayerComponent implements OnInit {
           thumbnail
           userId
           views
+          playlist_id
+          category
+          audience
+          visibility
+          premium
+          date
         }
       }
       `,
@@ -236,7 +316,7 @@ export class VideoPlayerComponent implements OnInit {
     this.apollo.mutate({
       mutation:gql`
       mutation UpdateVideo($id: Int!, $url: String!, $title: String!, $desc: String!, $thumb: String!, $uid: String!, $view: Int!,
-        $playlist_id: Int!, $cate: String!, $audience: String!, $vis: String!, $prem: String!){
+        $playlist_id: Int!, $cate: String!, $audience: String!, $vis: String!, $prem: String!, $date: String!){
         updateVideo(id: $id, input:{
           url: $url,
           title: $title,
@@ -248,7 +328,9 @@ export class VideoPlayerComponent implements OnInit {
           category: $cate,
           audience: $audience,
           visibility: $vis,
-          premium: $prem}
+          premium: $prem,
+          date: $date
+        }
         ){
           id
           url
@@ -264,6 +346,7 @@ export class VideoPlayerComponent implements OnInit {
           audience
           visibility
           premium
+          date
         }
       }
       `,variables:{
@@ -278,7 +361,8 @@ export class VideoPlayerComponent implements OnInit {
           cate: this.playingVideo.category,
           audience: this.playingVideo.audience,
           vis: this.playingVideo.visibility,
-          prem: this.playingVideo.premium
+          prem: this.playingVideo.premium,
+          date: this.playingVideo.date
       }
     }).subscribe( data  => {
       console.log("success update");
@@ -318,6 +402,7 @@ export class VideoPlayerComponent implements OnInit {
           audience
           visibility
           premium
+          date
         }
       }
       `,
@@ -326,6 +411,7 @@ export class VideoPlayerComponent implements OnInit {
       }
     }).valueChanges.subscribe(result => {
       this.playingVideo = result.data.getVideo;
+      this.view = this.formatter(this.playingVideo.views, 1)
       this.getUser();
       this.getVideo();
       if(!this.updated){
@@ -360,6 +446,7 @@ export class VideoPlayerComponent implements OnInit {
             like_comment
             dislike_comment
             subscribed
+            notified_by
           }
         }
       `,
@@ -368,6 +455,46 @@ export class VideoPlayerComponent implements OnInit {
       }
     }).valueChanges.subscribe(result => {
       this.userProfile = result.data.getUser
+      this.getUpdatedUser()
+      this.checkSub()
+    },(error) => {
+      console.log(error);
+    })
+  }
+
+  getUpdatedUser(){
+    this.apollo.watchQuery<any>({
+      query: gql `
+        query GetUser($id: String!){
+          getUser(id: $id){
+            id
+            name
+            profile_picture
+            subscriber
+            email
+            location
+            premium
+            restriction
+            premium_date
+            channel_icon
+            channel_description
+            channel_join_date
+            channel_views
+            channel_location
+            channel_art
+            like_comment
+            dislike_comment
+            subscribed
+            notified_by
+          }
+        }
+      `,
+      variables:{
+        id: this.loggedUser.id
+      }
+    }).valueChanges.subscribe(result => {
+      this.loggedUser = result.data.getUser
+      this.checkNotif()
     },(error) => {
       console.log(error);
     })
@@ -486,6 +613,26 @@ export class VideoPlayerComponent implements OnInit {
     }
     console.log(this.filteredComments);
     
+  }
+
+  formatter(num, digits) {
+    var si = [
+      { value: 1, symbol: "" },
+      { value: 1E3, symbol: "k" },
+      { value: 1E6, symbol: "M" },
+      { value: 1E9, symbol: "B" },
+      { value: 1E12, symbol: "T" },
+      { value: 1E15, symbol: "P" },
+      { value: 1E18, symbol: "E" }
+    ];
+    var rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+    var i;
+    for (i = si.length - 1; i > 0; i--) {
+      if (num >= si[i].value) {
+        break;
+      }
+    }
+    return (num / si[i].value).toFixed(digits).replace(rx, "$1") + si[i].symbol;
   }
 
 }

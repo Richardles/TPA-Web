@@ -5,8 +5,8 @@
         <div class="viewInfo" (click) = "deletekeys()">
             
             <div>
-                {{playingVideo.views}} views
-                Date
+                {{view}} views
+                {{playingVideo.date | dateAgo}}
             </div>
 
             <div class="responses" (click) = "deletekeys()">
@@ -26,10 +26,10 @@
                 </div>
                 
                 <div class="subNotif">
-                    <button (click)="subscribe()">SUBSCRIBE</button>
-                    <i class="material-icons" id="notif-btn">notifications_none</i>
-                    <!-- <i class="material-icons" id="notif-btn">notifications_active</i>
-                        <i class="material-icons" id="notif-btn">notifications_off</i> -->
+                    <button (click)="subscribe()" [style.background]="isSub ? 'gray' : 'red'">{{subsLabel}}</button>
+                    <i class="material-icons" id="notif-btn" *ngIf="isSub && !isOn" (click)="toggleNotif()">notifications_off</i>
+                    <i class="material-icons" id="notif-btn"  *ngIf="isSub && isOn" (click)="toggleNotif()">notifications_active</i>
+                        <!-- <i class="material-icons" id="notif-btn">notifications_off</i> -->
                     </div>
                 </div>
             </div>

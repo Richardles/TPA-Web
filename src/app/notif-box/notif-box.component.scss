@@ -1,0 +1,32 @@
+
+.notif{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 16px 16px 0px;
+    .head{
+        display: flex;
+        align-items: center;
+        .pp{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 48px;
+            height: 48px;
+            img{
+                width: 48px;
+                height: 48px;
+                border-radius: 50%;
+            }
+        }
+        .info{
+            padding: 10px;
+        }
+    }
+    .thumbnail{
+        img{
+            width: 100px;
+            height: 50px;
+        }
+    }
+}

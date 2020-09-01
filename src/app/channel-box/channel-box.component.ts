@@ -55,6 +55,9 @@ export class ChannelBoxComponent implements OnInit {
     if(sub.includes(check)){
       this.subsLabel = "SUBSCRIBED"
       this.isSub = true
+    }else{
+      this.subsLabel = "SUBSCRIBE"
+      this.isSub = false
     }
   }
 

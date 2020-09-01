@@ -147,10 +147,38 @@ export class UploadComponent implements OnInit {
         this.updatePlaylist()
         console.log(this.playlistId);
       }
+      this.uploadActivity()
       location.href = "/home";
     },(error) => {
       console.log('there was an error sending the query', error);
     })
+  }
+
+  uploadActivity(){
+    this.apollo.mutate({
+      mutation:gql`
+      mutation CreateActivity($uid: String!, $vid: Int, $pid: Int){
+        createActivity(input:{
+          user_id: $uid,
+          video_id: $vid,
+          post_id: $pid
+        }){
+          id
+          user_id
+          video_id
+          post_id
+        }
+      }
+      `,variables:{
+        uid: this.getUserId(),
+        vid: this.createdObj.id,
+        pid: 0
+      }
+    }).subscribe( result => {
+
+    }),(error) => {
+      console.log(error);
+    }
   }
 
   updatePlaylist(){

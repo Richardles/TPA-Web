@@ -24,11 +24,17 @@ export class HeaderComponent implements OnInit {
   isShortKey;
   setting;
   logged;
-
+  isNotifOpen
+  subscription = [];
+  tempUser;
+  
   constructor(private authService: SocialAuthService, private apollo: Apollo, private router: Router) { }
-
+  
+  sideBarSubs = [];
   auto = [];
   videos = [];
+  notifs = [];
+  notifToShow = [];
   
   ngOnInit(): void {
     if(localStorage.getItem("currentUser") != null){
@@ -43,7 +49,9 @@ export class HeaderComponent implements OnInit {
     this.isShortKey = false;
     this.setting = false;
     this.logged = false;
-    this.getLoggedUser()
+    this.getLoggedUser();
+    this.isNotifOpen = false
+    this.getUserNotifyId()
   }
 
   signIn(): void {
@@ -68,6 +76,7 @@ export class HeaderComponent implements OnInit {
 
   getLoggedUser(){
     let user = JSON.parse(localStorage.getItem("currentUser"))
+    this.getUpdatedUser(user.id)
     if(user){
       this.logged = true
     }else{
@@ -89,7 +98,39 @@ export class HeaderComponent implements OnInit {
   }
 
   toggleNotif(){
+    if(this.isNotifOpen){
+      this.isNotifOpen = false
+    }else{
+      this.isNotifOpen = true
+    }
+  }
 
+  getUserNotifyId(){
+    let n = this.loggedUser.notified_by.split(',')
+    this.getNotif(n.toString())
+    console.log(n.toString());
+  }
+  
+  getNotif(id){
+    this.apollo.watchQuery<any>({
+      query:gql`
+      query GetActivities($uid: String!){
+        getActivitiesByUserId(user_id: $uid){
+          id
+          user_id
+          video_id
+          post_id
+        }
+      }
+      `,variables:{
+        uid: id
+      }
+    }).valueChanges.subscribe( result => {
+      this.notifs = result.data.getActivitiesByUserId
+    }),(error) => {
+      console.log(error);
+      console.log(id);
+    }
   }
 
   toggleSidebar(){
@@ -170,6 +211,95 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  getSubscription(){
+    this.subscription = this.loggedUser.subscribed.split(',')
+    console.log(this.subscription);
+    
+    for(let i = 0; i < this.subscription.length; i++){
+      this.getSubs(this.subscription[i])
+    }
+  }
+
+  getSubs(uid){
+    console.log(uid);
+    
+    this.apollo.watchQuery<any>({
+      query: gql `
+        query GetUser($id: String!){
+          getUser(id: $id){
+            id
+            name
+            profile_picture
+            subscriber
+            email
+            location
+            premium
+            restriction
+            premium_date
+            channel_icon
+            channel_description
+            channel_join_date
+            channel_views
+            channel_location
+            channel_art
+            like_comment
+            dislike_comment
+            subscribed
+            notified_by
+          }
+        }
+      `,
+      variables:{
+        id: uid
+      }
+    }).valueChanges.subscribe(result => {
+      this.tempUser = result.data.getUser
+      this.sideBarSubs.push(this.tempUser)
+    },(error) => {
+      console.log(error);
+    })
+  }
+
+  getUpdatedUser(uid){
+    
+    this.apollo.watchQuery<any>({
+      query: gql `
+        query GetUser($id: String!){
+          getUser(id: $id){
+            id
+            name
+            profile_picture
+            subscriber
+            email
+            location
+            premium
+            restriction
+            premium_date
+            channel_icon
+            channel_description
+            channel_join_date
+            channel_views
+            channel_location
+            channel_art
+            like_comment
+            dislike_comment
+            subscribed
+            notified_by
+          }
+        }
+      `,
+      variables:{
+        id: uid
+      }
+    }).valueChanges.subscribe(result => {
+      this.loggedUser = result.data.getUser;
+      this.getSubscription()
+      
+    },(error) => {
+      console.log(error);
+    })
+  }
+
 
   getUser(){
     this.apollo.watchQuery<any>({
@@ -194,6 +324,7 @@ export class HeaderComponent implements OnInit {
             like_comment
             dislike_comment
             subscribed
+            notified_by
           }
         }
       `,
@@ -206,8 +337,8 @@ export class HeaderComponent implements OnInit {
       this.loggedUser = result.data.getUser;
       localStorage.removeItem("currentUser");
       localStorage.setItem("currentUser",JSON.stringify(this.loggedUser));
-      // location.reload();
-
+      this.getSubscription()
+      
     },(error) => {
       console.log(error);
       //ga ada -> create
@@ -287,8 +418,6 @@ export class HeaderComponent implements OnInit {
     this.toggleMenu()
   }
 
-
-
   toggleMenu(){
     if(this.userMenus){
       this.userMenus = false
@@ -296,7 +425,6 @@ export class HeaderComponent implements OnInit {
       this.userMenus = true
     }
     console.log(this.userMenus);
-    
   }
 
 }

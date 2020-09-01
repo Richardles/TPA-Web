@@ -28,6 +28,12 @@ export class HomeComponent implements OnInit {
           thumbnail
           userId
           views
+          playlist_id
+          category
+          audience
+          visibility
+          premium
+          date
         }
       }
       `,
