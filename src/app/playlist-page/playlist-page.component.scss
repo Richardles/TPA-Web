@@ -14,6 +14,11 @@
                 width: 100%;
                 height: 175px;
                 margin-bottom: 10px;
+                transition: 0.5s ease;
+                &:hover{
+                    transform: scale(1.1);
+                    transition: 0.5s ease;
+                }
             }
         }
         .title{
@@ -24,6 +29,25 @@
         .info{
             display: flex;
             align-items: center;
+            *{
+                margin: 5px;
+            }
+            img{
+                transition: 0.5s ease;
+                &:hover{
+                    transform: scale(1.05);
+                    box-shadow: 2px 2px 3px gray;
+                    cursor: pointer;
+                }
+            }
+            .name{
+                transition: 0.5s ease;
+                &:hover{
+                    transform: scale(1.05);
+                    text-shadow: 2px 2px 3px gray;
+                    cursor: pointer;
+                }
+            }
         }
         .vis{
             margin-top: 20px;
@@ -111,7 +135,11 @@
         }
         .user-profile{
             display: flex;
+            justify-content: space-between;
             align-items: center;
+            .info{
+                display: flex;
+            }
             img{
                 border-radius: 50%;
                 width: 45px;
@@ -119,6 +147,26 @@
             }
             .name{
                 margin-left: 10px;
+            }
+            .buttons{
+                display: flex;
+                align-items: center;
+                i{
+                    padding: 8px;
+                    width: 24px;
+                    height: 24px;
+                }
+                div{
+                    padding: 10px 16px;
+                    background: rgb(204, 0, 0);
+                    color: white;
+                    border-radius: 2px;
+                    font-size: 14px;
+                    font-weight: 500;
+                }
+                &:hover{
+                    cursor: pointer;
+                }
             }
         }
         #reply-btn{
@@ -193,5 +241,55 @@
         .videos-container{
             padding: 20px;
         }
+        .sort{
+            margin: 20px;
+        }
+        .type{
+            margin-left: 20px;
+            padding: 10px;
+        }
+    }
+}
+
+.share{
+    width: 470px;
+    height: 260px;
+    max-height: 674px;
+    max-width: 962px;
+    outline: none;
+    z-index: 2202;
+    position: fixed;
+    top: 182.7px;
+    left: 222px;
+    box-sizing: border-box;
+    background: rgb(255, 255, 255);
+    // position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 24px;
+    .content{
+        img{
+            width: 60px;
+            height: 60px;
+        }
+    }
+    .top{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 16px;
+        .font{
+            font-size: 16px;
+        }
+        i{
+            cursor: pointer;
+        }
+    }
+    .url{
+        padding: 16px;
+        background: rgb(187, 187, 187);
+        max-width: 440px;
+        max-height: 260px;
     }
 }

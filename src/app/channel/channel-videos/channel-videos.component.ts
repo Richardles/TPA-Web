@@ -10,21 +10,137 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class ChannelVideosComponent implements OnInit {
 
-videos;
+videos = [];
+lastKey:number = 12;
+observer: any
 filteredVids: Array<any> = [];
 id;
+user;
+temp = []
+isSort
 
   constructor(private apollo: Apollo, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.isSort = false
     this.id = this.route.parent.snapshot.paramMap.get('id');
     // this.getVideo()
-    this.getVideosOfUserId()
+    // this.getVideosOfUserId()
+    this.getLoggedUser()
+
+    this.lastKey = 12;
+    this.observer = new IntersectionObserver((entry)=>{
+      if(entry[0].isIntersecting){
+        let container = document.querySelector(".container");
+        for(let i: number = 0; i< 10; i++){
+          if(this.lastKey < this.filteredVids.length){
+            console.log(this.lastKey);
+            let div = document.createElement("div");
+            let v = document.createElement("app-video-box");
+            div.setAttribute("class", "video-container");
+            v.setAttribute("video", "this.filteredVids[this.lastKey]");
+            div.appendChild(v);
+            container.appendChild(div);
+            this.lastKey++;
+          }
+        }
+      }
+    
+    });
+    this.observer.observe(document.querySelector(".footer-scroll"));
+  }
+
+  getLoggedUser(){
+    let users = JSON.parse(localStorage.getItem("currentUser"))
+    if(users != null){
+      this.getUser(users)
+    }
+    this.getNonPremium()
+  }
+
+  getUser(users){
+    this.apollo.watchQuery<any>({
+      query: gql `
+        query GetUser($id: String!){
+          getUser(id: $id){
+            id
+            name
+            profile_picture
+            subscriber
+            email
+            location
+            premium
+            restriction
+            premium_date
+            channel_icon
+            channel_description
+            channel_join_date
+            channel_views
+            channel_location
+            channel_art
+            like_comment
+            dislike_comment
+            subscribed
+            notified_by
+            like_video
+            dislike_video
+            like_post
+            dislike_post
+            premium_type
+          }
+        }
+      `,
+      variables:{
+        id: users.id
+      }
+    }).valueChanges.subscribe(result => {
+      this.user = result.data.getUser
+      if(this.user.premium_type != "monthly" && this.user.premium_type != "annually"){
+        this.getNonPremium()
+      }else{
+        this.getVideo()
+      }
+    },(error) => {
+      console.log(error);
+    })
+  }
+
+  getNonPremium(){
+    this.apollo.query<any>({
+      query:gql`
+      query GetNotPremium{
+        getNotPremiumVideos{
+          id
+          url
+          title
+          likes
+          dislikes
+          description
+          thumbnail
+          userId
+          views
+          playlist_id
+          category
+          audience
+          visibility
+          premium
+          date
+        }
+      }
+      `
+    }).subscribe(res=>{
+      this.videos = res.data.getNotPremiumVideos
+      console.log(this.videos.length);
+      this.filterVideos()
+    }),(error)=>{
+      console.log(error);
+    }
   }
 
   filterVideos(){
     let pushed = []
     let i = 0
+    let ctr = 0;
     while(i < this.videos.length){
        let idx = this.videos[Math.floor(Math.random() * (this.videos.length - 0) + 0)];
        console.log(idx)
@@ -34,6 +150,10 @@ id;
            pushed.push(idx.id)
            i++
          }
+       }1
+       ctr++
+       if(ctr >= 200){
+         break
        }
     }
   }
@@ -52,6 +172,12 @@ id;
           thumbnail
           userId
           views
+          playlist_id
+          category
+          audience
+          visibility
+          premium
+          date
         }
       }
       `,
@@ -90,9 +216,62 @@ id;
       }
     }).valueChanges.subscribe(result => {
       this.videos = result.data.getVideosByUserId
+      let t = this.videos
+      console.log(t);
+      for(let i = 0; i < 5; i++){
+        for(let j = 0; j < t.length; j++){
+          const element = t[j]
+          this.temp.push(element);
+        }
+      }
     },(error) => {
       console.log(error);
     })
+  }
+
+  toggleSort(){
+    if(this.isSort){
+      this.isSort = false
+    }else{
+      this.isSort = true
+    }
+  }
+
+  mostPopular(){
+    this.toggleSort()
+    for(let i = 0; i < this.filteredVids.length; i++){
+      for(let j = 0; j < this.filteredVids.length-i-1; j++){
+        if(this.filteredVids[j].views < this.filteredVids[j+1].views){
+          let t = this.filteredVids[j]
+          this.filteredVids[j] = this.filteredVids[j+1]
+          this.filteredVids[j+1] = t
+        }
+      }
+    }
+  }
+  oldest(){
+    this.toggleSort()
+    for(let i = 0; i < this.filteredVids.length; i++){
+      for(let j = 0; j < this.filteredVids.length-i-1; j++){
+        if(this.filteredVids[j].date.toString() > this.filteredVids[j+1].date.toString()){
+          let t = this.filteredVids[j]
+          this.filteredVids[j] = this.filteredVids[j+1]
+          this.filteredVids[j+1] = t
+        }
+      }
+    }
+  }
+  newest(){
+    this.toggleSort()
+    for(let i = 0; i < this.filteredVids.length; i++){
+      for(let j = 0; j < this.filteredVids.length-i-1; j++){
+        let t = this.filteredVids[j]
+          if(this.filteredVids[j].date.toString() < this.filteredVids[j+1].date.toString()){
+          this.filteredVids[j] = this.filteredVids[j+1]
+          this.filteredVids[j+1] = t
+        }
+      }
+    }
   }
 
 }

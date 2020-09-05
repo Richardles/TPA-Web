@@ -23,7 +23,10 @@ export class PremiumComponent implements OnInit {
     this.getLoggedUser()
     this.plan = "monthly"
     this.price = "59,000"
-    this.getUser()
+    if(this.user != null){
+      this.getUser()
+
+    }
   }
 
   setPlan(plan){
@@ -40,46 +43,51 @@ export class PremiumComponent implements OnInit {
   }
 
   updatePremium(){
-    this.apollo.mutate<any>({
-      mutation:gql`
-      mutation UpdatePremium($id: String!, $bil:String!){
-        updatePremium(id: $id, billing: $bil){
-          id
-          name
-          profile_picture
-          subscriber
-          email
-          location
-          premium
-          restriction
-          premium_date
-          channel_icon
-          channel_description
-          channel_join_date
-          channel_views
-          channel_location
-          channel_art
-          like_comment
-          dislike_comment
-          subscribed
-          notified_by
-          like_video
-          dislike_video
-          like_post
-          dislike_post
-          premium_type
+    this.getLoggedUser()
+    if(!this.user){
+      console.log("no user");
+      window.alert("Please login")
+    }else{
+      this.apollo.mutate<any>({
+        mutation:gql`
+        mutation UpdatePremium($id: String!, $bil:String!){
+          updatePremium(id: $id, billing: $bil){
+            id
+            name
+            profile_picture
+            subscriber
+            email
+            location
+            premium
+            restriction
+            premium_date
+            channel_icon
+            channel_description
+            channel_join_date
+            channel_views
+            channel_location
+            channel_art
+            like_comment
+            dislike_comment
+            subscribed
+            notified_by
+            like_video
+            dislike_video
+            like_post
+            dislike_post
+            premium_type
+          }
         }
+        `,variables:{
+          id: this.user.id,
+          bil: this.plan
+        }
+      }).subscribe( result => {
+        this.isPremium = true
+      }),(error) => {
+        console.log(error);
       }
-      `,variables:{
-        id: this.user.id,
-        bil: this.plan
-      }
-    }).subscribe( result => {
-      console.log(result.data.updatePremium.premium_type);
-      console.log(result.data.updatePremium.premium_date);
-      this.isPremium = true
-    }),(error) => {
-      console.log(error);
+
     }
   }
 

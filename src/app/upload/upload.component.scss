@@ -41,6 +41,11 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    transition: 0.5s ease;
+    &:hover{
+        transition: 0.5s ease;
+        transform: scale(1.1);
+    }
 }
 
 .uploadOnUpload{
@@ -157,6 +162,28 @@
         min-height: 450px;
         overflow: hidden;
         overflow-y: scroll;
+        
+    }
+}
+
+.warn{
+    height: 500px;
+    width: 100%;
+    margin-left: 0px;
+    div{
+        height: 500px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: Helvetica;
+        p{
+            color: white;
+            font-size: 75px;
+            padding: 20px;
+            margin-left: -20px;
+            border-radius: 10px;
+            background: blue;
+        }
         
     }
 }

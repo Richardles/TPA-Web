@@ -1,19 +1,21 @@
 <div class="videoBox">
     <a [routerLink]="['/video-player-page', video.id]" routerLinkActive="router-link-active" >
         <img [src]="video.thumbnail" class="thumbnail">
+        <video src="{{video.url}}" id="vid" style="display: none;" (loadedmetadata)="setDur($event)"></video>
+        <div class="dur">{{durString}}</div>
     </a>
         
     <div class="titleBox" *ngIf="userId">
         <img [src]="userId.profile_picture" class="pp" (click)="toChannel()">
         <div class="info">
-            <div class="title">{{video.title}}</div>
+            <div class="title">{{video.title}} ({{type}})</div>
             <div class="playlist">
-                <div class="user" *ngIf="userId != null">{{userId.name}}</div>
+                <div class="user" *ngIf="userId != null" (click)="toChannel()">{{userId.name}}</div>
                 <i class="material-icons" (click) = "toggleModal()">more_vert</i>
             </div>
             <div class="viewDate">
-                <div class="views">{{video.views}} Views</div>
-                <div class="date">date</div>
+                <div class="views">{{view}} Views</div>
+                <div class="date">{{video.date | dateAgo}}</div>
             </div>
         </div>
     </div>
@@ -21,6 +23,7 @@
     <div class="playlistModal" *ngIf="modal">
         <div (click)="addToQueue()">Add to queue</div>
         <div (click)="routerToPlaylistModal()">Save to playlist</div>
+        <div (click)="deleteVid()" *ngIf="deleteAble">Delete video</div>
     </div>
 </div>
 

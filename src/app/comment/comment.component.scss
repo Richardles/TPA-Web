@@ -20,6 +20,9 @@
         font-size: 13px;
         *{
             margin: 10px;
+            &:hover{
+                cursor: pointer;
+            }
         }
         .TxtReply{
             cursor: pointer;
@@ -29,6 +32,13 @@
         font-size: 14px;
     }
     .commentInfo{
+        .replies{
+            margin: 10px;
+            color: blue;
+            &:hover{
+                cursor: pointer;
+            }
+        }
         .replyField{
             width: 330%;
             transition: 0.2s;

@@ -1,16 +1,16 @@
-<div class="comment">
+<div class="comment" *ngIf="user">
     <img src = "{{user.profile_picture}}" class="profile_pic">
     <div class="commentInfo">
         <div class="commenter-date">
             <span>{{user.name}}</span>
-            <span class="date">{{comment.date}}</span>
+            <span class="date">{{comment.date | dateAgo}}</span>
         </div>
         <div class="theComment">
             {{comment.comment}}
         </div>
         <div class="responses">
-            <i class="material-icons" id="menu-btn" (click)="updateLike()" [style.color]="isLiked ? 'blue' : 'black'">thumb_up_alt</i>{{comment.likes}}
-            <i class="material-icons" id="menu-btn" (click)="updateDislike()">thumb_down_alt</i>{{comment.dislikes}}
+            <i class="material-icons" id="menu-btn" (click)="like()" [style.color]="isLiked ? 'blue' : 'gray'">thumb_up_alt</i>{{comment.likes}}
+            <i class="material-icons" id="menu-btn" (click)="dislike()" [style.color]="isDisliked ? 'blue' : 'gray'">thumb_down_alt</i>{{comment.dislikes}}
             <span (click)="reply()" class="TxtReply">REPLY</span>
         </div>
         <div class="replyField" *ngIf="isReply">
@@ -24,8 +24,14 @@
             </div>
         </div>
 
-        <div *ngFor="let item of replies">
-            <app-comment-replies [comment]="item"></app-comment-replies>
+        <div (click)="toggleReplies()" class="replies" *ngIf="replyCount > 0">
+            <div>{{ViewLbl}} {{replyCount}} replies</div>
+        </div>
+
+        <div *ngIf="showReplies">
+            <div *ngFor="let item of replies">
+                <app-comment-replies [comment]="item"></app-comment-replies>
+            </div>
         </div>
     </div>
 </div>

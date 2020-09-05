@@ -26,6 +26,7 @@ export class ChannelCommunityComponent implements OnInit {
   title;
   description;
   posts;
+  loggedUser
 
   constructor(private route:ActivatedRoute, private apollo: Apollo, private storage: AngularFireStorage, private db: AngularFirestore) {
     this.id = this.route.parent.snapshot.paramMap.get('id');
@@ -35,6 +36,11 @@ export class ChannelCommunityComponent implements OnInit {
     this.getUser();
     this.showPic = false
     this.GetUserPosts();
+    this.getLoggedUser()
+  }
+
+  getLoggedUser(){
+    this.loggedUser = JSON.parse(localStorage.getItem("currentUser"))
   }
 
   setUrl($event){
@@ -105,7 +111,7 @@ export class ChannelCommunityComponent implements OnInit {
     }
     
     insert(){
-      this.apollo.mutate({
+      this.apollo.mutate<any>({
         mutation:gql`
         mutation CreatePost($url: String, $title: String!, $desc: String!, $channel_id: String!){
           createPost(input:{
@@ -134,8 +140,36 @@ export class ChannelCommunityComponent implements OnInit {
           channel_id: this.id
         }
       }).subscribe( res => {
-        let p = res.data
+        let p = res.data.createPost
         console.log(p);
+        this.insertActivity(p)
+      }),(error) => {
+        console.log(error);
+      }
+    }
+
+    insertActivity(p){
+      this.apollo.mutate({
+        mutation:gql`
+        mutation CreateActivity($uid: String!, $vid: Int, $pid: Int){
+          createActivity(input:{
+            user_id: $uid,
+            video_id: $vid,
+            post_id: $pid
+          }){
+            id
+            user_id
+            video_id
+            post_id
+          }
+        }
+        `,variables:{
+          uid: this.id,
+          vid: 0,
+          pid: p.id
+        }
+      }).subscribe( result => {
+  
       }),(error) => {
         console.log(error);
       }

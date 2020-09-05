@@ -13,12 +13,19 @@ export class SearchPageComponent implements OnInit {
   channels
   videos
   playlists
+  filteredVid = []
+  filteredChan = []
+  filteredPlay = []
+  nonPremium = []
 
   typeVideo
   typeChannel
   typePlaylist
+  thisWeek
+  thisMonth
+  thisYear
   currentType
-
+  user;
   query
   constructor(private apollo:Apollo, private route:ActivatedRoute) {
 
@@ -32,9 +39,13 @@ export class SearchPageComponent implements OnInit {
         console.log(this.query);
       }
     })
+    this.getLoggedUser()
     this.typeVideo = true
     this.typeChannel = true
     this.typePlaylist = true
+    this.thisWeek = false
+    this.thisMonth = false
+    this.thisYear = false
     this.isFiltering = false
     // this.GetAllUsers()
     // this.GetAllVideos()
@@ -42,7 +53,170 @@ export class SearchPageComponent implements OnInit {
     this.GetUsersWhereNameLike()
     this.GetVideosWhereNameLike()
     this.GetPlaylistsWhereNameLike()
+  }
 
+  getLoggedUser(){
+    this.user = JSON.parse(localStorage.getItem("currentUser"))
+  }
+
+  getUser(){
+    this.apollo.watchQuery<any>({
+      query: gql`
+        query GetUser($id: String!){
+          getUser(id: $id){
+            id
+            name
+            profile_picture
+            subscriber
+            email
+            location
+            premium
+            restriction
+            premium_date
+            channel_icon
+            channel_description
+            channel_join_date
+            channel_views
+            channel_location
+            channel_art
+            like_comment
+            dislike_comment
+            subscribed
+            notified_by
+            like_video
+            dislike_video
+            like_post
+            dislike_post
+            premium_type
+          }
+        }
+      `,
+      variables:{
+        id: this.user.id
+      }
+    }).valueChanges.subscribe(result => {
+      this.user = result.data.getUser
+      if(this.user.premium_type != "monthly" && this.user.premium_type != "annually"){
+        this.filterVid()
+      }
+    },(error) => {
+      console.log(error);
+    })
+  }
+  filterVid(){
+    for(let i = 0; i < this.videos.length; i++){
+      if(this.videos[i].premium == "Not premium"){
+        this.nonPremium.push(this.videos[i])
+      }
+    }
+    this.videos = this.nonPremium
+  }
+
+  changeDate(d){
+    if(d == 'week'){
+      this.filteredVid = []
+      this.filteredPlay = []
+      this.thisWeek = true
+      this.thisMonth = false
+      this.thisYear = false
+      this.typeVideo = false
+      this.typeChannel = false
+      this.typePlaylist = false
+      console.log(this.transform(this.videos[0].date));
+      for(let i = 0; i < this.videos.length; i++){
+        let v = this.transform(this.videos[i].date).toString()
+        console.log(v);
+        if(v.includes('day') || v.includes('hour') || v.includes('minute') || v.includes('second')){
+          this.filteredVid.push(this.videos[i])
+        }
+      }
+      for(let i = 0; i < this.playlists.length; i++){
+        let p = this.transform(this.playlists[i].last_updated).toString()
+        if(p.includes('day') || p.includes('hour') || p.includes('minute') || p.includes('second')){
+          this.filteredPlay.push(this.playlists[i])
+        }
+      }
+    }else if(d == 'month'){
+      this.filteredVid = []
+      this.filteredPlay = []
+      this.thisWeek = false
+      this.thisMonth = true
+      this.thisYear = false
+      this.typeVideo = false
+      this.typeChannel = false
+      this.typePlaylist = false
+      var today = new Date();
+      console.log(today.toISOString().substring(0, 10));
+      console.log(this.videos[0].date);
+      let d = today.toISOString().substring(0, 10)
+      d = d.substring(0, 7)
+      for(let i = 0; i < this.videos.length; i++){
+        let v = this.transform(this.videos[i].date).toString()
+        console.log(v);
+        if(v.includes('week') || v.includes('day') || v.includes('hour') || v.includes('minute') || v.includes('second')){
+          this.filteredVid.push(this.videos[i])
+        }
+      }
+      for(let i = 0; i < this.playlists.length; i++){
+        let p = this.transform(this.playlists[i].last_updated).toString()
+        if(p.includes('week') || p.includes('day') || p.includes('hour') || p.includes('minute') || p.includes('second')){
+          this.filteredPlay.push(this.playlists[i])
+        }
+      }
+    }else if(d == 'year'){
+      this.filteredVid = []
+      this.filteredPlay = []
+      this.thisWeek = false
+      this.thisMonth = false
+      this.thisYear = true
+      this.typeVideo = false
+      this.typeChannel = false
+      this.typePlaylist = false
+      for(let i = 0; i < this.videos.length; i++){
+        let v = this.transform(this.videos[i].date).toString()
+        console.log(v);
+        if(v.includes('month') || v.includes('week') || v.includes('day') || v.includes('hour') || v.includes('minute') || v.includes('second')){
+          this.filteredVid.push(this.videos[i])
+        }
+      }
+      for(let i = 0; i < this.playlists.length; i++){
+        let p = this.transform(this.playlists[i].last_updated).toString()
+        if(p.includes('month') || p.includes('week') || p.includes('day') || p.includes('hour') || p.includes('minute') || p.includes('second')){
+          this.filteredPlay.push(this.playlists[i])
+        }
+      }
+    }
+    
+  }
+
+  transform(value: any): any {
+    if(value){
+      const seconds = Math.floor(((+new Date() - +new Date(value))/1000))
+      if(seconds < 29) return 1
+
+      const intervals = {
+        'year': 31536000,
+        'month': 2592000,
+        'week':604800,
+        'day':86400,
+        'hour':3600,
+        'minute':60,
+        'second':1
+      }
+
+      let counter
+      for(const i in intervals){
+        counter = Math.floor(seconds / intervals[i])
+        if(counter > 0){
+          if(counter === 1){
+            return counter + ' ' + i
+          }else{
+            return counter + ' ' + i
+          }
+        }
+      }
+    }
+    return value
   }
 
   GetUsersWhereNameLike(){
@@ -68,6 +242,7 @@ export class SearchPageComponent implements OnInit {
           like_comment
           dislike_comment
           subscribed
+          notified_by
         }
       }
       `,variables:{
@@ -101,6 +276,7 @@ export class SearchPageComponent implements OnInit {
           audience
           visibility
           premium
+          date
         }
       }
       `,variables:{
@@ -108,6 +284,9 @@ export class SearchPageComponent implements OnInit {
       }
     }).valueChanges.subscribe( res=>{
       this.videos = res.data.getVideosByName
+      if(this.user != null){
+        this.getUser()
+      }
     }),(error)=>{
       console.log(error);
     }
@@ -144,22 +323,34 @@ export class SearchPageComponent implements OnInit {
       this.typeChannel = true
       this.typeVideo = true
       this.typePlaylist = true
+      this.thisWeek = false
+      this.thisMonth = false
+      this.thisYear = false
     }else{
       if(type == "channel"){
         this.currentType = "channel"
         this.typeChannel = true
         this.typeVideo = false
         this.typePlaylist = false
+        this.thisWeek = false
+        this.thisMonth = false
+        this.thisYear = false
       }else if(type == "video"){
         this.currentType = "video"
         this.typeChannel = false
         this.typeVideo = true
         this.typePlaylist = false
+        this.thisWeek = false
+        this.thisMonth = false
+        this.thisYear = false
       }else{
         this.currentType = "playlist"
         this.typeChannel = false
         this.typeVideo = false
         this.typePlaylist = true
+        this.thisWeek = false
+        this.thisMonth = false
+        this.thisYear = false
       }
     }
   }
@@ -262,7 +453,4 @@ export class SearchPageComponent implements OnInit {
   getPassingVideo(v){
     console.log(v.id)
   }
-
-  
-
 }

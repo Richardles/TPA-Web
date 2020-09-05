@@ -10,7 +10,31 @@ import { Route } from '@angular/compiler/src/core';
   styleUrls: ['./playlist-page.component.scss']
 })
 export class PlaylistPageComponent implements OnInit {
-
+  GET_USER = gql`
+  query GetUser($id: String!){
+    getUser(id: $id){
+      id
+      name
+      profile_picture
+      subscriber
+      email
+      location
+      premium
+      restriction
+      premium_date
+      channel_icon
+      channel_description
+      channel_join_date
+      channel_views
+      channel_location
+      channel_art
+      like_comment
+      dislike_comment
+      subscribed
+      notified_by
+    }
+  }
+  `
   id;
   playlist;
   playlistVideos;
@@ -28,6 +52,16 @@ export class PlaylistPageComponent implements OnInit {
   newCategory;
   newDesc;
   isMore;
+  loggedUser;
+  isSub;
+  subsLabel;
+  isOn;
+  lastKey;
+  observer: any;
+  open;
+  url;
+  shareOpen;
+  canEdit;
 
   constructor(private route:ActivatedRoute, private apollo: Apollo, private router: Router) { 
     this.route.params.subscribe(param => {
@@ -36,10 +70,124 @@ export class PlaylistPageComponent implements OnInit {
     })}
 
   ngOnInit(): void {
+    this.canEdit = false
+    this.url = window.location.href
+    this.shareOpen = false
+    this.lastKey = 6;
+    this.open=false
+    this.isOn = false
+    this.isSub = false
+    this.subsLabel = "SUBSCRIBE"
     this.GetPlaylistById()
     this.editing = false
     this.isUpdatingTitle = false
     this.isMore = false;
+    this.getLoggedUser()
+    this.observer = new IntersectionObserver((entry)=>{
+      if(entry[0].isIntersecting){
+        let container = document.querySelector(".right");
+        for(let i: number = 0; i< 4; i++){
+          if(this.lastKey < this.videosObj.length){
+            console.log(this.lastKey);
+            let div = document.createElement("div");
+            let v = document.createElement("app-playlist-videos");
+            div.setAttribute("class", "video-container");
+            v.setAttribute("video", "this.videosObj[this.lastKey]");
+            div.appendChild(v);
+            container.appendChild(div);
+            this.lastKey++;
+          }
+        }
+      }
+    
+    });
+    this.observer.observe(document.querySelector(".footer-scroll"));
+  }
+
+  checkSub(){
+    let sub = this.loggedUser.subscribed
+    let check = this.playlist.userId
+    if(sub.includes(check)){
+      this.subsLabel = "SUBSCRIBED"
+      this.isSub = true
+      console.log(this.loggedUser.id);
+    }else{
+      this.subsLabel = "SUBSCRIBE"
+      this.isSub = false
+      console.log("no");
+    }
+  }
+
+  toggleSort(){
+    if(this.open){
+      this.open = false
+    }else{
+      this.open = true
+    }
+  }
+
+  toggleNotif(){
+    if(this.isOn){
+      this.isOn = false
+    }else{
+      this.isOn = true
+    }
+    this.updateNotif()
+  }
+
+  copy(){
+    var u = document.createElement("input")
+    this.url = window.location.href
+    document.body.appendChild(u)
+    u.value = this.url
+    u.select()
+    document.execCommand("copy")
+    document.body.removeChild(u)
+  }
+
+  closeShare(){
+    if(this.shareOpen){
+      this.shareOpen = false
+    }else{
+      this.shareOpen = true
+    }
+  }
+
+  updateNotif(){
+    this.apollo.mutate({
+      mutation:gql`
+      mutation UpdateUserNotify($uid: String!, $nid: String!){
+        updateUserNotify(user_id: $uid,notif_id: $nid){
+          id
+          name
+          profile_picture
+          subscriber
+          email
+          location
+          premium
+          restriction
+          premium_date
+          channel_icon
+          channel_description
+          channel_join_date
+          channel_views
+          channel_location
+          channel_art
+          like_comment
+          dislike_comment
+          subscribed
+          notified_by
+        }
+      }
+      `,variables:{
+        uid: this.loggedUser.id,
+        nid: this.userPlaylist.id
+      }
+    }).subscribe( result => {
+
+    }),(error)=>{
+      console.log(error);
+    }
   }
 
   toChannel(){
@@ -57,6 +205,63 @@ export class PlaylistPageComponent implements OnInit {
   removeAll(){
     this.toggleMore()
     this.EmptyPlaylist()
+  }
+
+  getLoggedUser(){
+    this.loggedUser = JSON.parse(localStorage.getItem("currentUser"))
+    if(this.loggedUser != null){
+      if(this.playlist.userId == this.loggedUser.id){
+        this.canEdit = true
+      }else{
+        this.canEdit = false
+      }
+    }
+  }
+
+  subscribe(){
+    if(this.loggedUser != null){
+      this.apollo.mutate({
+        mutation:gql`
+        mutation UpdateSubscriber($uid: String!, $tid: String!){
+          updateSubscriber(user_id: $uid, target_id: $tid){
+            id
+            name
+            profile_picture
+            subscriber
+            email
+            location
+            premium
+            restriction
+            premium_date
+            channel_icon
+            channel_description
+            channel_join_date
+            channel_views
+            channel_location
+            channel_art
+            like_comment
+            dislike_comment
+            subscribed
+            notified_by
+          }
+        }
+        `,variables:{
+          uid: this.loggedUser.id,
+          tid: this.userPlaylist.id
+        },refetchQueries:[{
+          query: this.GET_USER
+          ,variables:{
+            id: this.userPlaylist.id
+          }
+        }]
+      }).subscribe( result => {
+        
+      }),(error) => {
+        console.log(error);
+        console.log(this.loggedUser.id);
+        
+      }
+    }
   }
 
   EmptyPlaylist(){
@@ -210,7 +415,6 @@ export class PlaylistPageComponent implements OnInit {
       this.video = result.data.getVideo;
       this.playlistThumbnail = this.video.thumbnail
       this.getUser();
-      this.pushVideos();
     },(error) => {
       console.log(error);
     })
@@ -236,6 +440,10 @@ export class PlaylistPageComponent implements OnInit {
             channel_views
             channel_location
             channel_art
+            like_comment
+            dislike_comment
+            subscribed
+            notified_by
           }
         }
       `,
@@ -244,6 +452,56 @@ export class PlaylistPageComponent implements OnInit {
       }
     }).valueChanges.subscribe(result => {
       this.userPlaylist = result.data.getUser
+
+      if(this.loggedUser != null){
+        this.getUpdatedUser()
+      }else{
+        this.getNonPremium()
+      }
+    },(error) => {
+      console.log(error);
+    })
+  }
+  getUpdatedUser(){
+    this.apollo.watchQuery<any>({
+      query: gql `
+        query GetUser($id: String!){
+          getUser(id: $id){
+            id
+            name
+            profile_picture
+            subscriber
+            email
+            location
+            premium
+            restriction
+            premium_date
+            channel_icon
+            channel_description
+            channel_join_date
+            channel_views
+            channel_location
+            channel_art
+            like_comment
+            dislike_comment
+            subscribed
+            notified_by
+            like_video
+            dislike_video
+            like_post
+            dislike_post
+            premium_type
+          }
+        }
+      `,
+      variables:{
+        id: this.loggedUser.id
+      }
+    }).valueChanges.subscribe(result => {
+      this.loggedUser = result.data.getUser
+      console.log(this.loggedUser);
+      this.checkSub()
+      this.pushVideos()
     },(error) => {
       console.log(error);
     })
@@ -269,6 +527,7 @@ export class PlaylistPageComponent implements OnInit {
             audience
             visibility
             premium
+            date
           }
         }
         `,
@@ -276,10 +535,96 @@ export class PlaylistPageComponent implements OnInit {
           id: this.playlistVideos[i]
         }
       }).valueChanges.subscribe(result => {
-        this.videosObj.push(result.data.getVideo);
+        let v = result.data.getVideo
+        if(this.loggedUser.premium_type != "monthly" && this.loggedUser.premium_type != "annually"){
+          if(v.premium == "Not premium"){
+            this.videosObj.push(result.data.getVideo);
+          }
+        }else{
+          this.videosObj.push(result.data.getVideo);
+        }
       },(error) => {
         console.log(error);
       })
+    }
+  }
+
+  getNonPremium(){
+    this.apollo.query<any>({
+      query:gql`
+      query GetNotPremium{
+        getNotPremiumVideos{
+          id
+          url
+          title
+          likes
+          dislikes
+          description
+          thumbnail
+          userId
+          views
+          playlist_id
+          category
+          audience
+          visibility
+          premium
+          date
+        }
+      }
+      `
+    }).subscribe(res=>{
+      let v = res.data.getNotPremiumVideos
+      this.filterVids(v)
+    }),(error)=>{
+      console.log(error);
+    }
+  }
+
+  filterVids(v){
+    let p = this.playlistVideos
+    console.log(p);
+    console.log(v);
+    
+    for(let i = 0; i < v.length; i++){
+      if(p.includes(v[i].id)){
+        this.videosObj.push(v[i])
+      }
+    }
+    console.log(this.videosObj);
+    
+  }
+
+  sortVid(){
+    for(let i = 0; i < this.videosObj.length; i++){
+      for(let j = 0; j < this.videosObj.length-i-1; j++){
+        if(this.videosObj[j].views < this.videosObj[j+1].views){
+          let t = this.videosObj[j]
+          this.videosObj[j] = this.videosObj[j+1]
+          this.videosObj[j+1] = t
+        }
+      }
+    }
+  }
+  sortPublished(){
+    for(let i = 0; i < this.videosObj.length; i++){
+      for(let j = 0; j < this.videosObj.length-i-1; j++){
+        if(this.videosObj[j].date > this.videosObj[j+1].date){
+          let t = this.videosObj[j]
+          this.videosObj[j] = this.videosObj[j+1]
+          this.videosObj[j+1] = t
+        }
+      }
+    }
+  }
+  sortAdded(){
+    for(let i = 0; i < this.videosObj.length; i++){
+      for(let j = 0; j < this.videosObj.length-i-1; j++){
+        if(this.videosObj[j].date < this.videosObj[j+1].date){
+          let t = this.videosObj[j]
+          this.videosObj[j] = this.videosObj[j+1]
+          this.videosObj[j+1] = t
+        }
+      }
     }
   }
 

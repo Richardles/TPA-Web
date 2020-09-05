@@ -1,13 +1,13 @@
-<div class="inputSection">
-    <div class="titleInput">
+<div class="inputSection" *ngIf="loggedUser">
+    <div class="titleInput" *ngIf="user">
         <img src = "{{user.profile_picture}}" class="profile_pic">
         <input type="text" name="" id="postTA" placeholder="Title" (input) = "title = $event.target.value">
     </div>
     <textarea name="" id="desc" cols="115" rows="5" placeholder="Description" (input) = "description = $event.target.value"></textarea>
     <div class="submitPost">
         <div class="uploadThumb">
-            <input type="file" name="pic" id="pic"(change)="onInputPic($event.target.files)" (url)="setUrl($event)">
-            <input type="button" class="button" value="ADD PICTURE" onclick="document.getElementById('pic').click();"/>
+            <input type="file" name="pic" id="pics"(change)="onInputPic($event.target.files)" (url)="setUrl($event)">
+            <input type="button" class="button" value="ADD PICTURE" onclick="document.getElementById('pics').click();"/>
         </div>
         <button class="button" (click)="insert()">POST</button>
     </div>

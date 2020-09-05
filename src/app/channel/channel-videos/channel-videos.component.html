@@ -1,9 +1,21 @@
-<div class="uploadLbl">
-    <p>UPLOADS</p>
+<div class="header">
+    <div class="uploadLbl">
+        <p>UPLOADS</p>
+    </div>
+    
+    <div class="sort">
+        <p (click)="toggleSort()">SORT BY</p>
+        <div class="menu" *ngIf="isSort">
+            <div (click)="mostPopular()">Most popular</div>
+            <div (click)="oldest()">Oldest</div>
+            <div (click)="newest()">Newest</div>
+        </div>
+    </div>
 </div>
 
 <div class="container">
-    <div class="video-container" *ngFor="let video of videos">
-        <app-video-box [video]="video"></app-video-box>
+    <div class="video-container" *ngFor="let video of filteredVids, let i = index">
+        <app-video-box [video]="video" *ngIf="i < lastKey"></app-video-box>
     </div>
+    <div class="footer-scroll"></div>
 </div>

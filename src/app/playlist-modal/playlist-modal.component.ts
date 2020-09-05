@@ -16,11 +16,13 @@ export class PlaylistModalComponent implements OnInit {
   playlistTitle;
   playlistVisibility;
   formOpen;
+  user;
 
   constructor(private apollo:Apollo) { }
 
   ngOnInit(): void {
-    this.getPlayListByUser();
+    this.getUserId()
+    this.getPlayListByUser()
     this.playlistVisibility = "Public";
   }
 
@@ -85,11 +87,10 @@ export class PlaylistModalComponent implements OnInit {
         }
       }
       `,variables:{
-        id: this.getUserId()
+        id: this.user.id
       }
     }).valueChanges.subscribe(({ data }) => {
         this.playlists = data.getPlaylistByUser
-        console.log(this.getUserId());
         console.log(this.playlists)
     },(error) => {
       console.log('there was an error sending the query', error);
@@ -125,7 +126,7 @@ export class PlaylistModalComponent implements OnInit {
           title: this.playlistTitle,
           view: this.playlistVisibility,
           desc: "",
-          userId: this.getUserId(),
+          userId: this.user.id,
       }
       ,refetchQueries: [{
           query: gql`
@@ -143,7 +144,7 @@ export class PlaylistModalComponent implements OnInit {
             }
           }
           `,variables:{
-            id: this.getUserId()
+            id: this.user.id
           }
       }]
     }).subscribe(({ data }) => {
@@ -161,8 +162,7 @@ export class PlaylistModalComponent implements OnInit {
   }
 
   getUserId(){
-    let user = JSON.parse(localStorage.getItem("currentUser"))
-    return user.id
+    this.user = JSON.parse(localStorage.getItem("currentUser"))
   }
 
 }

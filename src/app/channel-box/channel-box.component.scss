@@ -17,6 +17,9 @@
                 height: 136px;
                 background: gray;
                 border-radius: 50%;
+                &:hover{
+                    cursor: pointer;
+                }
             }
         }
         .info{
@@ -24,9 +27,16 @@
             .name{
                 font-size: 18px;
                 margin-bottom: 8px;
+                &:hover{
+                    cursor: pointer;
+                }
             }
             .channelSubs{
+                display: flex;
                 margin-bottom: 4px;
+                .vidCount{
+                    margin: 0px 5px;
+                }
             }
         }
     }

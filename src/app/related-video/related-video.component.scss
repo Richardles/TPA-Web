@@ -9,6 +9,11 @@
     width: 168px;
     height: 94px;
     margin-bottom: 10px;
+    transition: 0.5s ease;
+    &:hover{
+        transform: scale(1.1);
+        transition: 0.5s ease;
+    }
 }
 .videoBox{
     flex-direction: row;

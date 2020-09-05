@@ -1,0 +1,22 @@
+<div class="parent">
+    <!-- <a [routerLink]="['/video-player-page', video.id]" routerLinkActive="router-link-active" > -->
+        <div class="thumb">
+            <img [src]="playlistThumbnail" class="thumbnail">
+            <div class="effect">
+                <div class="label">PLAY ALL</div>
+            </div>
+        </div>
+        <!-- </a> -->
+        
+        <div class="titleBox" *ngIf="user">
+            <div class="title">{{playlist.title}}</div>
+            <div class="channel">
+                <div class="uname">{{user.name}}</div>
+                <div>Updated {{playlist.last_updated | dateAgo}}</div>
+            </div>
+            <div>{{playlist.description}}</div>
+            <a [routerLink]="['/playlist-page', playlist.id]" routerLinkActive="router-link-active" >
+                <div class="viewFull">VIEW FULL PLAYLIST</div>
+            </a>
+        </div>
+</div>

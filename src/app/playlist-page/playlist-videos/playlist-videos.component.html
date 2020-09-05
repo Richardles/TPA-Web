@@ -5,8 +5,10 @@
                 <img src="{{video.thumbnail}}" alt="">
             </a>
             </div>
-            <div class="info">
+            <div class="info" *ngIf="userProfile">
                 <div class="title">{{video.title}}</div>
+                <div class="view">{{views}} views  {{video.date | dateAgo}}</div>
+                <div class="user">{{video.description}}</div>
                 <div class="user">{{userProfile.name}}</div>
             </div>
         </div>
@@ -17,7 +19,7 @@
         <div class="playlistModal" *ngIf="modal">
             <div>Add to queue</div>
             <div (click) = "routerToPlaylistModal()">Save to playlist</div>
-            <div (click)="removeVideo()">Remove from playlist</div>
+            <div (click)="removeVideo()" *ngIf="canEdit">Remove from playlist</div>
         </div>
     </div>
 

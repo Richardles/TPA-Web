@@ -108,3 +108,56 @@
     }
 }
 
+.descTAsection {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    .descTA{
+        outline-color: blue;
+    }
+    .btns{
+        display: flex;
+        justify-content: flex-end;
+        *{
+            margin: 5px;
+        }
+        .done{
+            padding: 8px 12px 8px 12px;
+            margin: 7px;
+            border: none;
+            outline: none;
+            border-radius: 2px;
+            transition: 0.2s;
+            font-weight: 600;
+            color: white;
+            background: rgba(0, 0, 0, 0.2);
+            &:hover{
+                background: blue;
+                color: white;
+                cursor: pointer;
+            }
+        }
+        .cancel{
+            padding: 8px 12px 8px 12px;
+            margin: 7px;
+            border: none;
+            outline: none;
+            border-radius: 2px;
+            transition: 0.2s;
+            font-weight: 600;
+            color: gray;
+            background: transparent;
+            &:hover{
+                cursor: pointer;
+            }
+        }
+    }
+}
+i{
+    filter: opacity(0.6);
+    cursor: pointer;
+    transition: 0.3s;
+    &:hover{
+        filter: opacity(1);
+    }
+}

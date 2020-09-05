@@ -1,11 +1,11 @@
 <div class="container">
-    <div class="pp">
+    <div class="pp" *ngIf="user">
         <img src="{{user.profile_picture}}" alt="">
     </div>
     <div class="thePost">
-        <div class="info">
+        <div class="info" *ngIf="user">
             <p>{{user.name}}</p>
-            <p>{{post.date}}</p>
+            <p>{{post.date | dateAgo}}</p>
         </div>
         <div class="desc">
             <div class="title">{{post.title}}</div>

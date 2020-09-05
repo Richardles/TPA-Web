@@ -13,11 +13,13 @@ export class PlaylistComponent implements OnInit {
   vidId;
   video;
   playlistVideos = [];
+  vidCount;
 
   constructor(private apollo:Apollo) { }
 
   ngOnInit(): void {
     this.playlistVideos = this.playlist.videos_id.toString().split(',').map(Number);
+    this.vidCount = this.playlistVideos.length
     this.vidId = this.playlistVideos[0];
     this.getVideoById()
   }

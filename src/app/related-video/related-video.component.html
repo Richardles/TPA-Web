@@ -9,8 +9,8 @@
             <div class="title">{{video.title}}</div>
             <div class="user" *ngIf="userId != null">{{userId.name}}</div>
             <div class="viewDate">
-                <div class="views">{{video.views}} Views</div>
-                <div class="date">date</div>
+                <div class="views">{{view}} Views</div>
+                <div class="date">{{video.date | dateAgo}}</div>
             </div>
         </div>
     </div>

@@ -1,35 +1,54 @@
 <div class="parent">
-    <div class="video-screen">
+    <div class="video-screen" *ngIf="playingVideo">
         <video id="video-player" (click) = "hotkeys()" controls autoplay src="{{playingVideo.url}}"></video>
         <div class="title" (click) = "deletekeys()">{{playingVideo.title}}</div>
         <div class="viewInfo" (click) = "deletekeys()">
             
             <div>
-                {{playingVideo.views}} views
-                Date
+                {{view}} views
+                {{date}}
             </div>
 
             <div class="responses" (click) = "deletekeys()">
-                <i class="material-icons" id="menu-btn">thumb_up_alt</i>{{playingVideo.likes}}
-                <i class="material-icons" id="menu-btn">thumb_down_alt</i>{{playingVideo.dislikes}}
-                <i class="material-icons" id="reply-btn">reply</i>SHARE
+                <div class="like">
+                    <div class="likes">
+                        <div class="l-btn">
+                            <i class="material-icons" id="like-btn" (click)="like()"
+                            [style.color] = "isLike ? 'blue':'gray'">thumb_up_alt</i>{{likes}}
+                        </div>
+                        <div class="d-btn">
+                            <i class="material-icons" id="dislike-btn" (click)="dislike()"
+                            [style.color] = "isDislike ? 'blue':'gray'">thumb_down_alt</i>{{dislikes}}
+                        </div>
+                    </div>
+                    <div class="slide">
+                        <input type="range" class="slider" min="0" [max]="totalLikes" step="1" [value]="likeCount">
+                    </div>
+                </div>
+                
+                <i class="material-icons" id="reply-btn" (click)="toggleShare()">reply</i>SHARE
                 <i class="material-icons" id="save-btn" >playlist_add</i>SAVE
-                <i class="material-icons" id="menu-btn">more_horiz</i>
+                <i class="material-icons" id="menu-btn" (click)="toggleModal()">more_horiz</i>
+            </div>
+            
+            <div class="playlistModal" *ngIf="modal">
+                <div (click)="addToQueue()">Add to queue</div>
+                <div (click)="routerToPlaylistModal()">Save to playlist</div>
             </div>
         </div>
-        <div class="profile_info" (click) = "deletekeys()">
-            <img src = "{{userProfile.profile_picture}}" class="profile_pic">
+        <div class="profile_info" (click) = "deletekeys()" *ngIf="userProfile">
+            <img src = "{{userProfile.profile_picture}}" class="profile_pic" (click)="toChannel()">
             <div class="profilePart2">
                 <div class="detail_info">
-                    <div class="username">{{userProfile.name}}</div>
+                    <div class="username" (click)="toChannel()">{{userProfile.name}}</div>
                     <div class="subscriber">{{userProfile.subscriber}} subscribers</div>
                 </div>
                 
                 <div class="subNotif">
-                    <button (click)="subscribe()">SUBSCRIBE</button>
-                    <i class="material-icons" id="notif-btn">notifications_none</i>
-                    <!-- <i class="material-icons" id="notif-btn">notifications_active</i>
-                        <i class="material-icons" id="notif-btn">notifications_off</i> -->
+                    <button (click)="subscribe()" [style.background]="isSub ? 'gray' : 'red'">{{subsLabel}}</button>
+                    <i class="material-icons" id="notif-btn" *ngIf="isSub && !isOn" (click)="toggleNotif()">notifications_off</i>
+                    <i class="material-icons" id="notif-btn"  *ngIf="isSub && isOn" (click)="toggleNotif()">notifications_active</i>
+                        <!-- <i class="material-icons" id="notif-btn">notifications_off</i> -->
                     </div>
                 </div>
             </div>
@@ -39,22 +58,28 @@
             
             <div class="commentSection" (click) = "deletekeys()">
                 <div class="total-sort">
-                    <div>Comments</div>
-                    <div class="sort">
+                    <div>{{commentCount}} Comments</div>
+                    <div class="sort" (click) = "toggleSort()">
                         <i class="material-icons">sort</i>
                         <span>SORT BY</span>
                     </div>
+                    <div class="sortType" *ngIf="sortModal">
+                        <div (click)="getTopComment()">Top comment</div>
+                        <div (click)="getNewestComment()">Newest first</div>
+                    </div>
                 </div>
-                <div class="commentInput">
+                <div class="commentInput" *ngIf="loggedUser">
                     <img src = "{{loggedUser.profile_picture}}" class="profile_pic">
                     <input type="text" name="" id="commentTA" placeholder="Add a public comment" (input)="comment = $event.target.value">
                 </div>
-                <div class="submitComment">
+                <div class="submitComment" *ngIf="loggedUser">
                     <button (click)="submitComment()">COMMENT</button>
                 </div>
 
-                <div *ngFor="let item of filteredComments">
-                    <app-comment [comment]="item"></app-comment>
+                <div class="container">
+                    <div class="comment-container" *ngFor="let item of filteredComments, let i = index">
+                        <app-comment [comment]="item" *ngIf="i < lastKey"></app-comment>
+                    </div>
                 </div>
 
             </div>
@@ -68,8 +93,33 @@
                     <input type="checkbox" name="" id="checkbox" checked (change)="autoPlay($event)">
             </span>
         </div>
-        <div class="video-container" *ngFor="let v of videos" (click) = "deletekeys()">
-            <app-related-video [video]="v"></app-related-video>
+        <!-- <div class="relatedContainer"> -->
+            <div class="video-container" *ngFor="let v of videos, let i = index" (click) = "deletekeys()">
+                <app-related-video [video]="v" *ngIf="i < lastKey"></app-related-video>
+            </div>
+            <!-- </div> -->
         </div>
+</div>
+
+<div class="share" *ngIf="shareOpen">
+    <div class="top">
+        <div class="font">Share</div>
+        <i class="material-icons" (click) = "closeShare()">close</i>
+    </div>
+    <div class="content">
+        <a [href]="'http://twitter.com/share?text= &url=http://localhost:4200' + url" target="_blank">
+            <img src="../../assets/images/twitter.png" alt="">
+        </a>
+        
+    </div>
+    <div class="url">
+        {{url}}
+    </div>
+    <div>
+        <div (click)="copy()">COPY</div>
     </div>
 </div>
+<app-playlist-modal [isVisible]="playlist_modal" [vid]="playingVideo" (closePlaylist)="routerToPlaylistModal()"></app-playlist-modal>
+
+
+<div class="footer-scroll"></div>

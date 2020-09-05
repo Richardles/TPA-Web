@@ -13,12 +13,17 @@ export class SubscriptionComponent implements OnInit {
   filteredVids = [];
   observer: any;
   user;
+  todayV = []
+  weekV = []
+  monthV = []
+  isNotLogged;
 
   constructor(private apollo: Apollo) { }
 
   ngOnInit(): void {
+    this.isNotLogged = true
     this.getLoggedUser()
-    this.lastKey = 12;
+    this.lastKey = 6;
     this.observer = new IntersectionObserver((entry)=>{
       if(entry[0].isIntersecting){
         let container = document.querySelector(".container");
@@ -38,7 +43,6 @@ export class SubscriptionComponent implements OnInit {
     
     });
     this.observer.observe(document.querySelector(".footer-scroll"));
-  
   }
 
   getVideo(){
@@ -55,6 +59,12 @@ export class SubscriptionComponent implements OnInit {
           thumbnail
           userId
           views
+          playlist_id
+          category
+          audience
+          visibility
+          premium
+          date
         }
       }
       `,
@@ -81,6 +91,7 @@ export class SubscriptionComponent implements OnInit {
         this.filteredVids.push(this.videos[i])
       }
     }
+    this.filterDate()
   }
 
   getPassingVideo(v){
@@ -89,7 +100,12 @@ export class SubscriptionComponent implements OnInit {
 
   getLoggedUser(){
     let users = JSON.parse(localStorage.getItem("currentUser"))
-    this.getUser(users)
+    if(users != null){
+      this.getUser(users)
+      this.isNotLogged = false
+    }else{
+      this.isNotLogged = true
+    }
   }
 
   getUser(users){
@@ -115,6 +131,12 @@ export class SubscriptionComponent implements OnInit {
             like_comment
             dislike_comment
             subscribed
+            notified_by
+            like_video
+            dislike_video
+            like_post
+            dislike_post
+            premium_type
           }
         }
       `,
@@ -123,10 +145,97 @@ export class SubscriptionComponent implements OnInit {
       }
     }).valueChanges.subscribe(result => {
       this.user = result.data.getUser
-      this.getVideo()
+      if(this.user.premium_type != "monthly" && this.user.premium_type != "annually"){
+        this.getNonPremium()
+      }else{
+        this.getVideo()
+      }
     },(error) => {
       console.log(error);
     })
+  }
+
+  getNonPremium(){
+    this.apollo.query<any>({
+      query:gql`
+      query GetNotPremium{
+        getNotPremiumVideos{
+          id
+          url
+          title
+          likes
+          dislikes
+          description
+          thumbnail
+          userId
+          views
+          playlist_id
+          category
+          audience
+          visibility
+          premium
+          date
+        }
+      }
+      `
+    }).subscribe(res=>{
+      this.videos = res.data.getNotPremiumVideos
+      this.filter()
+      console.log(this.videos.length);
+    }),(error)=>{
+      console.log(error);
+    }
+  }
+
+  filterDate(){
+      for(let i = 0; i < this.filteredVids.length; i++){
+        let v = this.transform(this.filteredVids[i].date).toString()
+        if(v.includes('hour') || v.includes('minute') || v.includes('second')){
+          this.todayV.push(this.filteredVids[i])
+        }
+      }
+      for(let i = 0; i < this.filteredVids.length; i++){
+        let v = this.transform(this.filteredVids[i].date).toString()
+        if(v.includes('day') || v.includes('hour') || v.includes('minute') || v.includes('second')){
+          this.weekV.push(this.filteredVids[i])
+        }
+      }
+      for(let i = 0; i < this.filteredVids.length; i++){
+        let v = this.transform(this.filteredVids[i].date).toString()
+        if(v.includes('week') || v.includes('day') || v.includes('hour') || v.includes('minute') || v.includes('second')){
+          this.monthV.push(this.filteredVids[i])
+        }
+      }
+  }
+
+  transform(value: any): any {
+    if(value){
+      const seconds = Math.floor(((+new Date() - +new Date(value))/1000))
+      if(seconds < 29) return 1
+
+      const intervals = {
+        'year': 31536000,
+        'month': 2592000,
+        'week':604800,
+        'day':86400,
+        'hour':3600,
+        'minute':60,
+        'second':1
+      }
+
+      let counter
+      for(const i in intervals){
+        counter = Math.floor(seconds / intervals[i])
+        if(counter > 0){
+          if(counter === 1){
+            return counter + ' ' + i
+          }else{
+            return counter + ' ' + i
+          }
+        }
+      }
+    }
+    return value
   }
 
 }

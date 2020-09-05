@@ -29,10 +29,24 @@
     <a routerLink="more" class="apps">
         <i class="material-icons">apps</i>
     </a>
-    <a routerLink="setting" class="setting">
+    <div class="setting">
         <i class="material-icons" (click)="toggleSetting()" *ngIf="!logged">more_vert</i>
-        <i class="material-icons" (click)="toggleNotif()" *ngIf="logged">notifications_none</i>
-    </a>
+        <div class="notif-container">
+            <i class="material-icons" (click)="toggleNotif()" *ngIf="logged">notifications_none</i>
+
+            <div class="notif-modal" *ngIf="isNotifOpen">
+                <div class="box">
+                    <div class="header">Notifications</div>
+                    <div *ngFor="let notif of notifs">
+                        <app-notif-box [notif]="notif"></app-notif-box>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+   
 
     <div class="setting-modal" *ngIf="setting">
         <div class="set-box">
@@ -81,6 +95,14 @@
                     <div>Toggle mute</div>
                     <div>m</div>
                 </div>
+                <div class="keys">
+                    <div>Volume up</div>
+                    <div>&uarr;</div>
+                </div>
+                <div class="keys">
+                    <div>Volume down</div>
+                    <div>&darr;</div>
+                </div>
             </div>
         </div>
 
@@ -107,7 +129,7 @@
                 </div>
                 <ul class="listMenu">
                     <li (click)="toChannel()">Your channel</li>
-                    <li>Paid memberships</li>
+                    <li (click)="toPremium()">Paid memberships</li>
                     <li (click)="switchAcc()">Switch account</li>
                     <div class="restric">
                         <div>Resctricted mode</div>
@@ -149,70 +171,87 @@
                     <span style="padding: 15px;">Trending</span>
                 </li>
             </a>
-            <a routerLink="subscription-page" (click)="toggleSidebar()">
-                <li class="btns">
+            <!-- <a routerLink="subscription-page" (click)="checkLogin()"> -->
+                <li class="btns" (click)="checkLogin()">
                     <i class="material-icons">subscriptions</i>
                     <span style="padding: 15px;">Subscriptions</span>
                 </li>
-            </a>
+            <!-- </a> -->
             <br>
-            <a routerLink="library-page">
-                <li class="">
+                <li class="btns">
                     <i class="material-icons">video_library</i>
                     <span style="padding: 15px;">Library</span>
                 </li>
-            </a>
-            <a routerLink="history-page">
-                <li class="">
+                <li class="btns">
                     <i class="material-icons">history</i>
                     <span style="padding: 15px;">History</span>
                 </li>
-            </a>
-            <a routerLink="your-videos-page">
-                <li class="">
-                    <i class="material-icons">slideshow</i>
-                    <span style="padding: 15px;">Your videos</span>
-                </li>
-            </a>
-            <a routerLink="watch-later-page">
-                <li class="">
-                    <i class="material-icons">schedule</i>
-                    <span style="padding: 15px;">Watch later</span>
-                </li>
-            </a>
-            <a routerLink="liked-videos-page">
-                <li class="">
-                    <i class="material-icons">thumb_up</i>
-                    <span style="padding: 15px;">Liked videos</span>
-                </li>
-            </a>
-            SUBSCRIPTION
-                <a routerLink="liked-videos-page">
-                    <li class="">
-                        <i class="material-icons">youtube_play</i>
-                        Popular on YouTube
+                <div class="container" *ngFor="let play of firstFivePlay">
+                    <a [routerLink]="['/playlist-page', play.id]" routerLinkActive="router-link-active" (click)="toggleSidebar()">
+                        <i class="material-icons">playlist_play</i>
+                        <div class="name">{{play.title}}</div>
+                    </a>
+                </div>
+                <div *ngIf="isShowPlay">
+                    <div class="container" *ngFor="let play of restPlay" >
+                        <a [routerLink]="['/playlist-page', play.id]" routerLinkActive="router-link-active" (click)="toggleSidebar()">
+                            <i class="material-icons">playlist_play</i>
+                            <div class="name">{{play.title}}</div>
+                        </a>
+                    </div>
+                </div>
+                <div (click)="togglePlay()">
+                    <div class="btns" *ngIf="showMorePlay">
+                        <i class="material-icons">keyboard_arrow_down</i>
+                        <span style="padding: 15px;">Show more</span>
+                    </div>
+                    <div class="btns" *ngIf="!showMorePlay">
+                        <i class="material-icons">keyboard_arrow_up</i>
+                        <span style="padding: 15px;">Show less</span>
+                    </div>
+                </div>
+
+                <div class="subs"><li class="btns"><span style="padding: 15px;">SUBSCRIPTIONS</span></li></div>
+                    <div class="channels">
+                        <div class="container" *ngFor="let sub of sideBarSubs">
+                            <a [routerLink]="['/channel-app/',sub.id,'home']" routerLinkActive="router-link-active" (click)="toggleSidebar()">
+                                <div class="pp"><img src={{sub.profile_picture}} alt=""></div>
+                                <div class="name">{{sub.name}}</div>
+                            </a>
+                        </div>
+                    </div>
+                    <li class="btns">
+                        <span style="padding: 15px;">Popular on YouTube</span>
                     </li>
-                </a>
-                <a routerLink="liked-videos-page">
-                    <li class="">
-                        Music
+                    <li class="btns" (click)="toCategory('Music')">
+                        <span style="padding: 15px;">Music</span>
                     </li>
-                </a>
-                <a routerLink="liked-videos-page">
-                    <li class="">
-                        Sports
+                    <li class="btns" (click)="toCategory('Sport')">
+                        <span style="padding: 15px;">Sports</span>
                     </li>
-                </a>
-                <a routerLink="liked-videos-page">
-                    <li class="">
-                        Gaming
+                    <li class="btns" (click)="toCategory('Gaming')">
+                        <span style="padding: 15px;">Gaming</span>
                     </li>
-                </a>
-                <a routerLink="premium">
-                    <li class="">
-                        YouTube premium
+                    <li class="btns" (click)="toCategory('Entertainment')">
+                        <span style="padding: 15px;">Entertainment</span>
                     </li>
-                </a>
+                    <li class="btns" (click)="toCategory('News')">
+                        <span style="padding: 15px;">News</span>
+                    </li>
+                    <li class="btns" (click)="toCategory('Travel')">
+                        <span style="padding: 15px;">Travel</span>
+                    </li>
+                    <a routerLink="premium" (click)="toggleSidebar()">
+                        <li class="btns">
+                        <span style="padding: 15px;">Youtube premium</span>
+                        </li>
+                    </a>
+                <div class="links">
+                    <div><a href="https://www.youtube.com/about/">About</a></div>
+                    <div><a href="https://www.youtube.com/t/terms">Terms</a></div>
+                    <div><a href="https://www.youtube.com/howyoutubeworks/policies/copyright/">Copyright</a></div>
+                    <div><a href="https://www.youtube.com/t/contact_us">Contact us</a></div>
+                </div>
         </ul>
     </div>
     

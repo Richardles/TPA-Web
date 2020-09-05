@@ -71,6 +71,14 @@ export class CommentRepliesComponent implements OnInit {
             channel_location
             channel_art
             like_comment
+            dislike_comment
+            subscribed
+            notified_by
+            like_video
+            dislike_video
+            like_post
+            dislike_post
+            premium_type
           }
         }
       `,
@@ -80,9 +88,72 @@ export class CommentRepliesComponent implements OnInit {
     }).valueChanges.subscribe(result => {
       console.log(result);
       this.user = result.data.getUser
+      this.getUpdatedUser()
     },(error) => {
       console.log(error);
     })
+  }
+  getUpdatedUser(){
+    this.apollo.watchQuery<any>({
+      query: gql `
+        query GetUser($id: String!){
+          getUser(id: $id){
+            id
+            name
+            profile_picture
+            subscriber
+            email
+            location
+            premium
+            restriction
+            premium_date
+            channel_icon
+            channel_description
+            channel_join_date
+            channel_views
+            channel_location
+            channel_art
+            like_comment
+            dislike_comment
+            subscribed
+            notified_by
+            like_video
+            dislike_video
+            like_post
+            dislike_post
+            premium_type
+          }
+        }
+      `,
+      variables:{
+        id: this.loggedUser.id
+      }
+    }).valueChanges.subscribe(result => {
+      console.log(result);
+      this.loggedUser = result.data.getUser
+    },(error) => {
+      console.log(error);
+    })
+  }
+
+  like(){
+    this.getUpdatedUser()
+    let l = this.loggedUser.dislike_comment
+    if(l.includes(this.comment.id.toString())){
+      this.updateDislikeThenLike()
+    }else{
+      this.updateLike()
+    }
+  }
+  
+  dislike(){
+    this.getUpdatedUser()
+    let l = this.loggedUser.like_comment
+    if(l.includes(this.comment.id.toString())){
+      this.updateLikeThenDislike()
+    }else{
+      this.updateDislike()
+    }
   }
 
   updateDislike(){
@@ -122,6 +193,44 @@ export class CommentRepliesComponent implements OnInit {
       console.log(error);
     }
   }
+  updateDislikeThenLike(){
+    this.apollo.mutate<any>({
+      mutation:gql`
+      mutation UpdateDislikeComment($uid: String!, $cid: Int!){
+        updateDislikeCommentInUser(user_id: $uid, comment_id: $cid){
+          id
+          name
+          profile_picture
+          subscriber
+          email
+          location
+          premium
+          restriction
+          premium_date
+          channel_icon
+          channel_description
+          channel_join_date
+          channel_views
+          channel_location
+          channel_art
+          like_comment
+          dislike_comment
+        }
+      }
+      `,variables:{
+        uid: this.loggedUser.id,
+        cid: this.comment.id
+      },
+      refetchQueries:[{
+        query: this.GET_COMMENTS
+      }]
+    }).subscribe( result => {
+      let user = result.data.updateDislikeCommentInUser
+      this.updateLike()
+    }),(error) => {
+      console.log(error);
+    }
+  }
 
   updateLike(){
     this.apollo.mutate<any>({
@@ -157,6 +266,44 @@ export class CommentRepliesComponent implements OnInit {
     }).subscribe( result => {
       let user = result.data.updateLikeCommentInUser
       // this.checkIsLike(user)
+    }),(error) => {
+      console.log(error);
+    }
+  }
+  updateLikeThenDislike(){
+    this.apollo.mutate<any>({
+      mutation:gql`
+      mutation UpdateLikeComment($uid: String!, $cid: Int!){
+        updateLikeCommentInUser(user_id: $uid, comment_id: $cid){
+          id
+          name
+          profile_picture
+          subscriber
+          email
+          location
+          premium
+          restriction
+          premium_date
+          channel_icon
+          channel_description
+          channel_join_date
+          channel_views
+          channel_location
+          channel_art
+          like_comment
+          dislike_comment
+        }
+      }
+      `,variables:{
+        uid: this.loggedUser.id,
+        cid: this.comment.id
+      },
+      refetchQueries:[{
+        query: this.GET_COMMENTS
+      }]
+    }).subscribe( result => {
+      let user = result.data.updateLikeCommentInUser
+      this.updateDislike()
     }),(error) => {
       console.log(error);
     }

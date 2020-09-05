@@ -1,0 +1,24 @@
+<h2>All time popular</h2>
+<div class="container">
+    <div class="video-container" *ngFor="let video of videos">
+        <app-video-box [video]="video" (passVideo)="getPassingVideo($event)"></app-video-box>
+    </div>
+</div>
+<h2>Popular this week</h2>
+<div class="container">
+    <div class="video-container" *ngFor="let video of week">
+        <app-video-box [video]="video" (passVideo)="getPassingVideo($event)"></app-video-box>
+    </div>
+</div>
+<h2>Popular of the month</h2>
+<div class="container">
+    <div class="video-container" *ngFor="let video of month">
+        <app-video-box [video]="video" (passVideo)="getPassingVideo($event)"></app-video-box>
+    </div>
+</div>
+<h2>Recently uploaded</h2>
+<div class="container">
+    <div class="video-container" *ngFor="let video of recent">
+        <app-video-box [video]="video" (passVideo)="getPassingVideo($event)"></app-video-box>
+    </div>
+</div>

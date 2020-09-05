@@ -12,12 +12,20 @@ export class ChannelPlaylistsComponent implements OnInit {
 
   playlists;
   id;
+  publicPlaylists = [];
+  loggedUser;
 
   constructor(private apollo:Apollo, private route:ActivatedRoute) { }
 
   ngOnInit(): void {
     this.id = this.route.parent.snapshot.paramMap.get('id');
+    this.loggedUser = this.getLoggedUser()
     this.getPlayListByUser()
+  }
+
+  getLoggedUser(){
+    let user = JSON.parse(localStorage.getItem("currentUser"))
+    return user
   }
 
   getPlayListByUser(){
@@ -41,9 +49,27 @@ export class ChannelPlaylistsComponent implements OnInit {
       }
     }).valueChanges.subscribe(({ data }) => {
         this.playlists = data.getPlaylistByUser
+        if(this.loggedUser != null){
+          if(this.id != this.loggedUser.id){
+            this.getPublicPlaylist()
+          }
+        }else{
+          this.getPublicPlaylist()
+        }
     },(error) => {
       console.log('there was an error sending the query', error);
     })
+  }
+
+  getPublicPlaylist(){
+    console.log(this.playlists);
+    for(let i = 0; i < this.playlists.length; i++){
+      if(this.playlists[i].view_type == "Public"){
+        this.publicPlaylists.push(this.playlists[i])
+      }
+    }
+    console.log(this.publicPlaylists);
+    this.playlists = this.publicPlaylists
   }
 
 }

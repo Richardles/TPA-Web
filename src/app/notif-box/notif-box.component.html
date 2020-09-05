@@ -1,0 +1,10 @@
+<div class="notif" *ngIf="user && notifToShow">
+    <div class="head">
+        <div class="pp"><img src="{{user.profile_picture}}" alt=""></div>
+        <div class="info">
+            <div class="name-title">{{notifToShow.title}}</div>
+            <div class="name">{{user.name}}</div>
+        </div>
+    </div>
+    <div class="thumbnail" *ngIf="Url"><img src="{{Url}}" alt=""></div>
+</div>

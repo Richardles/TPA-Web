@@ -2,7 +2,7 @@
     <div class="not-stat">
         <div class="desc">
             <p>Description</p>
-            <div class="updateDesc">
+            <div class="updateDesc" *ngIf="user">
                 <p *ngIf="!isUpdating">{{user.channel_description}}</p>
                 <div class="descTAsection" *ngIf="isUpdating">
                     <textarea name="" id="" cols="80" rows="6" class="descTA" (input) = "desc = $event.target.value"></textarea>
@@ -11,22 +11,30 @@
                         <button class="done" (click) = "updateDesc($event)">DONE</button>
                     </div>
                 </div>
-                <i class="material-icons" id="update-btn" (click) = "toggleDesc()">create</i>
+                <i class="material-icons" id="update-btn" (click) = "toggleDesc()" *ngIf="canEdit">create</i>
             </div>
         </div>
         <div class="details">
             <div class="location">
                 <p>Details</p>
-                <div class="loc">
+                <div class="loc" *ngIf="user">
                     <p>Location:</p>
                     <p>{{user.channel_location}}</p>
                 </div>
             </div>
         </div>
         <div class="links">
+            <p>Links</p>
             <div>
-                <p>Links</p>
-                <p class="link">.com</p>
+                <p *ngIf="!isUpdatingLink" class="link">.com</p>
+                <!-- <div class="descTAsection" *ngIf="isUpdatingLink">
+                    <textarea name="" id="" cols="80" rows="6" class="descTA" (input) = "desc = $event.target.value"></textarea>
+                    <div class="btns">
+                        <button class="cancel" (click) = "toggleLink()">CANCEL</button>
+                        <button class="done" (click) = "updateLink($event)">DONE</button>
+                    </div>
+                </div>
+                <i class="material-icons" id="update-btn" (click) = "toggleDesc()">create</i> -->
             </div>
         </div>
     </div>
@@ -34,8 +42,8 @@
     <div class="stat">
         <div class="stats">
             <div>Stats</div>
-            <div>Joined {{user.channel_join_date}}</div>
-            <div>{{user.channel_views}} Views</div>
+            <div>Joined {{date}}</div>
+            <div>{{stringView}} Views</div>
         </div>
     </div>
 </div>

@@ -7,10 +7,48 @@
 .video-container{
     margin: 10px;
 }
+.header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 24px;
+    .uploadLbl{
+        margin-left: 80px;
+        font-family: Helvetica;
+        font-weight: bold;
+        font-size: 1rem;
+    }
+    .sort{
+        font-family: Helvetica;
+        p{
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .menu{
+            position: absolute;
+            width: 160px;
+            height: 160px;
+            right: 30px;
+            background: white;
+            box-shadow: 0px 0px 3px rgb(117, 117, 117);
+            border-radius: 1px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            div{
+                padding: 14px 16px;
+                transition: 0.5s ease;
+                &:hover{
+                    background: gray;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
 
-.uploadLbl{
-    margin-left: 80px;
-    font-family: Helvetica;
-    font-weight: bold;
-    font-size: 1rem;
+.footer-scroll{
+    height: 50px;
+    width: 100%;
 }

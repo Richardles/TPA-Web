@@ -1,4 +1,10 @@
-<div class="ParentUpload" (appDirectiveDrop)="onDrop($event)" *ngIf="!dropped">
+<div class="warn" *ngIf="!loggedUser">
+    <div>
+        <p>Please login first!</p>
+    </div>
+</div>
+
+<div class="ParentUpload" (appDirectiveDrop)="onDrop($event)" *ngIf="!dropped && loggedUser">
     <div class="ParentUploadHeader">
         <span class="TxtUploadVideo">Upload videos</span>
         <img src="../../assets/images/feedback.png" alt="feedback" class="feedbackOnUpload">

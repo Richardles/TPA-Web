@@ -1,7 +1,29 @@
-<h2>Today</h2>
-<div class="container">
-    <div class="video-container" *ngFor="let video of filteredVids, let i = index">
-        <app-video-box [video]="video" *ngIf="i < lastKey" (passVideo)="getPassingVideo($event)"></app-video-box>
+<div class="warn" *ngIf="isNotLogged">
+    <div>
+        <p>Please login first!</p>
     </div>
-    <div class="footer-scroll"></div>
+</div>
+
+<div *ngIf="!isNotLogged">
+    <h2>Today</h2>
+    <div class="container">
+        <div class="video-container" *ngFor="let video of todayV, let i = index">
+            <app-video-box [video]="video" *ngIf="i < lastKey" (passVideo)="getPassingVideo($event)"></app-video-box>
+        </div>
+        <!-- <div class="footer-scroll"></div> -->
+    </div>
+    <h2>This week</h2>
+    <div class="container">
+        <div class="video-container" *ngFor="let video of weekV, let i = index">
+            <app-video-box [video]="video" *ngIf="i < lastKey" (passVideo)="getPassingVideo($event)"></app-video-box>
+        </div>
+        <!-- <div class="footer-scroll"></div> -->
+    </div>
+    <h2>This month</h2>
+    <div class="container">
+        <div class="video-container" *ngFor="let video of monthV, let i = index">
+            <app-video-box [video]="video" *ngIf="i < lastKey" (passVideo)="getPassingVideo($event)"></app-video-box>
+        </div>
+        <div class="footer-scroll"></div>
+    </div>
 </div>

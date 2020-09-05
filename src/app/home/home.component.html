@@ -1,6 +1,6 @@
 <h2>Recommended</h2>
 <div class="container">
-    <div class="video-container" *ngFor="let video of videos, let i = index">
+    <div class="video-container" *ngFor="let video of randVideos, let i = index">
         <app-video-box [video]="video" *ngIf="i < lastKey" (passVideo)="getPassingVideo($event)"></app-video-box>
     </div>
     <div class="footer-scroll"></div>

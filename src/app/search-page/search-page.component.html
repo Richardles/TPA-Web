@@ -7,9 +7,9 @@
     <div class="filter" *ngIf="isFiltering">
         <div class="type">
             <div class="title">Upload date</div>
-            <div class="detail">This week</div>
-            <div class="detail">This month</div>
-            <div class="detail">This year</div>
+            <div class="detail" (click)="changeDate('week')">This week</div>
+            <div class="detail" (click)="changeDate('month')">This month</div>
+            <div class="detail" (click)="changeDate('year')">This year</div>
         </div>
         <div class="type">
             <div class="title">Type</div>
@@ -30,9 +30,39 @@
                 <app-trending-video-box [video]="video" (passVideo)="getPassingVideo($event)"></app-trending-video-box>
             </div>
         </div>
+        <div class="videos" *ngIf="thisWeek">
+            <div class="vids" *ngFor="let video of filteredVid">
+                <app-trending-video-box [video]="video" (passVideo)="getPassingVideo($event)"></app-trending-video-box>
+            </div>
+        </div>
+        <div class="videos" *ngIf="thisMonth">
+            <div class="vids" *ngFor="let video of filteredVid">
+                <app-trending-video-box [video]="video" (passVideo)="getPassingVideo($event)"></app-trending-video-box>
+            </div>
+        </div>
+        <div class="videos" *ngIf="thisYear">
+            <div class="vids" *ngFor="let video of filteredVid">
+                <app-trending-video-box [video]="video" (passVideo)="getPassingVideo($event)"></app-trending-video-box>
+            </div>
+        </div>
         <div class="playlists" *ngIf="typePlaylist">
             <div class="plays" *ngFor="let playlist of playlists">
-                <app-playlist-box [playlist]="playlist"></app-playlist-box>
+                <app-playlist-box-search [playlist]="playlist"></app-playlist-box-search>
+            </div>
+        </div>
+        <div class="playlists" *ngIf="thisWeek">
+            <div class="plays" *ngFor="let playlist of filteredPlay">
+                <app-playlist-box-search [playlist]="playlist"></app-playlist-box-search>
+            </div>
+        </div>
+        <div class="playlists" *ngIf="thisMonth">
+            <div class="plays" *ngFor="let playlist of filteredPlay">
+                <app-playlist-box-search [playlist]="playlist"></app-playlist-box-search>
+            </div>
+        </div>
+        <div class="playlists" *ngIf="thisYear">
+            <div class="plays" *ngFor="let playlist of filteredPlay">
+                <app-playlist-box-search [playlist]="playlist"></app-playlist-box-search>
             </div>
         </div>
     </div>

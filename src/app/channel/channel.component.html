@@ -1,8 +1,8 @@
 <div class="body">
 
-    <div class="banner">
+    <div class="banner" *ngIf="loggedUser">
         <img src="{{loggedUser.channel_art}}" alt="">
-        <div class="ico">
+        <div class="ico" *ngIf="canEdit">
             <input type="file" name="pic" id="pic"(change)="onInputPic($event.target.files)" (url)="setUrl($event)">
             <img src="../../assets/images/cam-ico.png" alt="" onclick="document.getElementById('pic').click();">
         </div>
@@ -10,10 +10,19 @@
     
     <div class="channel-home">
         <div class="profile">
-            <img src="{{loggedUser.profile_picture}}" alt="">
-            <div class="info">
-                <div class="uname">{{loggedUser.name}}</div>
-                <div class="subs">{{loggedUser.subscriber}} subscribers</div>
+            <div class="detail" *ngIf="loggedUser">
+                <img src="{{loggedUser.profile_picture}}" alt="" (click)="toChannelP()">
+                <div class="info">
+                    <div class="uname" (click)="toChannelP()">{{loggedUser.name}}</div>
+                    <div class="subs">{{loggedUser.subscriber}} subscribers</div>
+                </div>
+            </div>
+
+            <div class="buttons" *ngIf="visitor">
+                <div [style.background]="isSub ? 'gray' : 'red'" (click)="subscribe()">{{subsLabel}}</div>
+                <i class="material-icons" id="notif-btn" *ngIf="isSub && isOn" (click)="toggleNotif()">notifications_active</i>
+                <i class="material-icons" id="notif-btn" *ngIf="isSub && !isOn" (click)="toggleNotif()">notifications_off</i>
+                <!-- <i class="material-icons" id="notif-btn">notifications_active</i> -->
             </div>
         </div>
         

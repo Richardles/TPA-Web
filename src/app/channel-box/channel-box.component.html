@@ -1,13 +1,13 @@
 <div class="grand-parent">
     <div class="parent">
         <div class="pp">
-            <img src="{{channel.channel_icon}}" alt="">
+            <img src="{{channel.channel_icon}}" alt="" (click)="toChannel()">
         </div>
         <div class="info">
-            <div class="name">{{channel.name}}</div>
+            <div class="name" (click)="toChannel()">{{channel.name}}</div>
             <div class="channelSubs">
-                <div class="subs">{{channel.subscriber}} subscribers</div>
-                <div class="vidCount"></div>
+                <div class="subs">{{channel.subscriber}} subscribers &bull; </div>
+                <div class="vidCount"> {{videoCount}} videos</div>
             </div>
             <div class="desc">
                 <div>{{channel.channel_description}}</div>
@@ -16,9 +16,9 @@
     </div>
     <div class="buttons">
         <div [style.background]="isSub ? 'gray' : 'red'" (click)="subscribe()">{{subsLabel}}</div>
-        <i class="material-icons" id="notif-btn" *ngIf="isSub">notifications_none</i>
-        <!-- <i class="material-icons" id="notif-btn">notifications_active</i>
-            <i class="material-icons" id="notif-btn">notifications_off</i> -->
+        <i class="material-icons" id="notif-btn" *ngIf="isSub && isOn" (click)="toggleNotif()">notifications_active</i>
+        <i class="material-icons" id="notif-btn" *ngIf="isSub && !isOn" (click)="toggleNotif()">notifications_off</i>
+        <!-- <i class="material-icons" id="notif-btn">notifications_active</i> -->
     </div>
 
 </div>

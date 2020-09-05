@@ -1,0 +1,76 @@
+*{
+    margin: 0px;
+    box-sizing: border-box;
+    display: flex;
+}
+.parent{
+    display: flex;
+    align-items: center;
+    font-family: Helvetica;
+    margin: 10px;
+    .thumbnail{
+        margin: 10px;
+        width: 300px;
+        height: 175px;
+        opacity: 1;
+        display: block;
+        transition: .5s ease;
+        backface-visibility: hidden;
+        margin: 0px 10px;
+    }
+    .thumb{
+        position: relative;
+        width: 300px;
+        transition: .5s ease;
+        &:hover{
+            // background: gray;
+            opacity: 0.7;
+            cursor: pointer;
+        }
+        .effect{
+            transition: .5s ease;
+            opacity: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            text-align: center;
+            &:hover{
+                color: blue;
+                cursor: pointer;
+            }
+            .label{            
+
+            }
+        }
+        &:hover{
+            .effect{
+                opacity: 1;
+            }
+        }
+    }
+    .titleBox{
+        margin: 10px 16px;
+        width: 311px;
+        height: 75px;
+        display: flex;
+        flex-direction: column;
+        .title{
+            font-size: 18px;
+        }
+        .viewFull{
+            cursor: pointer;
+            padding: 10px 0px;
+        }
+        a{
+            text-decoration: none;
+        }
+        .channel{
+            padding: 5px 0px;
+            .uname{
+                margin-right: 10px;;
+            }
+        }
+    }
+}

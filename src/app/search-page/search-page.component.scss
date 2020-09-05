@@ -9,10 +9,19 @@
         padding: 6px 0px;
         display: flex;
         align-items: center;
+        transition: 0.5s ease;
+        border-radius: 3px;
         div{
             margin-left: 6px;
+            transition: 0.5s ease;
+            &:hover{
+                margin-left: 15px;
+                box-shadow: 1px 1px 3px gray;
+                cursor: pointer;
+            }
         }
         &:hover{
+            box-shadow: 1px 1px 3px gray;
             cursor: pointer;
         }
     }

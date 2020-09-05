@@ -12,9 +12,21 @@
 </div>
 <div class="randLabel">
     <p>RANDOM VIDEOS</p>
+    <p class="pa" (click)="toChannel()">PLAY ALL</p>
 </div>
 <div class="auto-grid">
     <div class="video-container" *ngFor="let video of showRandVids">
         <app-video-box [video]=video></app-video-box>
+    </div>
+</div>
+<div class="line">
+    
+</div>
+<div class="randLabel">
+    <p>PLAYLISTS</p>
+</div>
+<div class="auto-grid">
+    <div class="playlist-container" *ngFor="let playlist of showPlaylists">
+        <app-playlist [playlist]="playlist"></app-playlist>
     </div>
 </div>

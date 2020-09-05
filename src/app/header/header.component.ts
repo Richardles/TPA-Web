@@ -24,13 +24,26 @@ export class HeaderComponent implements OnInit {
   isShortKey;
   setting;
   logged;
-
+  isNotifOpen
+  subscription = [];
+  tempUser;
+  playlists;
+  firstFivePlay = [];
+  restPlay = [];
+  showMorePlay;
+  isShowPlay;
+  
   constructor(private authService: SocialAuthService, private apollo: Apollo, private router: Router) { }
-
+  
+  sideBarSubs = [];
   auto = [];
   videos = [];
+  notifs = [];
+  notifToShow = [];
   
   ngOnInit(): void {
+    this.showMorePlay = false
+    this.isShowPlay = false
     if(localStorage.getItem("currentUser") != null){
       this.loggedUser = JSON.parse(localStorage.getItem("currentUser"))
       console.log(this.loggedUser);
@@ -43,7 +56,8 @@ export class HeaderComponent implements OnInit {
     this.isShortKey = false;
     this.setting = false;
     this.logged = false;
-    this.getLoggedUser()
+    this.getLoggedUser();
+    this.isNotifOpen = false
   }
 
   signIn(): void {
@@ -66,13 +80,31 @@ export class HeaderComponent implements OnInit {
     location.reload()
   }
 
+  togglePlay(){
+    if(this.showMorePlay){
+      this.showMorePlay = false
+      this.isShowPlay = true
+    }else{
+      this.showMorePlay = true
+      this.isShowPlay = false
+    }
+  }
+
   getLoggedUser(){
     let user = JSON.parse(localStorage.getItem("currentUser"))
-    if(user){
-      this.logged = true
-    }else{
-      this.logged = false
+    if(user != null){
+      this.getUpdatedUser(user.id)
+      if(user){
+        this.logged = true
+      }else{
+        this.logged = false
+      }
     }
+  }
+
+  toPremium(){
+    this.router.navigateByUrl("/premium")
+    this.toggleMenu()
   }
 
   searchVid(){
@@ -89,7 +121,110 @@ export class HeaderComponent implements OnInit {
   }
 
   toggleNotif(){
+    if(this.isNotifOpen){
+      this.isNotifOpen = false
+    }else{
+      this.isNotifOpen = true
+    }
+  }
 
+  getUserNotifyId(){
+    let n = this.loggedUser.notified_by
+    this.getNotif(n)
+    console.log(n);
+  }
+  
+  getNotif(id){
+    this.apollo.watchQuery<any>({
+      query:gql`
+      query GetActivities($uid: String!){
+        getActivitiesByUserId(user_id: $uid){
+          id
+          user_id
+          video_id
+          post_id
+        }
+      }
+      `,variables:{
+        uid: id
+      }
+    }).valueChanges.subscribe( result => {
+      this.notifs = result.data.getActivitiesByUserId
+    }),(error) => {
+      console.log(error);
+      console.log(id);
+    }
+  }
+
+  getPlayListByUser(){
+    this.apollo.watchQuery<any>({
+      query: gql`
+      query GetPlaylistByUser($id: String!){
+        getPlaylistByUser(id: $id){
+          id
+          title
+          total_videos
+          views
+          last_updated
+          view_type
+          description
+          userId
+          videos_id
+        }
+      }
+      `,variables:{
+        id: this.loggedUser.id
+      }
+    }).valueChanges.subscribe(({ data }) => {
+        this.playlists = data.getPlaylistByUser
+    },(error) => {
+      console.log(error);
+    })
+  }
+  getPrivatePlayListFirst(){
+    this.apollo.watchQuery<any>({
+      query: gql`
+      query GetPlaylistPrivateFirst($id: String!){
+        getPrivatePlaylistFirst(id: $id){
+          id
+          title
+          total_videos
+          views
+          last_updated
+          view_type
+          description
+          userId
+          videos_id
+        }
+      }
+      `,variables:{
+        id: this.loggedUser.id
+      }
+    }).valueChanges.subscribe(({ data }) => {
+        this.playlists = data.getPrivatePlaylistFirst
+        
+        console.log(this.playlists.length);
+        if(this.playlists.length <= 5){
+          this.showMorePlay = false
+          this.firstFivePlay = this.playlists
+          console.log(this.playlists);
+        }else{
+          console.log(this.playlists);
+          this.showMorePlay = true
+          for(let i = 0; i < this.playlists.length;i++){
+            if(i >= 5){
+              this.restPlay.push(this.playlists[i]);
+              console.log(this.restPlay);
+            }else{
+              console.log(this.playlists[i]);
+              console.log("yes");
+              this.firstFivePlay.push(this.playlists[i])
+            }
+          }
+        }
+    },(error) => {
+      console.log(error);
+    })
   }
 
   toggleSidebar(){
@@ -98,11 +233,31 @@ export class HeaderComponent implements OnInit {
 
     if(side.left == "-230px"){
       side.left = "0px"
+      grayScreen.opacity = "1"
       grayScreen.display = "block"
     }else{
       side.left = "-230px"
+      grayScreen.opacity = "0"
       grayScreen.display = "none"
     }
+  }
+
+  toCategory(category){
+    this.toggleSidebar()
+    this.router.navigateByUrl("/refresh", {skipLocationChange: true}).then(()=>{
+      this.router.navigateByUrl("/category-page/" + category)
+    })
+  }
+
+  checkLogin(){
+    this.toggleSidebar()
+    // let user = JSON.parse(localStorage.getItem("currentUser"))
+    // if(!user){
+    //   console.log("need login");
+    //   window.alert("Please login")
+    // }else{
+      location.href = "/subscription-page";
+    // }
   }
 
   up(){
@@ -124,6 +279,8 @@ export class HeaderComponent implements OnInit {
     console.log(this.auto);
     this.up()
   }
+
+  
 
   getVideo(){
     this.apollo.watchQuery<any>({
@@ -170,6 +327,116 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  getSubscription(){
+    this.subscription = this.loggedUser.subscribed.split(',')
+    console.log(this.subscription);
+    
+    // for(let i = 0; i < this.subscription.length; i++){
+    //   this.getSubs(this.subscription[i])
+    // }
+  }
+
+  getSortedSubscription(){
+    this.apollo.query<any>({
+      query:gql`
+      query GetSubscribed($id: String!){
+        getSubscribed(subscribed: $id){
+          id
+          name
+          profile_picture
+        }
+      }
+      `,variables:{
+        id: this.loggedUser.subscribed
+      }
+    }).subscribe(res=>{
+      this.sideBarSubs = res.data.getSubscribed
+    }),(error)=>{
+      console.log(error);
+    }
+  }
+
+  getSubs(uid){
+    console.log(uid);
+    
+    this.apollo.watchQuery<any>({
+      query: gql `
+        query GetUser($id: String!){
+          getUser(id: $id){
+            id
+            name
+            profile_picture
+            subscriber
+            email
+            location
+            premium
+            restriction
+            premium_date
+            channel_icon
+            channel_description
+            channel_join_date
+            channel_views
+            channel_location
+            channel_art
+            like_comment
+            dislike_comment
+            subscribed
+            notified_by
+          }
+        }
+      `,
+      variables:{
+        id: uid
+      }
+    }).valueChanges.subscribe(result => {
+      this.tempUser = result.data.getUser
+      this.sideBarSubs.push(this.tempUser)
+    },(error) => {
+      console.log(error);
+    })
+  }
+
+  getUpdatedUser(uid){
+    
+    this.apollo.watchQuery<any>({
+      query: gql`
+        query GetUser($id: String!){
+          getUser(id: $id){
+            id
+            name
+            profile_picture
+            subscriber
+            email
+            location
+            premium
+            restriction
+            premium_date
+            channel_icon
+            channel_description
+            channel_join_date
+            channel_views
+            channel_location
+            channel_art
+            like_comment
+            dislike_comment
+            subscribed
+            notified_by
+          }
+        }
+      `,
+      variables:{
+        id: uid
+      }
+    }).valueChanges.subscribe(result => {
+      this.loggedUser = result.data.getUser;
+      this.getSortedSubscription()
+      this.getPrivatePlayListFirst()
+      this.getUserNotifyId()
+    },(error) => {
+      console.log(error);
+    })
+  }
+
 
   getUser(){
     this.apollo.watchQuery<any>({
@@ -194,6 +461,7 @@ export class HeaderComponent implements OnInit {
             like_comment
             dislike_comment
             subscribed
+            notified_by
           }
         }
       `,
@@ -206,8 +474,8 @@ export class HeaderComponent implements OnInit {
       this.loggedUser = result.data.getUser;
       localStorage.removeItem("currentUser");
       localStorage.setItem("currentUser",JSON.stringify(this.loggedUser));
-      // location.reload();
-
+      this.getSubscription()
+      
     },(error) => {
       console.log(error);
       //ga ada -> create
@@ -287,8 +555,6 @@ export class HeaderComponent implements OnInit {
     this.toggleMenu()
   }
 
-
-
   toggleMenu(){
     if(this.userMenus){
       this.userMenus = false
@@ -296,7 +562,6 @@ export class HeaderComponent implements OnInit {
       this.userMenus = true
     }
     console.log(this.userMenus);
-    
   }
 
 }

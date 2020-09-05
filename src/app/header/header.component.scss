@@ -46,6 +46,7 @@
                 }
             }
         }
+        
     }
     .setting-modal{
         display: flex;
@@ -137,6 +138,7 @@ a:link {
 }
 .btn-search img:hover{
     opacity: 1;
+    box-shadow: 2px 2px 3px gray;
 }
 
 .search-bar{
@@ -245,6 +247,70 @@ a:link {
     margin-top: 10px;
 }
 
+.pp{
+   
+    img{
+        border-radius: 50px;
+        width: 24px;
+        margin-right: 20px;
+        height: 24px;
+    }
+    .name{
+        font-size: 14px;
+    }
+}
+.container{
+    // width: 46px;
+    // height: 46px;
+    display: flex;
+    align-items: center;
+    padding: 0px 24px;
+    margin: 20px 0px;
+    a{
+        display: flex;
+        align-items: center;
+    }
+}
+.subs{
+    .channels{
+    }
+}
+
+.setting{
+    .notif-container{
+        position: relative;
+        .notif-modal{
+            height: 20%;
+            position: absolute;
+            background: white;
+            height: 500px;
+            left: -320px;
+            width: 350px;
+            transition: 0.5s;
+            box-shadow: 0px 0px 2px gray;
+            &:hover{
+                box-shadow: 2px 2px 10px gray;
+            }
+            .box{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                height: 500px;
+                overflow-y: scroll;
+                div{
+                    padding: 10px;
+                }
+                .header{
+                    height: 50px;
+                    display: flex;
+                    align-items: center;
+                    margin-left: 16px;
+                }
+            }
+        }
+    }
+}
+
 .user-pp img{
     width: 30px;
     border-radius: 50%;
@@ -257,7 +323,8 @@ a:link {
     background-color: rgb(0, 0, 0, 0.5);
     position: absolute;
     display: none;
-    transition: 0.5s ease;
+    opacity: 0;
+    transition: 0.3s ease;
     animation: 0.5s;
 }
 .userMenu{
@@ -293,5 +360,12 @@ a:link {
             .name-mail{
             }
         }
+    }
+}
+
+.links{
+    padding: 0px 16px;
+    *{
+        margin: 10px 0px;
     }
 }

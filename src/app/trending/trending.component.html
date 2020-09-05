@@ -31,7 +31,7 @@
 </div>
 
 <div class="trending">
-    <div class="video-container" *ngFor="let video of videos">
+    <div class="video-container" *ngFor="let video of filteredVid">
         <app-trending-video-box [video]="video" (passVideo)="getPassingVideo($event)"></app-trending-video-box>
     </div>
 </div>

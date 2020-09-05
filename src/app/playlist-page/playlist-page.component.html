@@ -3,7 +3,7 @@
         <div class="thumbnail">
             <img src="{{playlistThumbnail}}" alt="">
         </div>
-        <div class="title">
+        <div class="title" *ngIf="playlist">
             <p *ngIf="!isUpdatingTitle">{{playlist.title}}</p>
             <div class="titleSection" *ngIf="isUpdatingTitle">
                 <input type="text" name="" id="" [value]="playlist.title" (input) = "newTitle = $event.target.value">
@@ -12,11 +12,11 @@
                     <button class="done" (click) = "updateTitle()">DONE</button>
                 </div>
             </div>
-            <i class="material-icons" id="create-btn" (click)="toggleEditTitle()">create</i>
+            <i class="material-icons" id="create-btn" (click)="toggleEditTitle()" *ngIf="canEdit">create</i>
         </div>
-        <div class="info">
+        <div class="info" *ngIf="playlist">
             <div class="vid-count">{{totalVids}} videos</div>
-            <div class="last-update">{{playlist.last_updated}}</div>
+            <div class="last-update">Updated {{playlist.last_updated | dateAgo}}</div>
         </div>
         <div class="vis">
             <select name="visibility" id="visibility" [selectedIndex] = "selectedVis" (change)="UpdatePlayVisibility()">
@@ -27,15 +27,15 @@
         </div>
         <div class="action">
             <i class="material-icons" id="create-btn">shuffle</i>
-            <i class="material-icons" id="reply-btn">reply</i>
+            <i class="material-icons" id="reply-btn" (click)="closeShare()">reply</i>
             <i class="material-icons" id="more-btn" (click)="toggleMore()">more_horiz</i>
         </div>
 
-        <div class="more" *ngIf="isMore">
+        <div class="more" *ngIf="canEdit && isMore">
             <div (click)="removeAll()">Remove all video</div>
         </div>
         
-        <div class="description">
+        <div class="description" *ngIf="playlist">
             <div *ngIf = "!editing">{{playlist.description}}</div>
             <div class="descArea" *ngIf = "editing">
                 <textarea name="" id="" cols="30" rows="3" (input) = "newDesc = $event.target.value"></textarea>
@@ -44,19 +44,56 @@
                     <button class="done" (click) = "UpdatePlayDesc()">DONE</button>
                 </div>
             </div>
-            <i class="material-icons" id="create-btn" (click)="toggleEditDesc()">create</i>
+            <i class="material-icons" id="create-btn" (click)="toggleEditDesc()" *ngIf="canEdit">create</i>
         </div>
 
-        <div class="user-profile" (click)="toChannel()">
-            <img src="{{userPlaylist.profile_picture}}" alt="">
-            <div class="name">{{userPlaylist.name}}</div>
+        <div class="user-profile">
+            <div class="info" (click)="toChannel()" *ngIf="userPlaylist">
+                <img src="{{userPlaylist.profile_picture}}" alt="">
+                <div class="name">{{userPlaylist.name}}</div>
+            </div>
+            <div class="buttons">
+                <div [style.background]="isSub ? 'gray' : 'red'" (click)="subscribe()">{{subsLabel}}</div>
+                <i class="material-icons" id="notif-btn" *ngIf="isSub && isOn" (click)="toggleNotif()">notifications_active</i>
+                <i class="material-icons" id="notif-btn" *ngIf="isSub && !isOn" (click)="toggleNotif()">notifications_off</i>
+                <!-- <i class="material-icons" id="notif-btn">notifications_active</i> -->
+            </div>
         </div>
     </div>
 
 
     <div class="right">
-        <div class="videos-container" *ngFor = "let video of videosObj">
-            <app-playlist-videos [video]="video" (videoId)="removeVideo($event)"></app-playlist-videos>
+        <div class="sort" (click)="toggleSort()">SORT BY</div>
+        <div class="type" *ngIf="open">
+            <div (click)="sortAdded()">Date added</div>
+            <div (click)="sortPublished()">Date published</div>
+            <div (click)="sortVid()">Most popular</div>
         </div>
+        <div class="videos-container" *ngFor = "let video of videosObj, let i = index">
+            <app-playlist-videos [video]="video" *ngIf="i < lastKey" (videoId)="removeVideo($event)"></app-playlist-videos>
+        </div>
+        <div class="footer-scroll"></div>
+    </div>
+</div>
+
+<div class="share" *ngIf="shareOpen">
+    <div class="top">
+        <div class="font">Share</div>
+        <i class="material-icons" (click) = "closeShare()">close</i>
+    </div>
+    <div class="content">
+        <!-- <a [href]="'https://www.facebook.com/sharer/sharer.php?u=' + url" target="_blank">
+            <img src="../../assets/images/facebook.png" alt="">
+        </a> -->
+        <a [href]="'http://twitter.com/share?text= &url=http://localhost:4200' + url" target="_blank">
+            <img src="../../assets/images/twitter.png" alt="">
+        </a>
+        
+    </div>
+    <div class="url">
+        {{url}}
+    </div>
+    <div>
+        <div (click)="copy()">COPY</div>
     </div>
 </div>

@@ -44,6 +44,10 @@ import { PlaylistBoxComponent } from './playlist-box/playlist-box.component';
 import { TrendingVideoBoxComponent } from './trending-video-box/trending-video-box.component';
 import { RefreshComponent } from './refresh/refresh.component';
 import { PremiumComponent } from './premium/premium.component';
+import { NotifBoxComponent } from './notif-box/notif-box.component';
+import { DateAgoPipe } from './pipes/date-ago.pipe';
+import { PlaylistBoxSearchComponent } from './playlist-box-search/playlist-box-search.component';
+import { CategoryPageComponent } from './category-page/category-page.component';
 
 const fireConfig = {
     apiKey: "AIzaSyA2VWuhvm5N68oILOWtoYgPq_nTCbvvfEY",
@@ -86,7 +90,11 @@ const fireConfig = {
     PlaylistBoxComponent,
     TrendingVideoBoxComponent,
     RefreshComponent,
-    PremiumComponent
+    PremiumComponent,
+    NotifBoxComponent,
+    DateAgoPipe,
+    PlaylistBoxSearchComponent,
+    CategoryPageComponent,
   ],
   imports: [
     BrowserModule,

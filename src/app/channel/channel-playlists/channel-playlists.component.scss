@@ -1,7 +1,13 @@
 .parent{
     margin-left: 80px;
     .container{
-        display: flex;
+        // display: flex;
+        // margin-left: 40px;
+        --auto-grid-min-size: 300px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(var(--auto-grid-min-size), 1fr));
+        grid-gap: 5px;
+        overflow: hidden;
     }
     .welcome{
         font-family: Helvetica;

@@ -18,6 +18,7 @@ import { TrendingVideosComponent } from './trending/trending-videos/trending-vid
 import { PremiumComponent } from './premium/premium.component';
 import { SearchPageComponent } from './search-page/search-page.component';
 import { RefreshComponent } from './refresh/refresh.component';
+import { CategoryPageComponent } from './category-page/category-page.component';
 
 
 const routes: Routes = [
@@ -26,6 +27,7 @@ const routes: Routes = [
   {path:"home", component: HomeComponent},
   {path:"trending-page", component: TrendingComponent},
   {path:"subscription-page", component: SubscriptionComponent},
+  {path:"category-page/:category", component: CategoryPageComponent},
   {path:"playlist-modal", component: PlaylistModalComponent},
   {path:"trending-videos", component: TrendingVideosComponent},
   {path:"premium", component: PremiumComponent},

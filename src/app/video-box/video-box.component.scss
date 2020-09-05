@@ -9,9 +9,29 @@
     width: 300px;
     height: 175px;
     margin-bottom: 10px;
+    transition: 0.5s ease;
+    &:hover{
+        transform: scale(1.1);
+        transition: 0.5s ease;
+    }
 }
 .videoBox{
     flex-direction: column;
+    a{
+        .dur{
+            position: absolute;
+            color: white;
+            padding: 5px;
+            background: black;
+            margin-top: 150px;
+            margin-left: 265px;
+            font-size: 10px;
+            border-radius: 3px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-end;
+        }
+    }
     .playlistModal{
         // width: 150px;
         // height: 50px;
@@ -46,6 +66,13 @@
         width: 36px;
         height: 36px;
         border-radius: 50%;
+        transition: 0.2s ease;
+        &:hover{
+            transition: 0.2s ease;
+            transform: scale(1.1);
+            box-shadow: 2px 2px 3px gray;
+            cursor: pointer;
+        }
     }
     .info{
         margin-left: 10px;
@@ -56,6 +83,16 @@
             justify-content: space-between;
             i{
                 cursor: pointer;
+            }
+            .user{
+                // opacity: 0.8;
+                cursor: pointer;
+                transition: 0.5s ease;
+                &:hover{
+                    // opacity: 1;
+                    // transform: scale(1.05);
+                    // text-shadow: 1px 1px 3px gray;
+                }
             }
         }
     }

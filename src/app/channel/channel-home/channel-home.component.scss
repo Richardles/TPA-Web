@@ -18,6 +18,12 @@
     margin-left: 80px;
     font-weight: bold;
     font-family: Helvetica;
+    display: flex;
+    align-items: center;
+    .pa{
+        margin-left: 50px;
+        cursor: pointer;
+    }
 }
 
 .line{
