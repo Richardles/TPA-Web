@@ -98,18 +98,44 @@ export class SearchPageComponent implements OnInit {
       this.user = result.data.getUser
       if(this.user.premium_type != "monthly" && this.user.premium_type != "annually"){
         this.filterVid()
+      }else{
+        this.secFilter()
       }
     },(error) => {
       console.log(error);
     })
   }
+
+  secFilter(){
+    let arr = []
+    for(let i = 0; i < this.videos.length; i++){
+      if(this.videos[i].userId == this.user.id){
+        arr.push(this.videos[i])
+      }else{
+        if(this.videos[i].visibility == "Public"){
+          arr.push(this.videos[i])
+        }
+      }
+    }
+    this.videos = arr
+    console.log(this.videos);
+    
+  }
+
   filterVid(){
     for(let i = 0; i < this.videos.length; i++){
       if(this.videos[i].premium == "Not premium"){
-        this.nonPremium.push(this.videos[i])
+        if(this.videos[i].userId == this.user.id){
+          this.nonPremium.push(this.videos[i])
+        }else{
+          if(this.videos[i].visibility == "Public"){
+            this.nonPremium.push(this.videos[i])
+          }
+        }
       }
     }
     this.videos = this.nonPremium
+    this.secFilter()
   }
 
   changeDate(d){
@@ -286,7 +312,49 @@ export class SearchPageComponent implements OnInit {
       this.videos = res.data.getVideosByName
       if(this.user != null){
         this.getUser()
+      }else{
+        this.loneFilter()
       }
+    }),(error)=>{
+      console.log(error);
+    }
+  }
+
+  loneFilter(){
+    let arr = []
+    for(let i = 0; i < this.videos.length; i++){
+      if(this.videos[i].premium == "Not premium" && this.videos[i].visibility == "Public"){
+        arr.push(this.videos[i])
+      }
+    }
+    this.videos = arr
+  }
+
+  getPublicNotPremium(){
+    this.apollo.query<any>({
+      query:gql`
+      query GetPublicNonPremiumVideos{
+        getPublicNonPremiumVideos{
+          id
+          url
+          title
+          likes
+          dislikes
+          description
+          thumbnail
+          userId
+          views
+          playlist_id
+          category
+          audience
+          visibility
+          premium
+          date
+        }
+      }
+      `
+    }).subscribe(res=>{
+      this.videos = res.data.getPublicNonPremiumVideos
     }),(error)=>{
       console.log(error);
     }

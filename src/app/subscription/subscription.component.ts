@@ -17,32 +17,35 @@ export class SubscriptionComponent implements OnInit {
   weekV = []
   monthV = []
   isNotLogged;
+  loggedUser;
 
   constructor(private apollo: Apollo) { }
 
   ngOnInit(): void {
     this.isNotLogged = true
-    this.getLoggedUser()
-    this.lastKey = 6;
-    this.observer = new IntersectionObserver((entry)=>{
-      if(entry[0].isIntersecting){
-        let container = document.querySelector(".container");
-        for(let i: number = 0; i< 4; i++){
-          if(this.lastKey < this.videos.length){
-            console.log(this.lastKey);
-            let div = document.createElement("div");
-            let v = document.createElement("app-video-box");
-            div.setAttribute("class", "video-container");
-            v.setAttribute("video", "this.videos[this.lastKey]");
-            div.appendChild(v);
-            container.appendChild(div);
-            this.lastKey++;
+    this.loggedUser = this.getLoggedUser()
+    if(this.loggedUser != null){
+      this.lastKey = 6;
+      this.observer = new IntersectionObserver((entry)=>{
+        if(entry[0].isIntersecting){
+          let container = document.querySelector(".container");
+          for(let i: number = 0; i< 4; i++){
+            if(this.lastKey < this.videos.length){
+              console.log(this.lastKey);
+              let div = document.createElement("div");
+              let v = document.createElement("app-video-box");
+              div.setAttribute("class", "video-container");
+              v.setAttribute("video", "this.videos[this.lastKey]");
+              div.appendChild(v);
+              container.appendChild(div);
+              this.lastKey++;
+            }
           }
         }
-      }
-    
-    });
-    this.observer.observe(document.querySelector(".footer-scroll"));
+      
+      });
+      this.observer.observe(document.querySelector(".footer-scroll"));
+    }
   }
 
   getVideo(){
@@ -88,7 +91,9 @@ export class SubscriptionComponent implements OnInit {
   filter(){
     for(let i = 0; i < this.videos.length; i++){
       if(this.user.subscribed.includes(this.videos[i].userId)){
-        this.filteredVids.push(this.videos[i])
+        if(this.videos[i].visibility == "Public"){
+          this.filteredVids.push(this.videos[i])
+        }
       }
     }
     this.filterDate()
@@ -106,6 +111,7 @@ export class SubscriptionComponent implements OnInit {
     }else{
       this.isNotLogged = true
     }
+    return users
   }
 
   getUser(users){

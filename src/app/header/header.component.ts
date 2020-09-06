@@ -32,6 +32,8 @@ export class HeaderComponent implements OnInit {
   restPlay = [];
   showMorePlay;
   isShowPlay;
+  isShowMoreSubs;
+  restSideSubs = [];
   
   constructor(private authService: SocialAuthService, private apollo: Apollo, private router: Router) { }
   
@@ -42,6 +44,7 @@ export class HeaderComponent implements OnInit {
   notifToShow = [];
   
   ngOnInit(): void {
+    this.isShowMoreSubs = false
     this.showMorePlay = false
     this.isShowPlay = false
     if(localStorage.getItem("currentUser") != null){
@@ -351,8 +354,27 @@ export class HeaderComponent implements OnInit {
       }
     }).subscribe(res=>{
       this.sideBarSubs = res.data.getSubscribed
+      let temp = []
+      if(this.sideBarSubs.length > 10){
+        for(let i = 0; i < this.sideBarSubs.length; i++){
+          if(i >= 10){
+            this.restSideSubs.push(this.sideBarSubs[i]);
+          }else{
+            temp.push(this.sideBarSubs[i]);
+          }
+        }
+        this.sideBarSubs = temp
+      }
     }),(error)=>{
       console.log(error);
+    }
+  }
+
+  toggleSubs(){
+    if(this.isShowMoreSubs){
+      this.isShowMoreSubs = false
+    }else{
+      this.isShowMoreSubs = true
     }
   }
 

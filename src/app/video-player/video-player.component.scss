@@ -195,6 +195,20 @@
             width: 960px;
             height: 540px;
         }
+        .premium-cover{
+            font-family: Helvetica;
+            z-index: 2202;
+            position: absolute;
+            width: 960px;
+            height: 540px;
+            color: white;
+            background: rgb(121, 121, 121);
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-shadow: 1px 1px 10px black;
+        }
         .title{
             font-family: Helvetica;
             margin-top: 10px;
@@ -225,6 +239,8 @@
                         outline: none;
                         overflow: hidden;
                         box-shadow: inset 0 0 5px rgb(216, 216, 216);
+                        transition: 0.5s ease;
+                        animation: 0.5s ease;
                     }
                     .slider::-webkit-slider-thumb{
                         -webkit-appearance: none;

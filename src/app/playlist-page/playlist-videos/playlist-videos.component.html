@@ -1,12 +1,12 @@
 <div class="parent">
     <div class="vid">
-        <div class="thumbnail">
+        <div class="thumbnail" *ngIf="video">
             <a [routerLink]="['/video-player-page', video.id]" routerLinkActive="router-link-active" >
                 <img src="{{video.thumbnail}}" alt="">
             </a>
             </div>
             <div class="info" *ngIf="userProfile">
-                <div class="title">{{video.title}}</div>
+                <div class="title">{{video.title}} ({{type}})</div>
                 <div class="view">{{views}} views  {{video.date | dateAgo}}</div>
                 <div class="user">{{video.description}}</div>
                 <div class="user">{{userProfile.name}}</div>

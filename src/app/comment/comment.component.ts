@@ -117,9 +117,9 @@ export class CommentComponent implements OnInit {
     this.getUpdatedUser()
     let l = this.loggedUser.like_comment
     if(l.includes(this.comment.id.toString())){
-      this.updateDislikeThenLike()
+      this.updateLikeThenDislike()
     }else{
-      this.updateLike()
+      this.updateDislike()
     }
   }
 

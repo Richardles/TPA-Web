@@ -26,13 +26,15 @@ export class ChannelCommunityComponent implements OnInit {
   title;
   description;
   posts;
-  loggedUser
+  loggedUser;
+  canEdit;
 
   constructor(private route:ActivatedRoute, private apollo: Apollo, private storage: AngularFireStorage, private db: AngularFirestore) {
     this.id = this.route.parent.snapshot.paramMap.get('id');
   }
 
   ngOnInit(): void {
+    this.canEdit = false
     this.getUser();
     this.showPic = false
     this.GetUserPosts();
@@ -41,6 +43,11 @@ export class ChannelCommunityComponent implements OnInit {
 
   getLoggedUser(){
     this.loggedUser = JSON.parse(localStorage.getItem("currentUser"))
+    if(this.loggedUser.id == this.id){
+      this.canEdit = true
+    }else{
+      this.canEdit = false
+    }
   }
 
   setUrl($event){

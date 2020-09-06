@@ -54,6 +54,7 @@ export class ChannelBoxComponent implements OnInit {
     if(this.loggedUser != null){
       this.getUser()
     }
+    this.getVideosOfUserId()
   }
 
   toggleNotif(){
@@ -164,7 +165,6 @@ export class ChannelBoxComponent implements OnInit {
     }).valueChanges.subscribe(result => {
       this.user = result.data.getUser
       this.checkSub()
-      this.getVideosOfUserId()
       this.checkNotif()
     },(error) => {
       console.log(error);

@@ -15,13 +15,49 @@ export class TrendingComponent implements OnInit {
   constructor(private apollo: Apollo) { }
 
   ngOnInit(): void {
-    this.getVideo()
+    // this.getVideo()
     this.getLoggedUser()
   }
 
   getLoggedUser(){
     this.user = JSON.parse(localStorage.getItem("currentUser"))
-    this.getUser()
+    if(this.user != null){
+      this.getUser()
+    }else{
+      this.getPublicNotPremium()
+    }
+  }
+
+  getPublicNotPremium(){
+    this.apollo.query<any>({
+      query:gql`
+      query GetPublicNonPremiumVideos{
+        getPublicNonPremiumVideos{
+          id
+          url
+          title
+          likes
+          dislikes
+          description
+          thumbnail
+          userId
+          views
+          playlist_id
+          category
+          audience
+          visibility
+          premium
+          date
+        }
+      }
+      `
+    }).subscribe(res=>{
+      this.videos = res.data.getPublicNonPremiumVideos
+      this.pop()
+    }),(error)=>{
+      console.log(error);
+      
+    }
   }
 
   getUser(){
@@ -97,10 +133,25 @@ export class TrendingComponent implements OnInit {
     }).subscribe(res=>{
       this.videos = res.data.getNotPremiumVideos
       console.log(this.videos.length);
-      this.pop()
+      this.secFilter()
     }),(error)=>{
       console.log(error);
     }
+  }
+
+  secFilter(){
+    let arr = []
+    for(let i = 0; i < this.videos.length; i++){
+      if(this.videos[i].userId == this.user.id){
+        arr.push(this.videos[i])
+      }else{
+        if(this.videos[i].visibility == "Public"){
+          arr.push(this.videos[i])
+        }
+      }
+    }
+    this.videos = arr
+    this.pop()
   }
 
 
@@ -224,8 +275,7 @@ export class TrendingComponent implements OnInit {
       `,
     }).valueChanges.subscribe(result => {
       this.videos = result.data.videos
-      console.log(this.videos)
-      this.pop()
+      this.secFilter()
     },(error) => {
       console.log(error);
     })

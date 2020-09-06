@@ -1,5 +1,8 @@
 <div class="parent">
-    <div class="video-screen" *ngIf="playingVideo">
+    <div class="video-screen" >
+        <div class="premium-cover" *ngIf="isCovering">
+            This video is only available for premium user
+        </div>
         <video id="video-player" (click) = "hotkeys()" controls autoplay src="{{playingVideo.url}}"></video>
         <div class="title" (click) = "deletekeys()">{{playingVideo.title}}</div>
         <div class="viewInfo" (click) = "deletekeys()">

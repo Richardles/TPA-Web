@@ -3,6 +3,13 @@
     justify-content: space-between;
     width: 560px;
     padding: 46px 0;
+    .music{
+        border-radius: 50%;
+        transition: 0.5s ease;
+        &:hover{
+            box-shadow: 3px 3px 5px rgb(94, 94, 94);
+        }
+    }
 }
 
 .parent{

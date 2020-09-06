@@ -36,9 +36,11 @@
 
             <div class="notif-modal" *ngIf="isNotifOpen">
                 <div class="box">
-                    <div class="header">Notifications</div>
-                    <div *ngFor="let notif of notifs">
-                        <app-notif-box [notif]="notif"></app-notif-box>
+                    <!-- <div class="header">Notifications</div> -->
+                    <div>
+                        <div *ngFor="let notif of notifs">
+                            <app-notif-box [notif]="notif"></app-notif-box>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -218,6 +220,24 @@
                                 <div class="pp"><img src={{sub.profile_picture}} alt=""></div>
                                 <div class="name">{{sub.name}}</div>
                             </a>
+                        </div>
+                        <div *ngIf="isShowMoreSubs">
+                            <div class="container" *ngFor="let sub of restSideSubs">
+                                <a [routerLink]="['/channel-app/',sub.id,'home']" routerLinkActive="router-link-active" (click)="toggleSidebar()">
+                                    <div class="pp"><img src={{sub.profile_picture}} alt=""></div>
+                                    <div class="name">{{sub.name}}</div>
+                                </a>
+                            </div>
+                        </div>
+                        <div (click)="toggleSubs()">
+                            <div class="btns" *ngIf="!isShowMoreSubs">
+                                <i class="material-icons">keyboard_arrow_down</i>
+                                <span style="padding: 15px;">Show more</span>
+                            </div>
+                            <div class="btns" *ngIf="isShowMoreSubs">
+                                <i class="material-icons">keyboard_arrow_up</i>
+                                <span style="padding: 15px;">Show less</span>
+                            </div>
                         </div>
                     </div>
                     <li class="btns">

@@ -11,7 +11,9 @@ export class RelatedVideoComponent implements OnInit {
 
   @Input() video;
   userId;
-  view
+  view;
+  type;
+
 
   constructor(private apollo: Apollo) { }
 
@@ -22,6 +24,15 @@ export class RelatedVideoComponent implements OnInit {
       this.getUserById()
     }
     this.view = this.formatter(this.video.views, 1)
+
+    if(this.video.visibility == "Public"){
+      this.type = "Public"
+    }else if(this.video.visibility == "Private"){
+      this.type = "Private"
+    }
+    if(this.video.premium == "Premium"){
+      this.type = "Premium"
+    }
   }
 
   getUserById(){

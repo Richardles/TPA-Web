@@ -24,6 +24,6 @@
         <div class="video-container" *ngFor="let video of monthV, let i = index">
             <app-video-box [video]="video" *ngIf="i < lastKey" (passVideo)="getPassingVideo($event)"></app-video-box>
         </div>
-        <div class="footer-scroll"></div>
     </div>
 </div>
+<div class="footer-scroll"></div>

@@ -1,6 +1,6 @@
 <div class="parent">
     <div class="left">
-        <div class="thumbnail">
+        <div class="thumbnail" *ngIf="playlistThumbnail">
             <img src="{{playlistThumbnail}}" alt="">
         </div>
         <div class="title" *ngIf="playlist">
@@ -52,7 +52,7 @@
                 <img src="{{userPlaylist.profile_picture}}" alt="">
                 <div class="name">{{userPlaylist.name}}</div>
             </div>
-            <div class="buttons">
+            <div class="buttons" *ngIf="canSubscribe">
                 <div [style.background]="isSub ? 'gray' : 'red'" (click)="subscribe()">{{subsLabel}}</div>
                 <i class="material-icons" id="notif-btn" *ngIf="isSub && isOn" (click)="toggleNotif()">notifications_active</i>
                 <i class="material-icons" id="notif-btn" *ngIf="isSub && !isOn" (click)="toggleNotif()">notifications_off</i>
@@ -66,7 +66,8 @@
         <div class="sort" (click)="toggleSort()">SORT BY</div>
         <div class="type" *ngIf="open">
             <div (click)="sortAdded()">Date added</div>
-            <div (click)="sortPublished()">Date published</div>
+            <div (click)="sortPublished()">Date published(Oldest)</div>
+            <div (click)="sortAdded()">Date published(Newest)</div>
             <div (click)="sortVid()">Most popular</div>
         </div>
         <div class="videos-container" *ngFor = "let video of videosObj, let i = index">

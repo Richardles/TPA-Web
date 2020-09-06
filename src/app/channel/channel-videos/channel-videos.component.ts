@@ -13,7 +13,7 @@ export class ChannelVideosComponent implements OnInit {
 videos = [];
 lastKey:number = 12;
 observer: any
-filteredVids: Array<any> = [];
+filteredVids = [];
 id;
 user;
 temp = []
@@ -53,9 +53,14 @@ isSort
   getLoggedUser(){
     let users = JSON.parse(localStorage.getItem("currentUser"))
     if(users != null){
-      this.getUser(users)
+      if(users.id == this.id){
+        this.getVideosOfUserId()
+      }else{
+        this.getUser(users)
+      }
+    }else{
+      this.getNonPremium()
     }
-    this.getNonPremium()
   }
 
   getUser(users){
@@ -131,10 +136,26 @@ isSort
     }).subscribe(res=>{
       this.videos = res.data.getNotPremiumVideos
       console.log(this.videos.length);
-      this.filterVideos()
+      this.secFilter()
     }),(error)=>{
       console.log(error);
     }
+  }
+
+  secFilter(){
+    let arr = []
+    for(let i = 0; i < this.videos.length; i++){
+      if(this.videos[i].userId == this.id){
+        arr.push(this.videos[i])
+      }else{
+        if(this.videos[i].visibility == "Public"){
+          arr.push(this.videos[i])
+        }
+      }
+    }
+    this.videos = arr
+    
+    this.filterVideos()
   }
 
   filterVideos(){
@@ -183,7 +204,7 @@ isSort
       `,
     }).valueChanges.subscribe(result => {
       this.videos = result.data.videos
-      this.filterVideos()
+      this.secFilter()
       console.log(this.videos)
     },(error) => {
       console.log(error);
@@ -209,6 +230,7 @@ isSort
           audience
           visibility
           premium
+          date
         }
       }
       `,variables:{
@@ -216,13 +238,8 @@ isSort
       }
     }).valueChanges.subscribe(result => {
       this.videos = result.data.getVideosByUserId
-      let t = this.videos
-      console.log(t);
-      for(let i = 0; i < 5; i++){
-        for(let j = 0; j < t.length; j++){
-          const element = t[j]
-          this.temp.push(element);
-        }
+      for(let i = 0; i < this.videos.length; i++){
+        this.filteredVids.push(this.videos[i])
       }
     },(error) => {
       console.log(error);
@@ -238,6 +255,8 @@ isSort
   }
 
   mostPopular(){
+    console.log(this.filteredVids);
+    
     this.toggleSort()
     for(let i = 0; i < this.filteredVids.length; i++){
       for(let j = 0; j < this.filteredVids.length-i-1; j++){
@@ -250,6 +269,7 @@ isSort
     }
   }
   oldest(){
+    console.log(this.filteredVids);
     this.toggleSort()
     for(let i = 0; i < this.filteredVids.length; i++){
       for(let j = 0; j < this.filteredVids.length-i-1; j++){
@@ -262,6 +282,7 @@ isSort
     }
   }
   newest(){
+    console.log(this.filteredVids);
     this.toggleSort()
     for(let i = 0; i < this.filteredVids.length; i++){
       for(let j = 0; j < this.filteredVids.length-i-1; j++){

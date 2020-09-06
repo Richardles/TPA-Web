@@ -19,6 +19,7 @@ export class PlaylistVideosComponent implements OnInit {
   loggedUser;
   playlist;
   id;
+  type;
 
   constructor(private apollo:Apollo, private route: ActivatedRoute) { }
 
@@ -32,7 +33,15 @@ export class PlaylistVideosComponent implements OnInit {
     this.getUser()
     this.modal = false
     this.views = this.formatter(this.video.views, 1);
-    this.getLoggedUser()
+
+    if(this.video.visibility == "Public"){
+      this.type = "Public"
+    }else if(this.video.visibility == "Private"){
+      this.type = "Private"
+    }
+    if(this.video.premium == "Premium"){
+      this.type = "Premium"
+    }
   }
 
   GetPlaylistById(){
@@ -56,6 +65,7 @@ export class PlaylistVideosComponent implements OnInit {
       }
     }).valueChanges.subscribe(result => {
       this.playlist = result.data.getPlaylist
+      this.getLoggedUser()
     }),(error) => {
       console.log(error);
     }

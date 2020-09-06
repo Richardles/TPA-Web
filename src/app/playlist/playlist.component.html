@@ -9,7 +9,7 @@
         <!-- </a> -->
         
         <div class="titleBox">
-            <div class="title">{{playlist.title}} | {{vidCount}} videos</div>
+            <div class="title">{{playlist.title}} &bull; {{vidCount}} videos</div>
             <div>Last updated {{playlist.last_updated | dateAgo}}</div>
             <a [routerLink]="['/playlist-page', playlist.id]" routerLinkActive="router-link-active" >
                 <div class="viewFull">VIEW FULL PLAYLIST</div>

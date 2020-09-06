@@ -40,8 +40,7 @@ export class HomeComponent implements OnInit {
       `,
     }).valueChanges.subscribe(result => {
       this.videos = result.data.videos
-      
-      this.shuffle(this.videos)
+      this.secFilter()
       console.log(this.videos.length)
     },(error) => {
       console.log(error);
@@ -57,7 +56,7 @@ export class HomeComponent implements OnInit {
     this.observer = new IntersectionObserver((entry)=>{
       if(entry[0].isIntersecting){
         let container = document.querySelector(".container");
-        for(let i: number = 0; i< 4; i++){
+        for(let i: number = 0; i< 6; i++){
           if(this.lastKey < this.videos.length){
             console.log(this.lastKey);
             let div = document.createElement("div");
@@ -189,10 +188,25 @@ export class HomeComponent implements OnInit {
     }).subscribe(res=>{
       this.videos = res.data.getNotPremiumVideos
       console.log(this.videos.length);
-      this.shuffle(this.videos)
+      this.secFilter()
     }),(error)=>{
       console.log(error);
     }
+  }
+
+  secFilter(){
+    let arr = []
+    for(let i = 0; i < this.videos.length; i++){
+      if(this.videos[i].userId == this.user.id){
+        arr.push(this.videos[i])
+      }else{
+        if(this.videos[i].visibility == "Public"){
+          arr.push(this.videos[i])
+        }
+      }
+    }
+    this.videos = arr
+    this.shuffle(this.videos)
   }
 
 

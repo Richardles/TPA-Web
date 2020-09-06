@@ -38,7 +38,7 @@ export class CategoryPageComponent implements OnInit {
     if(this.user != null){
       this.getUser()
     }else{
-      this.getNonPremium()
+      this.getPublicNotPremium()
     }
   }
 
@@ -89,6 +89,42 @@ export class CategoryPageComponent implements OnInit {
     })
   }
 
+  getPublicNotPremium(){
+    this.apollo.query<any>({
+      query:gql`
+      query GetPublicNonPremiumVideos{
+        getPublicNonPremiumVideos{
+          id
+          url
+          title
+          likes
+          dislikes
+          description
+          thumbnail
+          userId
+          views
+          playlist_id
+          category
+          audience
+          visibility
+          premium
+          date
+        }
+      }
+      `
+    }).subscribe(res=>{
+      let v = res.data.getPublicNonPremiumVideos
+      for(let i = 0; i < v.length; i++){
+        if(v[i].category == this.category){
+          this.videos.push(v[i])
+        }
+      }
+    }),(error)=>{
+      console.log(error);
+      
+    }
+  }
+
   getNonPremium(){
     this.apollo.query<any>({
       query:gql`
@@ -120,11 +156,26 @@ export class CategoryPageComponent implements OnInit {
           this.videos.push(v[i])
         }
       }
-      this.filterVid()
+      this.secFilter()
       console.log(this.videos.length);
     }),(error)=>{
       console.log(error);
     }
+  }
+
+  secFilter(){
+    let arr = []
+    for(let i = 0; i < this.videos.length; i++){
+      if(this.videos[i].userId == this.user.id){
+        arr.push(this.videos[i])
+      }else{
+        if(this.videos[i].visibility == "Public"){
+          arr.push(this.videos[i])
+        }
+      }
+    }
+    this.videos = arr
+    this.filterVid()
   }
 
   getVideos(){
@@ -154,7 +205,7 @@ export class CategoryPageComponent implements OnInit {
       }
     }).valueChanges.subscribe( result => {
       this.videos = result.data.getVideosByCategory
-      this.filterVid()
+      this.secFilter()
     }),(error) => {
       console.log(error);
     }

@@ -45,6 +45,7 @@ export class PlaylistPageComponent implements OnInit {
   userPlaylist;
   totalVids;
   editing;
+  canSubscribe;
 
   isUpdatingTitle;
   selectedVis;
@@ -70,6 +71,7 @@ export class PlaylistPageComponent implements OnInit {
     })}
 
   ngOnInit(): void {
+    this.canSubscribe = false
     this.canEdit = false
     this.url = window.location.href
     this.shareOpen = false
@@ -82,7 +84,7 @@ export class PlaylistPageComponent implements OnInit {
     this.editing = false
     this.isUpdatingTitle = false
     this.isMore = false;
-    this.getLoggedUser()
+    // this.getLoggedUser()
     this.observer = new IntersectionObserver((entry)=>{
       if(entry[0].isIntersecting){
         let container = document.querySelector(".right");
@@ -212,8 +214,11 @@ export class PlaylistPageComponent implements OnInit {
     if(this.loggedUser != null){
       if(this.playlist.userId == this.loggedUser.id){
         this.canEdit = true
+        this.canSubscribe = false
       }else{
-        this.canEdit = false
+        this.canSubscribe = true;
+        this.canEdit = false;
+        (<HTMLInputElement>document.getElementById("visibility")).disabled = true;
       }
     }
   }
@@ -374,6 +379,7 @@ export class PlaylistPageComponent implements OnInit {
       this.playlist = result.data.getPlaylist
       this.GetThumbnail();
       this.selectVis();
+      this.getLoggedUser();
     }),(error) => {
       console.log(error);
     }
@@ -538,10 +544,22 @@ export class PlaylistPageComponent implements OnInit {
         let v = result.data.getVideo
         if(this.loggedUser.premium_type != "monthly" && this.loggedUser.premium_type != "annually"){
           if(v.premium == "Not premium"){
-            this.videosObj.push(result.data.getVideo);
+            if(v.userId == this.loggedUser.id){
+              this.videosObj.push(result.data.getVideo);
+            }else{
+              if(v.visibility == "Public"){
+                this.videosObj.push(result.data.getVideo);
+              }
+            }
           }
         }else{
-          this.videosObj.push(result.data.getVideo);
+          if(v.userId == this.loggedUser.id){
+            this.videosObj.push(result.data.getVideo);
+          }else{
+            if(v.visibility == "Public"){
+              this.videosObj.push(result.data.getVideo);
+            }
+          }
         }
       },(error) => {
         console.log(error);
@@ -586,7 +604,7 @@ export class PlaylistPageComponent implements OnInit {
     console.log(v);
     
     for(let i = 0; i < v.length; i++){
-      if(p.includes(v[i].id)){
+      if(p.includes(v[i].id) && v[i].visibility == "Public"){
         this.videosObj.push(v[i])
       }
     }

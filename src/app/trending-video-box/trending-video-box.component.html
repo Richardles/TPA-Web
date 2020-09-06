@@ -6,7 +6,7 @@
     <div class="titleBox" *ngIf="userId">
         <!-- <img [src]="userId.profile_picture" class="pp" (click)="toChannel()"> -->
         <div class="info">
-            <div class="title">{{video.title}}</div>
+            <div class="title">{{video.title}} ({{type}})</div>
             <div class="playlist">
                 <div class="info">
                     <div class="user" *ngIf="userId != null"  (click)="toChannel()">{{userId.name}}</div>

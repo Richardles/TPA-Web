@@ -6,14 +6,16 @@
 
 .header{
     display: flex;
+    box-shadow: 0px 5px 8px rgba(177, 177, 177, 0.639);
     .keyboard-modal{
+        z-index: 2202;
         position: absolute;
         width: 50%;
         height: 40%;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        box-shadow: 1px 1px 2px gray;
+        box-shadow: 3px 3px 7px gray;
         background: white;
         .body{
             display: flex;
@@ -55,8 +57,8 @@
             background: white;
             top: 50px;
             width: 20%;
-            height: 500px;
-            box-shadow: 1px 1px 2px gray;
+            height: 180px;
+            box-shadow: 1px 1px 5px gray;
             position: absolute;
             *{
                 margin: 10px;
@@ -68,6 +70,7 @@
             .restric{
                 display: flex;
                 justify-content: space-between;
+                flex-direction: row;
             }
             .loc{
                 display: flex;
@@ -143,12 +146,17 @@ a:link {
 
 .search-bar{
     width: 525px;
+    outline: none;
+    border: 0.5px solid;
+    box-shadow: inset 0px 1.5px 3px rgba(194, 194, 194, 0.898);
+    border-radius: 2px;
 }
 
 .search-form{
     padding-right: 19vw;
     margin-top: 5px;
     .auto{
+        z-index: 2202;
         position: absolute;
         width: 543px;
         box-shadow: -1px -1px 5px gray;
@@ -189,6 +197,19 @@ a:link {
 
 .side-bar{
     z-index: 0;
+    width: 240px;
+    &:hover{
+        box-shadow: 2px 2px 3px black;
+    }
+    *{
+        text-decoration: none;
+        color: rgb(66, 66, 66);
+        transition: 0.5s ease;
+        &:hover{
+            margin-left: 5px;
+            color: black;
+        }
+    }
 }
 
 .side-bar-list a{
@@ -280,6 +301,7 @@ a:link {
     .notif-container{
         position: relative;
         .notif-modal{
+            z-index: 2202;
             height: 20%;
             position: absolute;
             background: white;
@@ -301,6 +323,7 @@ a:link {
                     padding: 10px;
                 }
                 .header{
+                    // position: fixed;
                     height: 50px;
                     display: flex;
                     align-items: center;
@@ -315,6 +338,10 @@ a:link {
     width: 30px;
     border-radius: 50%;
     margin-top: 8px;
+    transition: 0.5s ease;
+    &:hover{
+        box-shadow: 1px 1px 5px gray;
+    }
 }
 
 .gray-screen{
@@ -328,11 +355,12 @@ a:link {
     animation: 0.5s;
 }
 .userMenu{
+    z-index: 2202;
     position: absolute;
     display: flex;
     justify-content: flex-end;
     width: 95%;
-    margin-top: 50px;
+    margin-top: 40px;
     .userProfile{
         height: 100%;
         border-radius: 1px;
@@ -351,9 +379,16 @@ a:link {
             list-style: none;
             li{
                 cursor: pointer;
+                padding: 5px;
+                transition: 0.3s ease;
+                border-radius: 2px;
                 &:hover{
                     background: gray;
+                    margin-left: 10px;
                 }
+            }
+            div{
+                padding: 5px;
             }
         }
         .userInfo{

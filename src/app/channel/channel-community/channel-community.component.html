@@ -1,4 +1,4 @@
-<div class="inputSection" *ngIf="loggedUser">
+<div class="inputSection" *ngIf="canEdit">
     <div class="titleInput" *ngIf="user">
         <img src = "{{user.profile_picture}}" class="profile_pic">
         <input type="text" name="" id="postTA" placeholder="Title" (input) = "title = $event.target.value">

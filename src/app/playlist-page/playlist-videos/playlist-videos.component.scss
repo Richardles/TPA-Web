@@ -3,6 +3,10 @@
     display: flex;
     justify-content: space-between;
     border-bottom: 0.3px solid rgba(128, 128, 128, 0.562);
+    transition: 0.2s ease;
+    &:hover{
+        background: rgb(111, 111, 111);
+    }
     .setting{
         margin: 10px 0px 0px 0px;
         opacity: 0.3;
@@ -52,8 +56,9 @@
             margin: 5px 0px 5px 0px;
             padding: 5px 10px 5px 10px;
             cursor: pointer;
-            transition: 0.2s;
+            transition: 0.2s ease;
             &:hover{
+                transition: 0.2s ease;
                 background: gray;
             }
         }

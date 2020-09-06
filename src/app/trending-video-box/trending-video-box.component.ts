@@ -15,6 +15,7 @@ export class TrendingVideoBoxComponent implements OnInit {
   modal;
   playlist_modal;
   view
+  type
 
   constructor(private apollo: Apollo, private router:Router) { }
 
@@ -27,6 +28,14 @@ export class TrendingVideoBoxComponent implements OnInit {
     this.modal = false;
     this.playlist_modal = false;
     this.view = this.formatter(this.video.views, 1)
+    if(this.video.visibility == "Public"){
+      this.type = "Public"
+    }else if(this.video.visibility == "Private"){
+      this.type = "Private"
+    }
+    if(this.video.premium == "Premium"){
+      this.type = "Premium"
+    }
   }
 
   getUserById(){

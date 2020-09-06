@@ -49,6 +49,27 @@ export class VideoPlayerComponent implements OnInit {
     }
   }
   `
+  GET_VIDEO = gql `
+  query GetVideo($id: Int!){
+    getVideo(id: $id){
+      id
+      url
+      title
+      likes
+      dislikes
+      description
+      thumbnail
+      userId
+      views
+      playlist_id
+      category
+      audience
+      visibility
+      premium
+      date
+    }
+  }
+  `
   id;
   videos = [];
   playingVideo;
@@ -77,14 +98,16 @@ export class VideoPlayerComponent implements OnInit {
   url;
   likeCount;
   totalLikes;
-  likes
-  dislikes
+  likes;
+  dislikes;
+  isCovering;
   
   constructor(private route: ActivatedRoute, private apollo: Apollo, private router: Router) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
   ngOnInit(): void {
+    this.isCovering = false
     this.likeCount = 0
     this.commentCount = 0;
     this.shareOpen = false
@@ -94,19 +117,23 @@ export class VideoPlayerComponent implements OnInit {
     this.isDislike = false
     this.updated = false;
     this.sortModal = false
-    let v = (document.getElementById('video-player') as HTMLVideoElement);
+    var v = (document.getElementById('video-player') as HTMLVideoElement);
     this.checked = true;
+    console.log(v);
     if(v != null){
-      v.addEventListener('timeupdate', () => {
-        if(v.ended){
-          if(this.checked){
-            this.router.navigate(['/video-player-page', this.videos[0].id])
-            console.log("done")
+        v.addEventListener('timeupdate', () => {
+          if(v.ended){
+            if(this.checked){
+              // this.router.navigateByUrl("/refresh", {skipLocationChange: true}).then(()=>{
+                this.router.navigate(['/video-player-page', this.videos[0].id])
+              // })
+              console.log("done")
+            }
           }
-        }
-      })
+        })
     }
     this.loggedUser = this.getLoggedUser();
+
     
     this.route.paramMap.subscribe(params => {
       this.id = params.get('id');
@@ -165,8 +192,19 @@ export class VideoPlayerComponent implements OnInit {
     this.url = window.location.href
   }
 
-  setLikeMetric(){
+  setLikeMetric(vid){
+    this.totalLikes = vid.likes + vid.dislikes
+    this.likeCount = vid.likes
+    if(this.totalLikes == 0){
+      this.totalLikes = 2
+      this.likeCount = 1
+    }
+  }
 
+  setBlackCover(){
+    this.isCovering = true
+    // let c = (<HTMLElement>document.querySelector(".premium-cover")).style
+    // c.display = "block"
   }
 
   toChannel(){
@@ -287,7 +325,7 @@ export class VideoPlayerComponent implements OnInit {
   }
 
   updateLike(){
-    this.apollo.mutate({
+    this.apollo.mutate<any>({
       mutation:gql`
       mutation LikeVideo($uid: String!, $vid: Int!){
         updateLikeVideo(user_id: $uid, video_id: $vid){
@@ -305,16 +343,23 @@ export class VideoPlayerComponent implements OnInit {
       `,variables:{
         uid: this.loggedUser.id,
         vid: this.playingVideo.id
-      }
+      },refetchQueries:[{
+        query: this.GET_VIDEO,
+        variables:{
+          id: this.id
+        }
+      }]
     }).subscribe( res => {
       console.log("liked");
+      let v = res.data.updateLikeVideo
+      this.setLikeMetric(v)
     }),(error)=>{
       console.log(error);
     }
   }
 
   updateDislike(){
-    this.apollo.mutate({
+    this.apollo.mutate<any>({
       mutation:gql`
       mutation DislikeVideo($uid: String!, $vid: Int!){
         updateDislikeVideo(user_id: $uid, video_id: $vid){
@@ -332,9 +377,16 @@ export class VideoPlayerComponent implements OnInit {
       `,variables:{
         uid: this.loggedUser.id,
         vid: this.playingVideo.id
-      }
+      },refetchQueries:[{
+        query: this.GET_VIDEO,
+        variables:{
+          id: this.id
+        }
+      }]
     }).subscribe( res => {
       console.log("disliked");
+      let v = res.data.updateDislikeVideo
+      this.setLikeMetric(v)
     }),(error)=>{
       console.log(error);
     }
@@ -679,11 +731,11 @@ export class VideoPlayerComponent implements OnInit {
       }
     }).valueChanges.subscribe(result => {
       this.playingVideo = result.data.getVideo;
+      console.log(this.playingVideo);
       this.view = this.formatter(this.playingVideo.views, 1)
-      this.totalLikes = this.playingVideo.likes + this.playingVideo.dislikes
-      this.likeCount = this.playingVideo.likes
       this.likes = this.formatter(this.playingVideo.likes, 1)
       this.dislikes = this.formatter(this.playingVideo.dislikes, 1)
+      this.setLikeMetric(this.playingVideo)
       this.getUser();
       // this.getVideo();
       if(!this.updated){
@@ -723,10 +775,55 @@ export class VideoPlayerComponent implements OnInit {
       }
     }).valueChanges.subscribe( result => {
       this.videos = result.data.getVideosByCategory
-
+      this.filter()
     }),(error) => {
       console.log(error);
     }
+  }
+
+  getPublicNotPremium(){
+    this.apollo.query<any>({
+      query:gql`
+      query GetPublicNonPremiumVideos{
+        getPublicNonPremiumVideos{
+          id
+          url
+          title
+          likes
+          dislikes
+          description
+          thumbnail
+          userId
+          views
+          playlist_id
+          category
+          audience
+          visibility
+          premium
+          date
+        }
+      }
+      `
+    }).subscribe(res=>{
+      this.videos = res.data.getPublicNonPremiumVideos
+    }),(error)=>{
+      console.log(error);
+      
+    }
+  }
+
+  secFilter(){
+    let arr = []
+    for(let i = 0; i < this.videos.length; i++){
+      if(this.videos[i].userId == this.loggedUser.id){
+        arr.push(this.videos[i])
+      }else{
+        if(this.videos[i].visibility == "Public"){
+          arr.push(this.videos[i])
+        }
+      }
+    }
+    this.videos = arr
   }
 
   setUploadDate(){
@@ -780,11 +877,15 @@ export class VideoPlayerComponent implements OnInit {
       }
     }).valueChanges.subscribe(result => {
       this.userProfile = result.data.getUser
+      
       if(this.loggedUser != null){
         this.getUpdatedUser()
         this.checkSub()
       }else{
-        this.getVideosByCategory()
+        if(this.playingVideo.premium == "Premium"){
+          this.setBlackCover()
+        }
+        this.getPublicNotPremium()
       }
     },(error) => {
       console.log(error);
@@ -832,6 +933,9 @@ export class VideoPlayerComponent implements OnInit {
       this.checkLike()
       if(this.loggedUser.premium_type != "monthly" && this.loggedUser.premium_type != "annually"){
         this.getNonPremium()
+        if(this.playingVideo.premium == "Premium"){
+          this.setBlackCover()
+        }
       }else{
         // this.getVideo()
         this.getVideosByCategory()
@@ -874,13 +978,22 @@ export class VideoPlayerComponent implements OnInit {
   }
 
   filter(){
+    console.log(this.videos);
     let temp = []
     for(let i = 0; i < this.videos.length; i++){
       if(this.videos[i].category == this.playingVideo.category){
-        temp.push(this.videos[i])
+        if(this.videos[i].userId == this.loggedUser.id){
+          temp.push(this.videos[i])
+        }else{
+          if(this.videos[i].visibility == "Public"){
+            temp.push(this.videos[i])
+          }
+        }
       }
     }
-    this.videos = temp
+
+    this.videos = temp.filter(v => v.id != this.playingVideo.id)
+
   }
 
 

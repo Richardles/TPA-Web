@@ -54,9 +54,9 @@ export class VideoBoxComponent implements OnInit {
     sec = Math.floor(sec)
     if(sec < 60){
       if(sec < 10){
-        this.durString ="0"+Math.floor(sec).toString()
+        this.durString ="0:0"+Math.floor(sec).toString()
       }else{
-        this.durString = Math.floor(sec).toString()
+        this.durString = "0:"+Math.floor(sec).toString()
       }
     }else{
       let min = Math.floor(sec/60)

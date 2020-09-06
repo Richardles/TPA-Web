@@ -22,7 +22,9 @@ export class PlaylistModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUserId()
-    this.getPlayListByUser()
+    if(this.user != null){
+      this.getPlayListByUser()
+    }
     this.playlistVisibility = "Public";
   }
 

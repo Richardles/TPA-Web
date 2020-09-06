@@ -39,8 +39,43 @@ export class ChannelHomeComponent implements OnInit {
     let users = JSON.parse(localStorage.getItem("currentUser"))
     if(users != null){
       this.getUser(users)
+    }else{
+      this.getPublicNotPremium()
     }
-    this.getNonPremium()
+  }
+
+  getPublicNotPremium(){
+    this.apollo.query<any>({
+      query:gql`
+      query GetPublicNonPremiumVideos{
+        getPublicNonPremiumVideos{
+          id
+          url
+          title
+          likes
+          dislikes
+          description
+          thumbnail
+          userId
+          views
+          playlist_id
+          category
+          audience
+          visibility
+          premium
+          date
+        }
+      }
+      `
+    }).subscribe(res=>{
+      this.randVideos = res.data.getPublicNonPremiumVideos
+      console.log(res.data.getPublicNonPremiumVideos);
+      
+      this.popVideos()
+    }),(error)=>{
+      console.log(error);
+      
+    }
   }
 
   getUser(users){
@@ -115,17 +150,33 @@ export class ChannelHomeComponent implements OnInit {
       `
     }).subscribe(res=>{
       this.randVideos = res.data.getNotPremiumVideos
-      this.popVideos()
+      this.secFilter()
     }),(error)=>{
       console.log(error);
     }
+  }
+
+  secFilter(){
+    let arr = []
+    for(let i = 0; i < this.randVideos.length; i++){
+      if(this.randVideos[i].userId == this.id){
+        arr.push(this.randVideos[i])
+      }else{
+        if(this.randVideos[i].visibility == "Public"){
+          arr.push(this.randVideos[i])
+        }
+      }
+    }
+    this.randVideos = arr
+    
+    this.popVideos()
   }
 
   popVideos(){
     let pushed = []
     let i = 0;
     let ctr = 0;
-    while(i < 5){
+    while(i < this.randVideos.length){
        let idx = this.randVideos[Math.floor(Math.random() * (this.randVideos.length - 0) + 0)];
        console.log(idx)
        if(idx.userId == this.id){
@@ -136,7 +187,7 @@ export class ChannelHomeComponent implements OnInit {
          }
        }
        ctr++
-       if(ctr >= 200){
+       if(ctr >= this.randVideos.length*2){
          break;
        }
     }
@@ -206,12 +257,14 @@ export class ChannelHomeComponent implements OnInit {
           userId
           views
           date
+          visibility
+          premium
         }
       }
       `
     }).valueChanges.subscribe(result => {
       this.randVideos = result.data.videos
-      this.popVideos()
+      this.secFilter()
     },(error) => {
       console.log("No rand vids -> "+error);
     })
