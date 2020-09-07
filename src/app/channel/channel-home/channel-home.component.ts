@@ -176,7 +176,7 @@ export class ChannelHomeComponent implements OnInit {
     let pushed = []
     let i = 0;
     let ctr = 0;
-    while(i < this.randVideos.length){
+    while(i < this.randVideos.length * 3){
        let idx = this.randVideos[Math.floor(Math.random() * (this.randVideos.length - 0) + 0)];
        console.log(idx)
        if(idx.userId == this.id){
@@ -186,8 +186,8 @@ export class ChannelHomeComponent implements OnInit {
            i++
          }
        }
-       ctr++
-       if(ctr >= this.randVideos.length*2){
+      //  ctr++
+       if(this.showRandVids.length >= 5){
          break;
        }
     }

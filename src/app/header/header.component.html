@@ -114,10 +114,15 @@
         
     </div>
 
-    <div *ngIf="!loggedUser" class="sign-in-components" (click)="signIn()">
+    <div *ngIf="!loggedUser" class="sign-in-components" (click)="signInModal()">
         <i class="material-icons" >account_circle</i>
         <span class="sign-in-button">SIGN IN</span>
     </div>
+
+    <div class="sign-in-modal" *ngIf="openSignInModal">
+        <div (click)="signIn()">Sign in with google</div>
+    </div>
+
     <div *ngIf="loggedUser" class="user-pp">
         <img src="{{loggedUser.profile_picture}}" alt="user photo" (click)="toggleMenu()">
     </div>
@@ -132,7 +137,7 @@
                 <ul class="listMenu">
                     <li (click)="toChannel()">Your channel</li>
                     <li (click)="toPremium()">Paid memberships</li>
-                    <li (click)="switchAcc()">Switch account</li>
+                    <li (click)="signIn()">Switch account</li>
                     <div class="restric">
                         <div>Resctricted mode</div>
                         <input type="checkbox" name="" id="">

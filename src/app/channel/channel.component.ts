@@ -54,6 +54,7 @@ isOn;
 subsLabel;
 visitor;
 canEdit;
+canSubs;
 
   constructor(private route: ActivatedRoute, private apollo: Apollo, private storage: AngularFireStorage, private db: AngularFirestore, private router:Router) {
     this.route.params.subscribe(param => {
@@ -63,6 +64,7 @@ canEdit;
   }
 
   ngOnInit(): void {
+    this.canSubs = false
     this.canEdit = false
     this.subsLabel="SUBSCRIBE"
     this.isOn = false
@@ -76,7 +78,12 @@ canEdit;
       this.getUpdatedUser()
       if(this.visitor == this.id){
         this.canEdit = true
+        this.canSubs = false
+      }else{
+        this.canSubs = true
       }
+    }else{
+      this.canSubs = false
     }
   }
 

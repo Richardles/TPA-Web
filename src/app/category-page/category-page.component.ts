@@ -119,6 +119,7 @@ export class CategoryPageComponent implements OnInit {
           this.videos.push(v[i])
         }
       }
+      this.filterVid()
     }),(error)=>{
       console.log(error);
       

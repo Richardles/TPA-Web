@@ -19,6 +19,7 @@ import { PremiumComponent } from './premium/premium.component';
 import { SearchPageComponent } from './search-page/search-page.component';
 import { RefreshComponent } from './refresh/refresh.component';
 import { CategoryPageComponent } from './category-page/category-page.component';
+import { QueueBoxComponent } from './queue-box/queue-box.component';
 
 
 const routes: Routes = [

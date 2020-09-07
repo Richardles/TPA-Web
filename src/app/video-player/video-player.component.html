@@ -94,8 +94,19 @@
                 <span class="toggle">
                     <span class="TxtAuto">Autoplay</span>
                     <input type="checkbox" name="" id="checkbox" checked (change)="autoPlay($event)">
-            </span>
-        </div>
+                </span>
+            </div>
+            <div class="queue-box" *ngIf="isListed">
+                <div class="header">
+                    <div>Queue</div>
+                    <div (click)="clearQueue()">CLEAR</div>
+                </div>
+                <div class="queue-container" *ngIf="queued">
+                    <div class="container" *ngFor="let v of queued">
+                        <app-queue-box [video]="v"></app-queue-box>
+                    </div>
+                </div>
+            </div>
         <!-- <div class="relatedContainer"> -->
             <div class="video-container" *ngFor="let v of videos, let i = index" (click) = "deletekeys()">
                 <app-related-video [video]="v" *ngIf="i < lastKey"></app-related-video>

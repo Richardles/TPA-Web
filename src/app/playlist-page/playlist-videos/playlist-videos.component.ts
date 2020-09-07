@@ -20,10 +20,12 @@ export class PlaylistVideosComponent implements OnInit {
   playlist;
   id;
   type;
+  durString;
 
   constructor(private apollo:Apollo, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.durString = "00:00";
     this.route.params.subscribe(param => {
       this.id = param['id'];
       console.log(this.id);
@@ -41,6 +43,62 @@ export class PlaylistVideosComponent implements OnInit {
     }
     if(this.video.premium == "Premium"){
       this.type = "Premium"
+    }
+  }
+
+  addToQueue(){
+    var temp = JSON.parse(localStorage.getItem("storedQueue"));
+    var a = [];
+    if (temp == null)
+    {
+      a.push(this.video.id);
+      localStorage.setItem("storedQueue",JSON.stringify(a));
+    }
+    else
+    {
+      temp.forEach(element => {
+        a.push(element);
+      });
+      a.push(this.video.id);
+      localStorage.setItem("storedQueue",JSON.stringify(a));
+    }
+  }
+
+  setDur(event){
+    let sec = event.target.duration
+    sec = Math.floor(sec)
+    if(sec < 60){
+      if(sec < 10){
+        this.durString ="0:0"+Math.floor(sec).toString()
+      }else{
+        this.durString = "0:"+Math.floor(sec).toString()
+      }
+    }else{
+      let min = Math.floor(sec/60)
+      sec = sec%60
+      if(min < 60){
+        if(sec < 10){
+          this.durString = min+":0"+Math.floor(sec)
+        }else{
+          this.durString = min+":"+Math.floor(sec)
+        }
+      }else{
+        let hour = Math.floor(min/60)
+        min = min%60
+        if(min < 10){
+          if(sec < 10){
+            this.durString = hour+":0"+min+":0"+Math.floor(sec)
+          }else{
+            this.durString = hour+":0"+min+":"+Math.floor(sec)
+          }
+        }else{
+            if(sec < 10){
+              this.durString = hour+":"+min+":0"+Math.floor(sec)
+            }else{
+              this.durString = hour+":"+min+":"+Math.floor(sec)
+            }
+        }
+      }
     }
   }
 

@@ -34,6 +34,7 @@ export class HeaderComponent implements OnInit {
   isShowPlay;
   isShowMoreSubs;
   restSideSubs = [];
+  openSignInModal;
   
   constructor(private authService: SocialAuthService, private apollo: Apollo, private router: Router) { }
   
@@ -44,6 +45,7 @@ export class HeaderComponent implements OnInit {
   notifToShow = [];
   
   ngOnInit(): void {
+    this.openSignInModal = false
     this.isShowMoreSubs = false
     this.showMorePlay = false
     this.isShowPlay = false
@@ -63,8 +65,16 @@ export class HeaderComponent implements OnInit {
     this.isNotifOpen = false
   }
 
+  signInModal(){
+    if(this.openSignInModal){
+      this.openSignInModal = false
+    }else{
+      this.openSignInModal = true
+    }
+  }
+
   signIn(): void {
-    
+    this.openSignInModal = false
     this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
     
     this.authService.authState.subscribe((user) => {

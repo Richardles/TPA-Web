@@ -101,12 +101,16 @@ export class VideoPlayerComponent implements OnInit {
   likes;
   dislikes;
   isCovering;
+
+  queued = [];
+  isListed;
   
   constructor(private route: ActivatedRoute, private apollo: Apollo, private router: Router) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
   ngOnInit(): void {
+    this.isListed = false
     this.isCovering = false
     this.likeCount = 0
     this.commentCount = 0;
@@ -119,7 +123,25 @@ export class VideoPlayerComponent implements OnInit {
     this.sortModal = false
     var v = (document.getElementById('video-player') as HTMLVideoElement);
     this.checked = true;
-    console.log(v);
+
+    var temp = JSON.parse(localStorage.getItem("storedQueue"));
+    console.log(temp);
+    if(temp != null){
+      this.isListed = true
+      this.getQueuedVid(temp)
+    }
+    // if(temp != null){
+    //   v.addEventListener('timeupdate', () => {
+    //     if(v.ended){
+    //       if(this.checked){
+    //         // this.router.navigateByUrl("/refresh", {skipLocationChange: true}).then(()=>{
+    //           this.router.navigate(['/video-player-page', temp[0]])
+    //         // })
+    //         console.log("done")
+    //       }
+    //     }
+    //   })
+    // }else 
     if(v != null){
         v.addEventListener('timeupdate', () => {
           if(v.ended){
@@ -189,7 +211,48 @@ export class VideoPlayerComponent implements OnInit {
     });
     this.observer.observe(document.querySelector(".footer-scroll"));
 
+    
+
     this.url = window.location.href
+  }
+
+  getQueuedVid(temp){
+    for(let i = 0; i < temp.length; i++){
+      this.apollo.query<any>({
+        query: gql `
+        query GetVideo($id: Int!){
+          getVideo(id: $id){
+            id
+            url
+            title
+            likes
+            dislikes
+            description
+            thumbnail
+            userId
+            views
+            playlist_id
+            category
+            audience
+            visibility
+            premium
+            date
+          }
+        }
+        `,
+        variables:{
+          id: temp[i]
+        }
+      }).subscribe(result => {
+        this.queued.push(result.data.getVideo);
+      },(error) => {
+        console.log(error);
+      })
+    }
+  }
+
+  clearQueue(){
+    localStorage.removeItem("storedQueue");
   }
 
   setLikeMetric(vid){

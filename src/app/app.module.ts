@@ -48,6 +48,7 @@ import { NotifBoxComponent } from './notif-box/notif-box.component';
 import { DateAgoPipe } from './pipes/date-ago.pipe';
 import { PlaylistBoxSearchComponent } from './playlist-box-search/playlist-box-search.component';
 import { CategoryPageComponent } from './category-page/category-page.component';
+import { QueueBoxComponent } from './queue-box/queue-box.component';
 
 const fireConfig = {
     apiKey: "AIzaSyA2VWuhvm5N68oILOWtoYgPq_nTCbvvfEY",
@@ -95,6 +96,7 @@ const fireConfig = {
     DateAgoPipe,
     PlaylistBoxSearchComponent,
     CategoryPageComponent,
+    QueueBoxComponent,
   ],
   imports: [
     BrowserModule,

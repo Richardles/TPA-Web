@@ -95,8 +95,26 @@ export class VideoBoxComponent implements OnInit {
     }
   }
 
-  addToQueue(){
+  emitVid(){
     this.queued.emit(this.video)
+  }
+
+  addToQueue(){
+    var temp = JSON.parse(localStorage.getItem("storedQueue"));
+    var a = [];
+    if (temp == null)
+    {
+      a.push(this.video.id);
+      localStorage.setItem("storedQueue",JSON.stringify(a));
+    }
+    else
+    {
+      temp.forEach(element => {
+        a.push(element);
+      });
+      a.push(this.video.id);
+      localStorage.setItem("storedQueue",JSON.stringify(a));
+    }
   }
 
   getLoggedUser(){

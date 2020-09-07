@@ -18,7 +18,7 @@
                 </div>
             </div>
 
-            <div class="buttons" *ngIf="visitor">
+            <div class="buttons" *ngIf="canSubs">
                 <div [style.background]="isSub ? 'gray' : 'red'" (click)="subscribe()">{{subsLabel}}</div>
                 <i class="material-icons" id="notif-btn" *ngIf="isSub && isOn" (click)="toggleNotif()">notifications_active</i>
                 <i class="material-icons" id="notif-btn" *ngIf="isSub && !isOn" (click)="toggleNotif()">notifications_off</i>

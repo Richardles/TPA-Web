@@ -6,8 +6,8 @@
 
 .thumbnail{
     margin: 0px;
-    width: 168px;
-    height: 94px;
+    width: 100px;
+    height: 56px;
     margin-bottom: 10px;
     transition: 0.5s ease;
     &:hover{
@@ -43,13 +43,9 @@
         border-radius: 50%;
     }
     .info{
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        .detail-info{
-            margin-left: 10px;
-            flex-direction: column;
-        }
+        width: 220px;
+        margin-left: 10px;
+        flex-direction: column;
     }
     .viewDate{
         *{
@@ -57,29 +53,8 @@
         }
     }
     .title{
+        font-size: 14px;
         font-family: Helvetica;
         font-weight: 550;
-    }
-}
-
-.playlistModal{
-    background: white;
-    box-shadow: 0px 0px 3px black;
-    border-radius: 2px;
-    position: absolute;
-    margin-top: 50px;
-    margin-left: 300px;
-    display: flex;
-    flex-direction: column;
-    *{
-        display: flex;
-        justify-content: flex-end;
-        margin: 5px 0px 5px 0px;
-        padding: 5px 10px 5px 10px;
-        cursor: pointer;
-        transition: 0.2s;
-        &:hover{
-            background: gray;
-        }
     }
 }

@@ -1,0 +1,19 @@
+<div class="videoBox">
+    <a [routerLink]="['/video-player-page', video.id]" routerLinkActive="router-link-active" >
+        <img [src]="video.thumbnail" class="thumbnail">
+        <!-- <video src="{{video.url}}" id="vid" style="display: none;" (loadedmetadata)="setDur($event)"></video>
+        <div class="dur">{{durString}}</div> -->
+    </a>
+        
+    <div class="titleBox">
+        <!-- <img [src]="userId.profile_picture" class="pp"> -->
+        <div class="info">
+            <div class="title">{{video.title}}</div>
+            <div class="user" *ngIf="userId != null">{{userId.name}}</div>
+            <!-- <div class="viewDate">
+                <div class="views">{{view}} Views</div>
+                <div class="date">{{video.date | dateAgo}}</div>
+            </div> -->
+        </div>
+    </div>
+</div>

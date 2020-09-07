@@ -3,6 +3,8 @@
         <div class="thumbnail" *ngIf="video">
             <a [routerLink]="['/video-player-page', video.id]" routerLinkActive="router-link-active" >
                 <img src="{{video.thumbnail}}" alt="">
+                <video src="{{video.url}}" id="vid" style="display: none;" (loadedmetadata)="setDur($event)"></video>
+                <div class="dur">{{durString}}</div>
             </a>
             </div>
             <div class="info" *ngIf="userProfile">
@@ -17,7 +19,7 @@
         </div>
         
         <div class="playlistModal" *ngIf="modal">
-            <div>Add to queue</div>
+            <div (click)="addToQueue()">Add to queue</div>
             <div (click) = "routerToPlaylistModal()">Save to playlist</div>
             <div (click)="removeVideo()" *ngIf="canEdit">Remove from playlist</div>
         </div>

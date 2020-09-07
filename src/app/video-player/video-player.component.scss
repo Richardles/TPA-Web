@@ -280,6 +280,34 @@
         margin: 10px;
         margin-left: 20px;
         width: 25%;
+        .queue-container{
+            width: 400px;
+        }
+        .queue-box{
+            width: 400px;
+            font-family: Helvetica;
+            padding: 10px 0px;
+            border: 0.5px solid black;
+            margin: 10px 0px;
+            .header{
+                div{
+                    padding: 0px 10px;
+                }
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 400px;
+                height: 50px;
+                *{
+                    transition: 0.3s ease;
+                    &:hover{
+                        cursor: pointer;
+                        margin-bottom: 5px;
+                        text-shadow: 1px 1px 3px gray;
+                    }
+                }
+            }
+        }
         .autoPlay{
             display: flex;
             align-items: center;
